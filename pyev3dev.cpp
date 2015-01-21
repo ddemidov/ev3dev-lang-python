@@ -155,6 +155,9 @@ BOOST_PYTHON_MODULE(ev3dev)
         .def("get_attr_from_set", &ev3::device::get_attr_from_set, args("name"))
         ;
 
+    //-----------------------------------------------------------------------
+    // Sensors
+    //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::sensor>("sensor", init<ev3::port_type>())
             .def(init<ev3::port_type, const std::set<ev3::sensor::sensor_type>&>())
@@ -188,9 +191,6 @@ BOOST_PYTHON_MODULE(ev3dev)
         s.attr("nxt_i2c_sensor") = ev3::sensor::nxt_i2c_sensor;
     }
 
-    //-----------------------------------------------------------------------
-    // Sensors
-    //-----------------------------------------------------------------------
     class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor", init<>())
         .def(init<ev3::port_type>())
         .def(init<ev3::port_type, ev3::address_type>())
