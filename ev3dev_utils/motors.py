@@ -1,4 +1,4 @@
-import time, ev3dev
+import time, atexit, ev3dev
 
 def run_for(motor, power=75, ever=None, seconds=None, degrees=None):
     """ Run motor for specified amount of seconds, degrees, or forever
@@ -100,3 +100,12 @@ def drive_for(left, right, dir=0, power=75, ever=None, seconds=None):
     run_for(master, mpower, ever, seconds)
     run_for(slave,  spower, ever, seconds)
 
+#----------------------------------------------------------------------------
+# Reset any motors attached at program exit
+#----------------------------------------------------------------------------
+def reset_motors():
+    for port in [ev3dev.OUTPUT_A, ev3dev.OUTPUT_B, ev3dev.OUTPUT_C, ev3dev.OUTPUT_C]:
+        m = ev3dev.motor(port)
+        if m.connected(): m.reset()
+
+atexit.register(reset_motors)
