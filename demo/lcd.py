@@ -1,32 +1,18 @@
 #!/usr/bin/python
+#
+# Draws a smiley face on the brick screen.
 
-from PIL import Image, ImageDraw
-import ev3dev
+import time
+from ev3dev_utils.lcd import LCD
 
-lcd = ev3dev.lcd()
+lcd = LCD()
 
-# Use PIL to draw a smiley face.
-# Pad image size to be divisible by 32
-def alignup(n, m):
-    r = n % m
-    if r == 0:
-        return n
+# lcd.draw returns a PIL.ImageDraw handle
+lcd.draw.ellipse(( 20, 20,  60, 60))
+lcd.draw.ellipse((118, 20, 158, 60))
+lcd.draw.arc((20, 80, 158, 100), 0, 180)
 
-    return n - r + m;
+# Update lcd display
+lcd.update()
 
-nx = alignup(lcd.resolution_x(), 32)
-ny = lcd.resolution_y()
-
-im = Image.new("1", (nx, ny), "white")
-
-draw = ImageDraw.Draw(im)
-
-draw.ellipse(( 20, 20,  60, 60))
-draw.ellipse((118, 20, 158, 60))
-draw.arc((20, 80, 158, 100), 0, 180)
-
-# Copy image data to LCD's frame buffer
-fb = lcd.frame_buffer()
-ib = im.tobytes("raw", "1;IR")
-
-fb[:] = ib
+time.sleep(3)
