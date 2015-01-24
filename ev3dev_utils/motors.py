@@ -100,10 +100,10 @@ def drive_for(left, right, dir=0, power=75, ever=None, seconds=None):
     run_for(master, mpower, ever, seconds)
     run_for(slave,  spower, ever, seconds)
 
-#----------------------------------------------------------------------------
-# Reset any motors attached at program exit
-#----------------------------------------------------------------------------
 def reset_motors():
+    """
+    Reset any motors attached to the brick.
+    """
     for port in [ev3dev.OUTPUT_A, ev3dev.OUTPUT_B, ev3dev.OUTPUT_C, ev3dev.OUTPUT_C]:
         m = ev3dev.motor(port)
         if m.connected(): m.reset()
