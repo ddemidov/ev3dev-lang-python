@@ -53,7 +53,7 @@ setup(
         license='GPLv2',
         url='https://github.com/ddemidov/evdev-lang-python',
         include_package_data=True,
-        py_modules=['ev3dev_utils'],
+        packages=['ev3dev_utils'],
         ext_modules=[
             Extension('ev3dev',
                 language='c++',

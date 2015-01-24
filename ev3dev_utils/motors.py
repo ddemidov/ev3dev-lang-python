@@ -74,28 +74,28 @@ def run_until(motor, power=75, degrees=None, check=None, check_interval=0.01):
 
         time.sleep(check_interval)
 
-def drive_for(left_motor, right_motor, direction=0, power=75, ever=None, seconds=None):
+def drive_for(left, right, dir=0, power=75, ever=None, seconds=None):
     """ Run both motors for a specified amount of seconds, or forever. The
-    direction parameter is in range [-100, 100] and specifies how fast the
-    robot should turn.
+    dir parameter is in range [-100, 100] and specifies how fast the robot
+    should turn.
 
-    direction = -100: turn left as fast as possible,
-    direction =    0: drive forward,
-    direction =  100: turn right as fast as possible.
+    dir = -100: turn left as fast as possible,
+    dir =    0: drive forward,
+    dir =  100: turn right as fast as possible.
 
     The motor on the outer arc is driven at full power (specified as 'power'
     parameter), and the inner motor power is computed accordingly.
     """
 
-    if (direction >= 0):
-        master = left_motor
-        slave  = right_motor
+    if (dir >= 0):
+        master = left
+        slave  = right
     else:
-        master = right_motor
-        slave  = left_motor
+        master = right
+        slave  = left
 
     mpower = power
-    spower = power * (50 - abs(direction)) / 50
+    spower = power * (50 - abs(dir)) / 50
 
     run_for(master, mpower, ever, seconds)
     run_for(slave,  spower, ever, seconds)
