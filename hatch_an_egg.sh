@@ -2,12 +2,7 @@
 
 cp ../cpp/ev3dev.{cpp,h} .
 
-if [ "$1" == "upload" ]; then
-    # Create a binary egg and upload it to pypi
-    python setup.py bdist_egg -p linux-armv5tejl upload
-else
-    # Install locally
-    python setup.py install
-fi
+# Create a binary egg
+python setup.py bdist_egg -p linux-armv5tejl $*
 
 rm ev3dev.{cpp,h}
