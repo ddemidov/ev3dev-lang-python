@@ -1,2 +1,5 @@
 build
+dist
+python_ev3dev.egg-info
+*.pyc
 *.swp
