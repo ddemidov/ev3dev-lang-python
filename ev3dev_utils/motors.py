@@ -30,7 +30,6 @@ def run_for(motor, power=75, ever=None, seconds=None, degrees=None):
     elif degrees is not None:
         motor.run_mode = ev3dev.motor.run_mode_position
         motor.position_mode = ev3dev.motor.position_mode_relative
-        motor.position = 0
         motor.position_setpoint = int(degrees)
 
     motor.run()
