@@ -1,6 +1,6 @@
 import time, atexit, ev3dev
 
-def run_for(motor, power=75, ever=None, seconds=None, degrees=None):
+def run_for(motor, power=75, ever=None, seconds=None, degrees=None, check_interval=0.01):
     """ Run motor for specified amount of seconds, degrees, or forever
 
     Examples:
@@ -33,6 +33,9 @@ def run_for(motor, power=75, ever=None, seconds=None, degrees=None):
         motor.position_setpoint = int(degrees)
 
     motor.run()
+
+    if ever is None:
+        while motor.running(): time.sleep(check_interval)
 
 def run_until(motor, power=75, degrees=None, check=None, check_interval=0.01):
     """ Run motor until specified position or until check() evaluates to True.
