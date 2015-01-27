@@ -46,7 +46,7 @@ def boost_python_lib():
 #----------------------------------------------------------------------------
 setup(
         name='python-ev3dev',
-        version='0.0.3',
+        version='0.0.3.post3',
         description='Python language bindings for ev3dev',
         author='Denis Demidov',
         author_email='dennis.demidov@gmail.com',

@@ -1,6 +1,9 @@
 import time, atexit, ev3dev
 
-def run_for(motor, power=75, ever=None, seconds=None, degrees=None, check_interval=0.01):
+def run_for(motor, power=75, ever=None, seconds=None, degrees=None,
+        regulation_mode=None, stop_mode=None, ramp_up=0, ramp_down=0,
+        wait=True, check_interval=0.05
+        ):
     """ Run motor for specified amount of seconds, degrees, or forever
 
     Examples:
@@ -13,6 +16,15 @@ def run_for(motor, power=75, ever=None, seconds=None, degrees=None, check_interv
     pulses_per_seconds value. The upper limits for pulses_per_second assumed to
     be 900 and 1200 for tacho and minitacho motors accordingly.
     """
+
+    if regulation_mode is not None:
+        motor.regulation_mode = regulation_mode
+
+    if stop_mode is not None:
+        motor.stop_mode = stop_mode
+
+    motor.ramp_up   = ramp_up
+    motor.ramp_down = ramp_down
 
     if motor.regulation_mode == ev3dev.motor.mode_on:
         if motor.type() == 'tacho':
@@ -34,11 +46,14 @@ def run_for(motor, power=75, ever=None, seconds=None, degrees=None, check_interv
 
     motor.run()
 
-    if ever is None:
+    if ever is None and wait:
         while motor.running(): time.sleep(check_interval)
 
-def run_until(motor, power=75, degrees=None, check=None, check_interval=0.01):
-    """ Run motor until specified position or until check() evaluates to True.
+def run_until(motor, power=75, degrees=None, stalled=None, check=None,
+        regulation_mode=None, stop_mode=None, ramp_up=0, ramp_down=0,
+        check_interval=0.05
+        ):
+    """ Run motor until specified condition.
 
     Examples:
     run_until(motor, degrees=270, power=40)
@@ -49,6 +64,15 @@ def run_until(motor, power=75, degrees=None, check=None, check_interval=0.01):
     pulses_per_seconds value. The upper limits for pulses_per_second assumed to
     be 900 and 1200 for tacho and minitacho motors accordingly.
     """
+
+    if regulation_mode is not None:
+        motor.regulation_mode = regulation_mode
+
+    if stop_mode is not None:
+        motor.stop_mode = stop_mode
+
+    motor.ramp_up   = ramp_up
+    motor.ramp_down = ramp_down
 
     if motor.regulation_mode == ev3dev.motor.mode_on:
         if motor.type() == 'tacho':
@@ -67,16 +91,27 @@ def run_until(motor, power=75, degrees=None, check=None, check_interval=0.01):
 
     motor.run()
 
+    last_position = motor.position
+
     while True:
+        time.sleep(check_interval)
+
         if degrees is not None:
             if not motor.running(): break
+        elif stalled is not None:
+            position = motor.position
+            if position == last_position:
+                motor.stop()
+                break
+            last_position = position
         elif check():
             motor.stop()
             break
 
-        time.sleep(check_interval)
-
-def drive_for(left, right, dir=0, power=75, ever=None, seconds=None):
+def drive_for(left, right, dir=0, power=75, ever=None, seconds=None,
+        regulation_mode=None, stop_mode=None, ramp_up=0, ramp_down=0,
+        wait=True, check_interval=0.05
+        ):
     """ Run both motors for a specified amount of seconds, or forever. The
     dir parameter is in range [-100, 100] and specifies how fast the robot
     should turn.
@@ -99,8 +134,16 @@ def drive_for(left, right, dir=0, power=75, ever=None, seconds=None):
     mpower = power
     spower = power * (50 - abs(dir)) / 50
 
-    run_for(master, mpower, ever, seconds)
-    run_for(slave,  spower, ever, seconds)
+    run_for(motor=master, power=mpower, ever=ever, seconds=seconds,
+            regulation_mode=regulation_mode, stop_mode=stop_mode,
+            ramp_up=ramp_up, ramp_down=ramp_down,
+            wait=wait, check_interval=check_interval
+            )
+    run_for(motor=slave, power=spower, ever=ever, seconds=seconds,
+            regulation_mode=regulation_mode, stop_mode=stop_mode,
+            ramp_up=ramp_up, ramp_down=ramp_down,
+            wait=wait, check_interval=check_interval
+            )
 
 def reset_motors():
     """
