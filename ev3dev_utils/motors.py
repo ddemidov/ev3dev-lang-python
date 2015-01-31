@@ -149,7 +149,7 @@ def reset_motors():
     """
     Reset any motors attached to the brick.
     """
-    for port in [ev3dev.OUTPUT_A, ev3dev.OUTPUT_B, ev3dev.OUTPUT_C, ev3dev.OUTPUT_C]:
+    for port in [ev3dev.OUTPUT_A, ev3dev.OUTPUT_B, ev3dev.OUTPUT_C, ev3dev.OUTPUT_D]:
         m = ev3dev.motor(port)
         if m.connected(): m.reset()
 
