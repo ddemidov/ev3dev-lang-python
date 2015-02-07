@@ -136,14 +136,15 @@ def drive_for(left, right, dir=0, power=75, ever=None, seconds=None,
 
     run_for(motor=master, power=mpower, ever=ever, seconds=seconds,
             regulation_mode=regulation_mode, stop_mode=stop_mode,
-            ramp_up=ramp_up, ramp_down=ramp_down,
-            wait=wait, check_interval=check_interval
+            ramp_up=ramp_up, ramp_down=ramp_down, wait=False
             )
     run_for(motor=slave, power=spower, ever=ever, seconds=seconds,
             regulation_mode=regulation_mode, stop_mode=stop_mode,
-            ramp_up=ramp_up, ramp_down=ramp_down,
-            wait=wait, check_interval=check_interval
+            ramp_up=ramp_up, ramp_down=ramp_down, wait=False
             )
+    if ever is None and wait:
+        while master.running() and slave.running():
+            time.sleep(check_interval)
 
 def reset_motors():
     """
