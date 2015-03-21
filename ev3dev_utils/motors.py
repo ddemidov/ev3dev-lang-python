@@ -27,27 +27,27 @@ def run_for(motor, power=75, ever=None, seconds=None, degrees=None,
     motor.ramp_down = ramp_down
 
     if motor.regulation_mode == ev3dev.motor.mode_on:
-        if motor.type() == 'tacho':
-            motor.pulses_per_second_setpoint = int(power * 9)
-        elif motor.type() == 'minitacho':
-            motor.pulses_per_second_setpoint = int(power * 12)
+        if motor.type == 'tacho':
+            motor.pulses_per_second_sp = int(power * 9)
+        elif motor.type == 'minitacho':
+            motor.pulses_per_second_sp = int(power * 12)
     else:
-        motor.duty_cycle_setpoint = int(power)
+        motor.duty_cycle_sp = int(power)
 
     if ever is not None:
         motor.run_mode = ev3dev.motor.run_mode_forever
     elif seconds is not None:
         motor.run_mode = ev3dev.motor.run_mode_time
-        motor.time_setpoint = int(seconds * 1000)
+        motor.time_sp = int(seconds * 1000)
     elif degrees is not None:
         motor.run_mode = ev3dev.motor.run_mode_position
         motor.position_mode = ev3dev.motor.position_mode_relative
-        motor.position_setpoint = int(degrees)
+        motor.position_sp = int(degrees)
 
-    motor.run()
+    motor.start()
 
     if ever is None and wait:
-        while motor.running(): time.sleep(check_interval)
+        while motor.running: time.sleep(check_interval)
 
 def run_until(motor, power=75, degrees=None, stalled=None, check=None,
         regulation_mode=None, stop_mode=None, ramp_up=0, ramp_down=0,
@@ -75,21 +75,21 @@ def run_until(motor, power=75, degrees=None, stalled=None, check=None,
     motor.ramp_down = ramp_down
 
     if motor.regulation_mode == ev3dev.motor.mode_on:
-        if motor.type() == 'tacho':
-            motor.pulses_per_second_setpoint = int(power * 9)
-        elif motor.type() == 'minitacho':
-            motor.pulses_per_second_setpoint = int(power * 12)
+        if motor.type == 'tacho':
+            motor.pulses_per_second_sp = int(power * 9)
+        elif motor.type == 'minitacho':
+            motor.pulses_per_second_sp = int(power * 12)
     else:
-        motor.duty_cycle_setpoint = int(power)
+        motor.duty_cycle_sp = int(power)
 
     if degrees is not None:
         motor.run_mode = ev3dev.motor.run_mode_position
         motor.position_mode = ev3dev.motor.position_mode_absolute
-        motor.position_setpoint = int(degrees)
+        motor.position_sp = int(degrees)
     else:
         motor.run_mode = ev3dev.motor.run_mode_forever
 
-    motor.run()
+    motor.start()
 
     last_position = motor.position
 
@@ -97,7 +97,7 @@ def run_until(motor, power=75, degrees=None, stalled=None, check=None,
         time.sleep(check_interval)
 
         if degrees is not None:
-            if not motor.running(): break
+            if not motor.running: break
         elif stalled is not None:
             position = motor.position
             if position == last_position:
@@ -143,7 +143,7 @@ def drive_for(left, right, dir=0, power=75, ever=None, seconds=None,
             ramp_up=ramp_up, ramp_down=ramp_down, wait=False
             )
     if ever is None and wait:
-        while master.running() and slave.running():
+        while master.running and slave.running:
             time.sleep(check_interval)
 
 def reset_motors():
@@ -152,6 +152,6 @@ def reset_motors():
     """
     for port in [ev3dev.OUTPUT_A, ev3dev.OUTPUT_B, ev3dev.OUTPUT_C, ev3dev.OUTPUT_D]:
         m = ev3dev.motor(port)
-        if m.connected(): m.reset()
+        if m.connected: m.reset()
 
 atexit.register(reset_motors)

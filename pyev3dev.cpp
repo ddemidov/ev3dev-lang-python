@@ -2,11 +2,14 @@
 #include <boost/python/scope.hpp>
 #include <ev3dev.h>
 
+//~autogen autogen-header
+    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 1. 
+//~autogen
+
 //---------------------------------------------------------------------------
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(device_get_attr_set_ovr, get_attr_set, 1, 2)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(sensor_value_ovr, value, 0, 1)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(sensor_float_value_ovr, float_value, 0, 1)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(motor_run_ovr, run, 0, 1)
 
 //---------------------------------------------------------------------------
 // Functions below allow python to iterate through std::set<std::string>
@@ -161,21 +164,23 @@ BOOST_PYTHON_MODULE(ev3dev)
     {
         scope s = class_<ev3::sensor>("sensor", init<ev3::port_type>())
             .def(init<ev3::port_type, const std::set<ev3::sensor::sensor_type>&>())
-            .def("connected",    device_connected<ev3::sensor>)
-            .def("device_index", device_device_index<ev3::sensor>)
-            .def("port_name",    &ev3::sensor::port_name,   return_value_policy<copy_const_reference>())
-            .def("type",         &ev3::sensor::type,        return_value_policy<copy_const_reference>())
-            .def("type_name",    &ev3::sensor::type_name,   return_value_policy<copy_const_reference>())
-            .def("units",        &ev3::sensor::units)
-            .def("num_values",   &ev3::sensor::num_values)
-            .def("dp",           &ev3::sensor::dp)
+            .add_property("connected", device_connected<ev3::sensor>)
+            .add_property("device_index", device_device_index<ev3::sensor>)
             .def("value",        &ev3::sensor::value,       sensor_value_ovr())
             .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
-            .def("modes",        &ev3::sensor::modes,       return_value_policy<copy_const_reference>())
-            .add_property("mode",
-                    make_function(&ev3::sensor::mode, return_value_policy<copy_const_reference>()),
-                    &ev3::sensor::set_mode
-                    )
+//~autogen python_generic-get-set classes.sensor>currentClass
+
+            .add_property("decimals", &ev3::sensor::decimals)
+            .add_property("mode", &ev3::sensor::mode, &ev3::sensor::set_mode)
+            .add_property("modes", &ev3::sensor::modes)
+            .def("set_command", &ev3::sensor::set_command)
+            .add_property("commands", &ev3::sensor::commands)
+            .add_property("num_values", &ev3::sensor::num_values)
+            .add_property("port_name", &ev3::sensor::port_name)
+            .add_property("units", &ev3::sensor::units)
+            .add_property("driver_name", &ev3::sensor::driver_name)
+
+//~autogen
             ;
 
         s.attr("ev3_touch")      = ev3::sensor::ev3_touch;
@@ -191,17 +196,25 @@ BOOST_PYTHON_MODULE(ev3dev)
         s.attr("nxt_i2c_sensor") = ev3::sensor::nxt_i2c_sensor;
     }
 
-    class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor", init<>())
-        .def(init<ev3::port_type>())
-        .def(init<ev3::port_type, ev3::address_type>())
-        .def("address",     &ev3::i2c_sensor::address)
-        .def("fw_version",  &ev3::i2c_sensor::fw_version)
-        .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, &ev3::i2c_sensor::set_poll_ms)
-        ;
+    {
+        class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor", init<>())
+            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type, ev3::address_type>())
+//~autogen python_generic-get-set classes.i2cSensor>currentClass
 
-    class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", init<>())
-        .def(init<ev3::port_type>())
-        ;
+            .add_property("fw_version", &ev3::i2c_sensor::fw_version)
+            .add_property("address", &ev3::i2c_sensor::address)
+            .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, &ev3::i2c_sensor::set_poll_ms)
+
+//~autogen
+            ;
+    }
+
+    {
+        class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", init<>())
+            .def(init<ev3::port_type>())
+            ;
+    }
 
     {
         scope s = class_<ev3::color_sensor, bases<ev3::sensor>>(
@@ -258,34 +271,47 @@ BOOST_PYTHON_MODULE(ev3dev)
     {
         scope s = class_<ev3::motor>("motor", init<ev3::port_type>())
             .def(init<ev3::port_type, ev3::motor::motor_type>())
+            .add_property("connected",         device_connected<ev3::motor>)
+            .add_property("device_index",      device_device_index<ev3::motor>)
+            .def("start",            &ev3::motor::start)
+            .def("stop",             &ev3::motor::stop)
+            .def("reset",            &ev3::motor::reset)
+            .add_property("running", &ev3::motor::running)
+//~autogen python_generic-get-set classes.motor>currentClass
 
-            .def("connected",         device_connected<ev3::motor>)
-            .def("device_index",      device_device_index<ev3::motor>)
-            .def("port_name",         &ev3::motor::port_name)
-            .def("type",              &ev3::motor::type)
-            .def("run",               &ev3::motor::run, motor_run_ovr())
-            .def("stop",              &ev3::motor::stop)
-            .def("reset",             &ev3::motor::reset)
-            .def("running",           &ev3::motor::running)
-            .def("state",             &ev3::motor::state)
-            .def("duty_cycle",        &ev3::motor::duty_cycle)
-            .def("pulses_per_second", &ev3::motor::pulses_per_second)
+            .add_property("duty_cycle", &ev3::motor::duty_cycle)
+            .add_property("duty_cycle_sp", &ev3::motor::duty_cycle_sp, &ev3::motor::set_duty_cycle_sp)
+            .add_property("encoder_mode", &ev3::motor::encoder_mode, &ev3::motor::set_encoder_mode)
+            .add_property("encoder_modes", &ev3::motor::encoder_modes)
+            .add_property("emergency_stop", &ev3::motor::emergency_stop, &ev3::motor::set_emergency_stop)
+            .add_property("debug_log", &ev3::motor::debug_log)
+            .add_property("polarity_mode", &ev3::motor::polarity_mode, &ev3::motor::set_polarity_mode)
+            .add_property("polarity_modes", &ev3::motor::polarity_modes)
+            .add_property("port_name", &ev3::motor::port_name)
+            .add_property("position", &ev3::motor::position, &ev3::motor::set_position)
+            .add_property("position_mode", &ev3::motor::position_mode, &ev3::motor::set_position_mode)
+            .add_property("position_modes", &ev3::motor::position_modes)
+            .add_property("position_sp", &ev3::motor::position_sp, &ev3::motor::set_position_sp)
+            .add_property("pulses_per_second", &ev3::motor::pulses_per_second)
+            .add_property("pulses_per_second_sp", &ev3::motor::pulses_per_second_sp, &ev3::motor::set_pulses_per_second_sp)
+            .add_property("ramp_down_sp", &ev3::motor::ramp_down_sp, &ev3::motor::set_ramp_down_sp)
+            .add_property("ramp_up_sp", &ev3::motor::ramp_up_sp, &ev3::motor::set_ramp_up_sp)
+            .add_property("regulation_mode", &ev3::motor::regulation_mode, &ev3::motor::set_regulation_mode)
+            .add_property("regulation_modes", &ev3::motor::regulation_modes)
+            .add_property("run", &ev3::motor::run, &ev3::motor::set_run)
+            .add_property("run_mode", &ev3::motor::run_mode, &ev3::motor::set_run_mode)
+            .add_property("run_modes", &ev3::motor::run_modes)
+            .add_property("speed_regulation_p", &ev3::motor::speed_regulation_p, &ev3::motor::set_speed_regulation_p)
+            .add_property("speed_regulation_i", &ev3::motor::speed_regulation_i, &ev3::motor::set_speed_regulation_i)
+            .add_property("speed_regulation_d", &ev3::motor::speed_regulation_d, &ev3::motor::set_speed_regulation_d)
+            .add_property("speed_regulation_k", &ev3::motor::speed_regulation_k, &ev3::motor::set_speed_regulation_k)
+            .add_property("state", &ev3::motor::state)
+            .add_property("stop_mode", &ev3::motor::stop_mode, &ev3::motor::set_stop_mode)
+            .add_property("stop_modes", &ev3::motor::stop_modes)
+            .add_property("time_sp", &ev3::motor::time_sp, &ev3::motor::set_time_sp)
+            .add_property("type", &ev3::motor::type)
 
-            .add_property("position",                   &ev3::motor::position,                   &ev3::motor::set_position)
-            .add_property("run_mode",                   &ev3::motor::run_mode,                   &ev3::motor::set_run_mode)
-            .add_property("stop_mode",                  &ev3::motor::stop_mode,                  &ev3::motor::set_stop_mode)
-            .add_property("regulation_mode",            &ev3::motor::regulation_mode,            &ev3::motor::set_regulation_mode)
-            .add_property("position_mode",              &ev3::motor::position_mode,              &ev3::motor::set_position_mode)
-            .add_property("duty_cycle_setpoint",        &ev3::motor::duty_cycle_setpoint,        &ev3::motor::set_duty_cycle_setpoint)
-            .add_property("pulses_per_second_setpoint", &ev3::motor::pulses_per_second_setpoint, &ev3::motor::set_pulses_per_second_setpoint)
-            .add_property("time_setpoint",              &ev3::motor::time_setpoint,              &ev3::motor::set_time_setpoint)
-            .add_property("position_setpoint",          &ev3::motor::position_setpoint,          &ev3::motor::set_position_setpoint)
-            .add_property("ramp_up",                    &ev3::motor::ramp_up,                    &ev3::motor::set_ramp_up)
-            .add_property("ramp_down",                  &ev3::motor::ramp_down,                  &ev3::motor::set_ramp_down)
-            .add_property("speed_regulation_p",         &ev3::motor::speed_regulation_p,         &ev3::motor::set_speed_regulation_p)
-            .add_property("speed_regulation_i",         &ev3::motor::speed_regulation_i,         &ev3::motor::set_speed_regulation_i)
-            .add_property("speed_regulation_d",         &ev3::motor::speed_regulation_d,         &ev3::motor::set_speed_regulation_d)
-            .add_property("speed_regulation_k",         &ev3::motor::speed_regulation_k,         &ev3::motor::set_speed_regulation_k)
+//~autogen
             ;
 
         s.attr("motor_large")  = ev3::motor::motor_large;
@@ -306,28 +332,35 @@ BOOST_PYTHON_MODULE(ev3dev)
         s.attr("position_mode_relative") = ev3::motor::position_mode_relative;
     }
 
-    class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", init<>())
-        .def(init<ev3::port_type>())
-        ;
+    {
+        class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", init<>())
+            .def(init<ev3::port_type>())
+            ;
+    }
 
-    class_<ev3::large_motor, bases<ev3::motor>>("large_motor", init<>())
-        .def(init<ev3::port_type>())
-        ;
+    {
+        class_<ev3::large_motor, bases<ev3::motor>>("large_motor", init<>())
+            .def(init<ev3::port_type>())
+            ;
+    }
 
     {
         scope s = class_<ev3::dc_motor>("dc_motor", init<>())
             .def(init<ev3::port_type>())
-            .def("connected",    device_connected<ev3::dc_motor>)
-            .def("device_index", device_device_index<ev3::dc_motor>)
-            .def("port_name",    &ev3::dc_motor::port_name)
-            .def("type_name",    &ev3::dc_motor::type_name)
-            .def("commands",     &ev3::dc_motor::command)
+            .add_property("connected",    device_connected<ev3::dc_motor>)
+            .add_property("device_index", device_device_index<ev3::dc_motor>)
+//~autogen python_generic-get-set classes.dcMotor>currentClass
 
-            .add_property("command",      &ev3::dc_motor::command,      &ev3::dc_motor::set_command)
-            .add_property("duty_cycle",   &ev3::dc_motor::duty_cycle,   &ev3::dc_motor::set_duty_cycle)
+            .def("set_command", &ev3::dc_motor::set_command)
+            .add_property("commands", &ev3::dc_motor::commands)
+            .add_property("duty_cycle", &ev3::dc_motor::duty_cycle, &ev3::dc_motor::set_duty_cycle)
+            .add_property("driver_name", &ev3::dc_motor::driver_name)
+            .add_property("port_name", &ev3::dc_motor::port_name)
             .add_property("ramp_down_ms", &ev3::dc_motor::ramp_down_ms, &ev3::dc_motor::set_ramp_down_ms)
-            .add_property("ramp_up_ms",   &ev3::dc_motor::ramp_up_ms,   &ev3::dc_motor::set_ramp_up_ms)
-            .add_property("polarity",     &ev3::dc_motor::polarity,     &ev3::dc_motor::set_polarity)
+            .add_property("ramp_up_ms", &ev3::dc_motor::ramp_up_ms, &ev3::dc_motor::set_ramp_up_ms)
+            .add_property("polarity", &ev3::dc_motor::polarity, &ev3::dc_motor::set_polarity)
+
+//~autogen
             ;
 
         s.attr("command_run")       = ev3::dc_motor::command_run;
@@ -340,17 +373,21 @@ BOOST_PYTHON_MODULE(ev3dev)
     {
         scope s = class_<ev3::servo_motor>("servo_motor", init<>())
             .def(init<ev3::port_type>())
-            .def("connected",    device_connected<ev3::servo_motor>)
-            .def("device_index", device_device_index<ev3::servo_motor>)
-            .def("port_name",    &ev3::servo_motor::port_name)
-            .def("type_name",    &ev3::servo_motor::type_name)
+            .add_property("connected",    device_connected<ev3::servo_motor>)
+            .add_property("device_index", device_device_index<ev3::servo_motor>)
+//~autogen python_generic-get-set classes.servoMotor>currentClass
 
-            .add_property("command",      &ev3::servo_motor::command,      &ev3::servo_motor::set_command)
-            .add_property("rate",         &ev3::servo_motor::rate,         &ev3::servo_motor::set_rate)
+            .add_property("command", &ev3::servo_motor::command, &ev3::servo_motor::set_command)
+            .add_property("driver_name", &ev3::servo_motor::driver_name)
+            .add_property("port_name", &ev3::servo_motor::port_name)
             .add_property("max_pulse_ms", &ev3::servo_motor::max_pulse_ms, &ev3::servo_motor::set_max_pulse_ms)
             .add_property("mid_pulse_ms", &ev3::servo_motor::mid_pulse_ms, &ev3::servo_motor::set_mid_pulse_ms)
             .add_property("min_pulse_ms", &ev3::servo_motor::min_pulse_ms, &ev3::servo_motor::set_min_pulse_ms)
-            .add_property("polarity",     &ev3::servo_motor::polarity,     &ev3::servo_motor::set_polarity)
+            .add_property("polarity", &ev3::servo_motor::polarity, &ev3::servo_motor::set_polarity)
+            .add_property("position", &ev3::servo_motor::position, &ev3::servo_motor::set_position)
+            .add_property("rate", &ev3::servo_motor::rate, &ev3::servo_motor::set_rate)
+
+//~autogen
             ;
 
         s.attr("command_run")       = ev3::servo_motor::command_run;
@@ -364,22 +401,27 @@ BOOST_PYTHON_MODULE(ev3dev)
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::led>("led", init<std::string>())
-            .def("connected",      device_connected<ev3::led>)
-            .def("max_brightness", &ev3::led::max_brightness)
-            .add_property("brightness", &ev3::led::brightness, &ev3::led::set_brightness)
+            .add_property("connected",      device_connected<ev3::led>)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
             .def("flash",          &ev3::led::flash, args("interval_ms"))
             .def("set_on_delay",   &ev3::led::set_on_delay, args("ms"))
             .def("set_off_delay",  &ev3::led::set_off_delay, args("ms"))
             .def("triggers",       &ev3::led::triggers)
-            .add_property("trigger", &ev3::led::trigger, &ev3::led::set_trigger)
             .def("red_on",         &ev3::led::red_on).staticmethod("red_on")
             .def("red_off",        &ev3::led::red_off).staticmethod("red_off")
             .def("green_on",       &ev3::led::green_on).staticmethod("green_on")
             .def("green_off",      &ev3::led::green_off).staticmethod("green_off")
             .def("all_on",         &ev3::led::all_on).staticmethod("all_on")
             .def("all_off",        &ev3::led::all_off).staticmethod("all_off")
+            .add_property("triggers", &ev3::led::triggers)
+//~autogen python_generic-get-set classes.led>currentClass
+
+            .add_property("max_brightness", &ev3::led::max_brightness)
+            .add_property("brightness", &ev3::led::brightness, &ev3::led::set_brightness)
+            .add_property("trigger", &ev3::led::trigger, &ev3::led::set_trigger)
+
+//~autogen
             ;
 
         s.attr("red_right")   = ev3::led::red_right;
@@ -393,15 +435,19 @@ BOOST_PYTHON_MODULE(ev3dev)
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::power_supply>("power_supply", init<std::string>())
-            .def("connected",          device_connected<ev3::power_supply>)
-            .def("current_now",        &ev3::power_supply::current_now)
-            .def("current_amps",       &ev3::power_supply::current_amps)
-            .def("current_max_design", &ev3::power_supply::current_max_design)
-            .def("voltage_now",        &ev3::power_supply::voltage_now)
-            .def("voltage_volts",      &ev3::power_supply::voltage_volts)
-            .def("voltage_max_design", &ev3::power_supply::voltage_max_design)
-            .def("technology",         &ev3::power_supply::technology)
-            .def("type",               &ev3::power_supply::type)
+            .add_property("connected",          device_connected<ev3::power_supply>)
+            .add_property("current_amps",       &ev3::power_supply::current_amps)
+            .add_property("voltage_volts",      &ev3::power_supply::voltage_volts)
+//~autogen python_generic-get-set classes.powerSupply>currentClass
+
+            .add_property("current_now", &ev3::power_supply::current_now)
+            .add_property("voltage_now", &ev3::power_supply::voltage_now)
+            .add_property("voltage_max_design", &ev3::power_supply::voltage_max_design)
+            .add_property("voltage_min_design", &ev3::power_supply::voltage_min_design)
+            .add_property("technology", &ev3::power_supply::technology)
+            .add_property("type", &ev3::power_supply::type)
+
+//~autogen
             ;
 
         s.attr("battery") = ev3::power_supply::battery;
@@ -412,7 +458,7 @@ BOOST_PYTHON_MODULE(ev3dev)
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::button>("button", init<int>())
-            .def("pressed", &ev3::button::pressed)
+            .add_property("pressed", &ev3::button::pressed)
             ;
 
         s.attr("back")  = ev3::button::back;
@@ -442,13 +488,13 @@ BOOST_PYTHON_MODULE(ev3dev)
     // LCD
     //-----------------------------------------------------------------------
     class_<ev3::lcd>("lcd")
-        .def("available",         &ev3::lcd::available)
-        .def("resolution_x",      &ev3::lcd::resolution_x)
-        .def("resolution_y",      &ev3::lcd::resolution_y)
-        .def("bits_per_pixel",    &ev3::lcd::bits_per_pixel)
-        .def("frame_buffer_size", &ev3::lcd::frame_buffer_size)
-        .def("line_length",       &ev3::lcd::line_length)
-        .def("frame_buffer",      lcd_frame_buffer)
+        .add_property("available",         &ev3::lcd::available)
+        .add_property("resolution_x",      &ev3::lcd::resolution_x)
+        .add_property("resolution_y",      &ev3::lcd::resolution_y)
+        .add_property("bits_per_pixel",    &ev3::lcd::bits_per_pixel)
+        .add_property("frame_buffer_size", &ev3::lcd::frame_buffer_size)
+        .add_property("line_length",       &ev3::lcd::line_length)
+        .add_property("frame_buffer",      lcd_frame_buffer)
         .def("fill",              &ev3::lcd::fill, args("pixel"))
         ;
 
@@ -459,8 +505,8 @@ BOOST_PYTHON_MODULE(ev3dev)
         .def(init<unsigned>())
         .def(init<ev3::infrared_sensor&>())
         .def(init<ev3::infrared_sensor&, unsigned>())
-        .def("connected",    &ev3::remote_control::connected)
-        .def("channel",      &ev3::remote_control::channel)
+        .add_property("connected",    &ev3::remote_control::connected)
+        .add_property("channel",      &ev3::remote_control::channel)
         .def("process",      &ev3::remote_control::process)
         .def("on_red_up",    rc_on_red_up,    args("callable"))
         .def("on_red_down",  rc_on_red_down,  args("callable"))

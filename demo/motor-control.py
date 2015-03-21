@@ -43,7 +43,7 @@ def draw():
 def drive(state, power=None):
     m = motors[current]
 
-    if not m.connected(): return
+    if not m.connected: return
 
     if state:
         run_for(ever=True, motor=m, power=power)
@@ -60,15 +60,15 @@ def prev_port():
     drive(False)
     current = (current - 1) % 4
 
-while not button.back.pressed():
-    if button.left.pressed():
+while not button.back.pressed:
+    if button.left.pressed:
         prev_port()
-    elif button.right.pressed():
+    elif button.right.pressed:
         next_port()
 
-    if button.up.pressed():
+    if button.up.pressed:
         drive(True, 80)
-    elif button.down.pressed():
+    elif button.down.pressed:
         drive(True, -80)
     else:
         drive(False)

@@ -18,8 +18,8 @@ class LCD:
                 return n - r + m
 
 
-        self.nx = alignup(self.dev.resolution_x(), 32)
-        self.ny = self.dev.resolution_y()
+        self.nx = alignup(self.dev.resolution_x, 32)
+        self.ny = self.dev.resolution_y
 
         self.img = Image.new("1", (self.nx, self.ny), "white")
 
@@ -28,7 +28,7 @@ class LCD:
         """
         Dimensions of the LCD screen.
         """
-        return (self.dev.resolution_x(), self.dev.resolution_y())
+        return (self.dev.resolution_x, self.dev.resolution_y)
 
     @property
     def draw(self):
@@ -51,7 +51,5 @@ class LCD:
         Applies pending changes to LCD.
         Nothing will be drawn on the screen until this function is called.
         """
-        fb = self.dev.frame_buffer()
-        fb[:] = self.img.tobytes("raw", "1;IR")
-
+        self.dev.frame_buffer[:] = self.img.tobytes("raw", "1;IR")
 
