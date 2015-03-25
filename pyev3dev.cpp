@@ -144,26 +144,10 @@ BOOST_PYTHON_MODULE(ev3dev)
         ;
 
     //-----------------------------------------------------------------------
-    // Generic device
-    //-----------------------------------------------------------------------
-    class_<ev3::device>("device")
-        .def("connect",           &ev3::device::connect, args("dir", "pattern", "match"))
-        .def("connected",         &ev3::device::connected)
-        .def("device_index",      &ev3::device::device_index)
-        .def("get_attr_int",      &ev3::device::get_attr_int,      args("name"))
-        .def("set_attr_int",      &ev3::device::set_attr_int,      args("name", "value"))
-        .def("get_attr_string",   &ev3::device::get_attr_string,   args("name"))
-        .def("set_attr_string",   &ev3::device::set_attr_string,   args("name", "value"))
-        .def("get_attr_set",      &ev3::device::get_attr_set,      device_get_attr_set_ovr())
-        .def("get_attr_from_set", &ev3::device::get_attr_from_set, args("name"))
-        ;
-
-    //-----------------------------------------------------------------------
     // Sensors
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::sensor>("sensor", init<ev3::port_type>())
-            .def(init<ev3::port_type, const std::set<ev3::sensor::sensor_type>&>())
             .add_property("connected", device_connected<ev3::sensor>)
             .add_property("device_index", device_device_index<ev3::sensor>)
             .def("value",        &ev3::sensor::value,       sensor_value_ovr())
