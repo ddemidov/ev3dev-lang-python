@@ -6,7 +6,7 @@ This is a python library implementing unified interface for [ev3dev][] devices.
 
 * Prerequisites:
 ```
-apt-get install libboost-python-dev python-setuptools
+apt-get install libboost-python-dev python-setuptools python-pil
 ```
 
 * Now, the actual module installation:
