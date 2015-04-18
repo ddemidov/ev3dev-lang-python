@@ -1,34 +1,53 @@
 #!/usr/bin/python
-#
-# Remotely controls a robot with infrared and touch sensor attached
-# and driven by two large motors.
-#
-# Halts when touch sensor is activated.
 
-import time
+print(
+"""This demo shows how to control a robot with a remote.
+
+The robot should have two large motors and an infrared sensor attached.
+Red buttons on the remote control the left motor, blue buttons control
+the right one.
+
+Required hardware:
+    large motor on output port B
+    large motor on output port C
+    infrared sensor on any input port
+"""
+)
+
+from time import sleep
 from ev3dev import *
-from ev3dev_utils.motors import *
 
-rmotor = large_motor(OUTPUT_B)
 lmotor = large_motor(OUTPUT_C)
+rmotor = large_motor(OUTPUT_B)
+irsens = infrared_sensor()
 
-ir = infrared_sensor()
-ts = touch_sensor()
-rc = remote_control(ir)
+assert lmotor.connected, "Left motor is not connected!"
+assert rmotor.connected, "Right motor is not connected!"
+assert irsens.connected, "Infrared sensor is not connected!"
+
+lmotor.speed_regulation_enabled = 'on'
+rmotor.speed_regulation_enabled = 'on'
+
+lmotor.stop_command = 'brake'
+rmotor.stop_command = 'brake'
+
+rc = remote_control(irsens)
 
 def make_roll(m, p):
     def roll(state):
         if state:
-            run_for(ever=True, motor=m, power=p)
+            m.speed_sp = p * 900
+            m.set_command('run-forever')
         else:
-            m.reset()
+            m.set_command('stop')
     return roll
 
-rc.on_red_up   (make_roll(lmotor,  80))
-rc.on_red_down (make_roll(lmotor, -80))
-rc.on_blue_up  (make_roll(rmotor,  80))
-rc.on_blue_down(make_roll(rmotor, -80))
+rc.on_red_up   (make_roll(lmotor,  1))
+rc.on_red_down (make_roll(lmotor, -1))
+rc.on_blue_up  (make_roll(rmotor,  1))
+rc.on_blue_down(make_roll(rmotor, -1))
 
-while not ts.value():
-    if not rc.process(): time.sleep(0.01)
+while True:
+    rc.process()
+    sleep(0.01)
 

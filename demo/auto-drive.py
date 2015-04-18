@@ -1,32 +1,61 @@
 #!/usr/bin/python
-#
-# Controls a robot with attached infrared and touch sensors and
-# driven by two large motors.
-#
-# Moves forward until an object is met, then turns and
-# continues to run in the other direction.
-# Halts when touch sensor is activated.
 
-import time
+print(
+"""In this demo a robot with two large motors and an infrared sensor drives
+autonomously. It drives forward until an obstacle is met (determined by the
+infrared sensor), then turns in a random direction and continues.
+
+If a touch sensor is present, the robot may be stopped by pressing the sensor.
+
+Required hardware:
+    large motor on output port B
+    large motor on output port C
+    infrared sensor on any input port
+
+Optional hardware:
+    touch sensor on any input port
+"""
+)
+
+from sys import exit
+from time import sleep
+from random import randint
 from ev3dev import *
-from ev3dev_utils.motors import *
 
 lmotor = large_motor(OUTPUT_C)
 rmotor = large_motor(OUTPUT_B)
 irsens = infrared_sensor()
 
-irsens.mode = infrared_sensor.mode_proximity
+assert lmotor.connected, "Left motor is not connected!"
+assert rmotor.connected, "Right motor is not connected!"
+assert irsens.connected, "Infrared sensor is not connected!"
+
+irsens.mode = 'IR-PROX'
+
+lmotor.speed_regulation_enabled = 'on'
+rmotor.speed_regulation_enabled = 'on'
+
+motors = [lmotor, rmotor]
 
 ts = touch_sensor()
 
-while not ts.value():
+def done():
+    return ts.connected and ts.value()
+
+while not done():
     distance = irsens.value()
-    if distance < 0: break
 
     if distance > 40:
-        drive_for(ever=True, left=lmotor, right=rmotor)
-        time.sleep(0.01)
+        for m in motors:
+            m.speed_sp = 900
+            m.set_command('run-forever')
+
+        sleep(0.01)
     else:
-        while irsens.value() < 70 and not ts.value():
-            drive_for(ever=True, left=lmotor, right=rmotor, dir=-100)
-            time.sleep(0.01)
+        dir = 100 * (randint(0, 1) * 2 - 1)
+        while irsens.value() < 70 and not done():
+            for (m, p) in zip(motors, steering(dir, 900)):
+                m.speed_sp = p
+                m.set_command('run-forever')
+
+            sleep(0.01)

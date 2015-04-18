@@ -98,12 +98,12 @@ setup(
         license='GPLv2',
         url='https://github.com/ddemidov/evdev-lang-python',
         include_package_data=True,
-        packages=['ev3dev_utils'],
+        packages=['ev3dev'],
         ext_modules=[
-            Extension('ev3dev',
+            Extension('ev3dev_ext',
                 language='c++',
-                sources=['pyev3dev.cpp', 'ev3dev.cpp'],
-                include_dirs=['.'],
+                sources=['ev3dev/pyev3dev.cpp', 'ev3dev/ev3dev.cpp'],
+                include_dirs=['ev3dev'],
                 libraries=[boost_python_lib()],
                 extra_compile_args=['-O2', '-std=c++11']
                 )

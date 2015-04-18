@@ -1,14 +1,17 @@
 #!/usr/bin/python
-#
-# A script that controls motors attached to each of the output ports with the
-# brick buttons. This could be very helpful for initial tests of your robot's
-# functionality.
 
-import time
-from PIL import Image, ImageDraw, ImageFont
+print(
+"""This demo allows to control motors attached to each of the output ports with the
+brick buttons. This could be very helpful for initial tests of your robot's
+functionality.
+
+Use left/right buttons to choose output port to control.
+Use up/down buttons to run the motor attached to the current port.
+"""
+)
+
+from time import sleep
 from ev3dev import *
-from ev3dev_utils.lcd import *
-from ev3dev_utils.motors import *
 
 lcd = LCD()
 motors = [
@@ -18,7 +21,7 @@ motors = [
         motor(OUTPUT_D)
         ]
 
-current = 0
+port = 0
 
 def draw():
     nx = lcd.shape[0]
@@ -35,43 +38,34 @@ def draw():
     for p in zip(pos, ['A', 'B', 'C', 'D']):
         lcd.draw.text((p[0], 16), p[1])
 
-    x = pos[current] + 8
+    x = pos[port] + 8
     lcd.draw.rectangle((x, 4, x + 4, 8), fill='black')
 
     lcd.update()
 
-def drive(state, power=None):
-    m = motors[current]
-
+def drive(m = None, state=False, power=None):
     if not m.connected: return
 
     if state:
-        run_for(ever=True, motor=m, power=power)
+        m.speed_regulation_enabled = 'off'
+        m.duty_cycle_sp = power
+        m.set_command('run-forever')
     else:
-        m.reset()
-
-def next_port():
-    global current
-    drive(False)
-    current = (current + 1) % 4
-
-def prev_port():
-    global current
-    drive(False)
-    current = (current - 1) % 4
+        m.set_command('stop')
 
 while not button.back.pressed:
     if button.left.pressed:
-        prev_port()
+        port = (port - 1) % 4
     elif button.right.pressed:
-        next_port()
+        port = (port + 1) % 4
 
     if button.up.pressed:
-        drive(True, 80)
+        drive(motors[port], True,  100)
     elif button.down.pressed:
-        drive(True, -80)
+        drive(motors[port], True, -100)
     else:
-        drive(False)
+        drive(motors[port], False)
 
     draw()
-    time.sleep(0.1)
+
+    sleep(0.1)

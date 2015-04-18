@@ -1,18 +1,33 @@
 #!/usr/bin/python
-#
-# Draws a smiley face on the brick screen.
 
-import time
-from ev3dev_utils.lcd import LCD
+print(
+"""This demo draws a smiley face on the brick screen.
+"""
+)
 
-lcd = LCD()
+from time import sleep
+from ev3dev import *
 
-# lcd.draw returns a PIL.ImageDraw handle
-lcd.draw.ellipse(( 20, 20,  60, 60))
-lcd.draw.ellipse((118, 20, 158, 60))
-lcd.draw.arc((20, 80, 158, 100), 0, 180)
+screen = LCD()
 
-# Update lcd display
-lcd.update()
+smile = True
 
-time.sleep(3)
+while True:
+    screen.clear()
+
+    # LCD.draw returns a PIL.ImageDraw handle
+    screen.draw.ellipse(( 20, 20,  60, 60))
+    screen.draw.ellipse((118, 20, 158, 60))
+
+    if smile:
+        screen.draw.arc((20, 80, 158, 100), 0, 180)
+    else:
+        screen.draw.arc((20, 80, 158, 100), 180, 360)
+
+    smile = not smile
+
+    # Update lcd display
+    screen.update()
+
+    sleep(1)
+

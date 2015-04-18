@@ -1,16 +1,32 @@
 #!/usr/bin/python
-#
-# Line tracking program
-# The algorithm is taken from the following link:
-# http://thetechnicgear.com/2014/03/howto-create-line-following-robot-using-mindstorms/
-#
-# The default values for Kp, Ki, and Kd (see the link above) are only
-# guaranteed to work for my specific setup and most probably will need to be
-# adjusted on a case-by-case basis.
+
+print(
+"""This demo make a robot driven by two large_motors follow a dark line with
+help of a color sensor.
+
+The algorithm is taken from the following link:
+http://thetechnicgear.com/2014/03/howto-create-line-following-robot-using-mindstorms/
+
+The default values for Kp, Ki, and Kd (see the link above) are only
+guaranteed to work for my specific setup and most probably will need to be
+adjusted on a case-by-case basis.
+
+When started, the robot will ask to show him white (background) and dark (line)
+colors. Place the robot so that the color sensor would be directly above the
+respective color and press the touch sensor to proceed.
+
+Press the touch sensor to stop the program.
+
+Required hardware:
+    large motor on output port B
+    large motor on output port C
+    color sensor on any input port
+    touch sensor on any input port
+"""
+)
 
 import sys, argparse, time
 from ev3dev import *
-from ev3dev_utils.motors import *
 
 #----------------------------------------------------------------------------
 # Parse command line
@@ -27,15 +43,20 @@ args = parser.parse_args(sys.argv[1:])
 lmotor = large_motor(OUTPUT_C)
 rmotor = large_motor(OUTPUT_B)
 
-ts = touch_sensor()
 cs = color_sensor()
+ts = touch_sensor()
+
+assert lmotor.connected, "Left motor is not connected!"
+assert rmotor.connected, "Right motor is not connected!"
+assert cs.connected,     "Color sensor is not connected!"
+assert ts.connected,     "Touch sensor is not connected!"
 
 #----------------------------------------------------------------------------
 # Calibrate the color sensor.
 # Put the color sensor on white/black surface and
 # press touch sensor to take the reading.
 #----------------------------------------------------------------------------
-cs.mode = color_sensor.mode_reflect
+cs.mode = 'COL-REFLECT'
 
 def get_reading(color):
     sound.speak("Show me %s!" % color, True)
@@ -54,8 +75,8 @@ mid   = 0.5 * (white + black)
 #----------------------------------------------------------------------------
 # Follow the line!
 #----------------------------------------------------------------------------
-lmotor.regulation_mode = motor.mode_on
-rmotor.regulation_mode = motor.mode_on
+lmotor.speed_regulation_enabled = 'on'
+rmotor.speed_regulation_enabled = 'on'
 
 last_error = 0
 integral   = 0
@@ -68,5 +89,8 @@ while not ts.value():
 
     correction = args.Kp * error + args.Ki * integral + args.Kd * derivative
 
-    drive_for(ever=True, left=lmotor, right=rmotor, dir=correction, power=60)
+    for m,p in zip((lmotor, rmotor), steering(correction, 540)):
+        m.speed_sp = p
+        m.set_command('run-forever')
+
     time.sleep(0.01)
