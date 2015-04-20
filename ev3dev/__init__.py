@@ -31,7 +31,7 @@ def steering(direction, power=100):
 
     pl = power
     pr = power
-    s = (50 - abs(direction)) / 50
+    s = (50 - abs(float(direction))) / 50
 
     if direction >= 0:
         pr *= s
