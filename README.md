@@ -9,7 +9,7 @@ This is a python library implementing unified interface for [ev3dev][] devices.
 apt-get install libboost-python-dev python-setuptools python-pil
 ```
 
-* Now, the actual module installation:
+* Now, the actual module installation (see [#3](https://github.com/ddemidov/ev3dev-lang-python/issues/3)):
 ```
 easy_install python-ev3dev
 ```
