@@ -1,6 +1,8 @@
 #include <boost/python.hpp>
 #include <boost/python/scope.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <ev3dev.h>
+#include <iostream>
 
 //~autogen autogen-header
     // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 2. 
@@ -10,6 +12,19 @@
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(device_get_attr_set_ovr, get_attr_set, 1, 2)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(sensor_value_ovr, value, 0, 1)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(sensor_float_value_ovr, float_value, 0, 1)
+
+//---------------------------------------------------------------------------
+// Connect generic device. Only port_name matching is supported.
+// Need this function since there is no easy way to expose std::set to python
+//---------------------------------------------------------------------------
+void device_connect(ev3dev::device &dev,
+        const std::string &dir,
+        const std::string &pattern,
+        const std::string &port_name
+        )
+{
+    dev.connect(dir, pattern, {{"port_name", {port_name}}});
+}
 
 //---------------------------------------------------------------------------
 // Functions below allow python to iterate through std::set<std::string>
@@ -142,6 +157,28 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         .def("empty",        &ev3::mode_set::empty)
         .def("count",        &ev3::mode_set::count)
         ;
+
+    //-----------------------------------------------------------------------
+    // Generic device
+    //-----------------------------------------------------------------------
+    {
+        class_<std::map<std::string, std::string> >("map_s2s")
+            .def(map_indexing_suite<std::map<std::string, std::string> >() );
+
+
+        class_<ev3::device>("device")
+            .def("connect", device_connect)
+            .add_property("connected",    &ev3::device::connected)
+            .add_property("device_index", &ev3::device::device_index)
+            .def("get_attr_int",    &ev3::device::get_attr_int)
+            .def("set_attr_int",    &ev3::device::set_attr_int)
+            .def("get_attr_string", &ev3::device::get_attr_string)
+            .def("set_attr_string", &ev3::device::set_attr_string)
+            .def("get_attr_line",   &ev3::device::get_attr_line)
+            .def("get_attr_set",    &ev3::device::get_attr_set)
+            .def("get_attr_from_set", &ev3::device::get_attr_from_set)
+            ;
+    }
 
     //-----------------------------------------------------------------------
     // Sensors
