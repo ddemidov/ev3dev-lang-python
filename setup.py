@@ -41,8 +41,11 @@ def get_git_version(abbrev=4):
     if version is None:
         raise ValueError("Cannot find the version number!")
 
-    #adapt to PEP 386 compatible versioning scheme
+    # adapt to PEP 386 compatible versioning scheme
     version = pep386adapt(version)
+
+    # write version to version.py
+    open("ev3dev/version.py", "w").write("__version__='%s'\n" % version)
 
     # Finally, return the current version.
     return version

@@ -1,5 +1,6 @@
 build
 dist
 python_ev3dev.egg-info
+ev3dev/version.py
 *.pyc
 *.swp

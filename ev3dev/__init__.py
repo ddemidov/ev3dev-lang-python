@@ -1,4 +1,5 @@
 from ev3dev_ext import *
+from version import __version__
 from PIL import Image, ImageDraw
 
 # Furnish mode_set class (which is wrapper around std::set<std::string>)
