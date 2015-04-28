@@ -102,6 +102,7 @@ setup(
         url='https://github.com/ddemidov/evdev-lang-python',
         include_package_data=True,
         packages=['ev3dev'],
+        zip_safe=False,
         ext_modules=[
             Extension('ev3dev_ext',
                 language='c++',
