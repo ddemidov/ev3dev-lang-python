@@ -1,6 +1,5 @@
 #include <boost/python.hpp>
 #include <boost/python/scope.hpp>
-#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <ev3dev.h>
 #include <iostream>
 
@@ -162,10 +161,6 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Generic device
     //-----------------------------------------------------------------------
     {
-        class_<std::map<std::string, std::string> >("map_s2s")
-            .def(map_indexing_suite<std::map<std::string, std::string> >() );
-
-
         class_<ev3::device>("device")
             .def("connect", device_connect)
             .add_property("connected",    &ev3::device::connected)
