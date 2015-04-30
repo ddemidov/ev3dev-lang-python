@@ -170,7 +170,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def("get_attr_string", &ev3::device::get_attr_string)
             .def("set_attr_string", &ev3::device::set_attr_string)
             .def("get_attr_line",   &ev3::device::get_attr_line)
-            .def("get_attr_set",    &ev3::device::get_attr_set)
+            .def("get_attr_set",    &ev3::device::get_attr_set, device_get_attr_set_ovr())
             .def("get_attr_from_set", &ev3::device::get_attr_from_set)
             ;
     }
