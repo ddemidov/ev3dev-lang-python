@@ -59,48 +59,49 @@ int device_device_index(const Derived *s) {
 //---------------------------------------------------------------------------
 // Remote control event processing functions
 //---------------------------------------------------------------------------
+struct HoldGIL {
+    PyGILState_STATE state;
+    HoldGIL() : state(PyGILState_Ensure()) {}
+    ~HoldGIL() { PyGILState_Release(state); }
+};
+
 void rc_on_red_up(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_red_up = [f](bool pressed) {
-        PyGILState_STATE state = PyGILState_Ensure();
+        HoldGIL lock;
         boost::python::call<void>(f, pressed);
-        PyGILState_Release(state);
     };
 }
 
 void rc_on_red_down(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_red_down = [f](bool pressed) {
-        PyGILState_STATE state = PyGILState_Ensure();
+        HoldGIL lock;
         boost::python::call<void>(f, pressed);
-        PyGILState_Release(state);
     };
 }
 
 void rc_on_blue_up(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_blue_up = [f](bool pressed) {
-        PyGILState_STATE state = PyGILState_Ensure();
+        HoldGIL lock;
         boost::python::call<void>(f, pressed);
-        PyGILState_Release(state);
     };
 }
 
 void rc_on_blue_down(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_blue_down = [f](bool pressed) {
-        PyGILState_STATE state = PyGILState_Ensure();
+        HoldGIL lock;
         boost::python::call<void>(f, pressed);
-        PyGILState_Release(state);
     };
 }
 
 void rc_on_beacon(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_beacon = [f](bool pressed) {
-        PyGILState_STATE state = PyGILState_Ensure();
+        HoldGIL lock;
         boost::python::call<void>(f, pressed);
-        PyGILState_Release(state);
     };
 }
 
