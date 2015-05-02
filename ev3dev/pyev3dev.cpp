@@ -105,6 +105,14 @@ void rc_on_beacon(ev3dev::remote_control *rc, PyObject *f) {
     };
 }
 
+void rc_on_state_change(ev3dev::remote_control *rc, PyObject *f) {
+    Py_INCREF(f);
+    rc->on_state_change = [f](int s) {
+        HoldGIL lock;
+        boost::python::call<void>(f, s);
+    };
+}
+
 //---------------------------------------------------------------------------
 // Wraps LCD's frame buffer into Python object
 //---------------------------------------------------------------------------
@@ -509,17 +517,28 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     // Remote control
     //-----------------------------------------------------------------------
-    class_<ev3::remote_control>("remote_control", init<>())
-        .def(init<unsigned>())
-        .def(init<ev3::infrared_sensor&>())
-        .def(init<ev3::infrared_sensor&, unsigned>())
-        .add_property("connected",    &ev3::remote_control::connected)
-        .add_property("channel",      &ev3::remote_control::channel)
-        .def("process",      &ev3::remote_control::process)
-        .def("on_red_up",    rc_on_red_up,    args("callable"))
-        .def("on_red_down",  rc_on_red_down,  args("callable"))
-        .def("on_blue_up",   rc_on_blue_up,   args("callable"))
-        .def("on_blue_down", rc_on_blue_down, args("callable"))
-        .def("on_beacon",    rc_on_beacon,    args("callable"))
-        ;
+    {
+        scope s = class_<ev3::remote_control>("remote_control", init<>())
+            .def(init<unsigned>())
+            .def(init<ev3::infrared_sensor&>())
+            .def(init<ev3::infrared_sensor&, unsigned>())
+            .add_property("connected",    &ev3::remote_control::connected)
+            .add_property("channel",      &ev3::remote_control::channel)
+            .def("process", &ev3::remote_control::process)
+            .def("on_red_up",       rc_on_red_up,       args("callable"))
+            .def("on_red_down",     rc_on_red_down,     args("callable"))
+            .def("on_blue_up",      rc_on_blue_up,      args("callable"))
+            .def("on_blue_down",    rc_on_blue_down,    args("callable"))
+            .def("on_beacon",       rc_on_beacon,       args("callable"))
+            .def("on_state_change", rc_on_state_change, args("callable"))
+            ;
+
+        enum_<ev3::remote_control::buttons>("buttons")
+            .value("red_up",    ev3::remote_control::red_up)
+            .value("red_down",  ev3::remote_control::red_down)
+            .value("blue_up",   ev3::remote_control::blue_up)
+            .value("blue_down", ev3::remote_control::blue_down)
+            .value("beacon",    ev3::remote_control::beacon)
+            ;
+    }
 }
