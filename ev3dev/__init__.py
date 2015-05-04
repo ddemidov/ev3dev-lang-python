@@ -2,7 +2,7 @@ from ev3dev_ext import *
 from version import __version__
 from PIL import Image, ImageDraw
 
-# Furnish mode_set class (which is wrapper around std::set<std::string>)
+# Furnish mode_set class (which is a wrapper around std::set<std::string>)
 # with __repr__ and __str__ methods which are better than defaults.
 def mode_set_repr(self):
     return list(self).__repr__()
@@ -18,11 +18,12 @@ def steering(direction, power=100):
     """
     Computes how fast each motor in a pair should turn to achieve the
     specified steering.
-    
+
     Input:
-        direction [-100, 100]: -100 means turn left as fast as possible,
-            means drive in a straight line, and 100 means turn right as fast as
-            possible.
+        direction [-100, 100]:
+            -100 means turn left as fast as possible,
+             0   means drive in a straight line, and
+             100 means turn right as fast as possible.
         power: the outmost motor (the one rotating faster) should receive this
             value of power.
 

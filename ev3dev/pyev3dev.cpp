@@ -4,7 +4,7 @@
 #include <iostream>
 
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 2. 
+    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
 //~autogen
 
 //---------------------------------------------------------------------------
@@ -393,15 +393,16 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::servo_motor>)
 //~autogen python_generic-get-set classes.servoMotor>currentClass
 
-            .add_property("command", &ev3::servo_motor::command, &ev3::servo_motor::set_command)
+            .def("set_command", &ev3::servo_motor::set_command)
             .add_property("driver_name", &ev3::servo_motor::driver_name)
-            .add_property("max_pulse_ms", &ev3::servo_motor::max_pulse_ms, &ev3::servo_motor::set_max_pulse_ms)
-            .add_property("mid_pulse_ms", &ev3::servo_motor::mid_pulse_ms, &ev3::servo_motor::set_mid_pulse_ms)
-            .add_property("min_pulse_ms", &ev3::servo_motor::min_pulse_ms, &ev3::servo_motor::set_min_pulse_ms)
+            .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, &ev3::servo_motor::set_max_pulse_sp)
+            .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, &ev3::servo_motor::set_mid_pulse_sp)
+            .add_property("min_pulse_sp", &ev3::servo_motor::min_pulse_sp, &ev3::servo_motor::set_min_pulse_sp)
             .add_property("polarity", &ev3::servo_motor::polarity, &ev3::servo_motor::set_polarity)
             .add_property("port_name", &ev3::servo_motor::port_name)
-            .add_property("position", &ev3::servo_motor::position, &ev3::servo_motor::set_position)
-            .add_property("rate", &ev3::servo_motor::rate, &ev3::servo_motor::set_rate)
+            .add_property("position_sp", &ev3::servo_motor::position_sp, &ev3::servo_motor::set_position_sp)
+            .add_property("rate_sp", &ev3::servo_motor::rate_sp, &ev3::servo_motor::set_rate_sp)
+            .add_property("state", &ev3::servo_motor::state)
 
 //~autogen
             ;
