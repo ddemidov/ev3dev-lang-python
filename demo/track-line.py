@@ -90,7 +90,6 @@ while not ts.value():
     correction = args.Kp * error + args.Ki * integral + args.Kd * derivative
 
     for m,p in zip((lmotor, rmotor), steering(correction, 540)):
-        m.speed_sp = p
-        m.set_command('run-forever')
+        (m.speed_sp, m.command) = (p, 'run-forever')
 
     time.sleep(0.01)

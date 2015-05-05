@@ -57,6 +57,14 @@ int device_device_index(const Derived *s) {
 }
 
 //---------------------------------------------------------------------------
+// Dummy getter method for write-only properties
+//---------------------------------------------------------------------------
+template <class T>
+void no_getter(const T&) {
+    throw std::runtime_error("Unreadable attribute");
+}
+
+//---------------------------------------------------------------------------
 // Remote control event processing functions
 //---------------------------------------------------------------------------
 struct HoldGIL {
@@ -195,7 +203,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
 //~autogen python_generic-get-set classes.sensor>currentClass
 
-            .def("set_command", &ev3::sensor::set_command)
+            .add_property("command", no_getter<ev3::sensor>, &ev3::sensor::set_command)
             .add_property("commands", &ev3::sensor::commands)
             .add_property("decimals", &ev3::sensor::decimals)
             .add_property("driver_name", &ev3::sensor::driver_name)
@@ -299,7 +307,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index",      device_device_index<ev3::motor>)
 //~autogen python_generic-get-set classes.motor>currentClass
 
-            .def("set_command", &ev3::motor::set_command)
+            .add_property("command", no_getter<ev3::motor>, &ev3::motor::set_command)
             .add_property("commands", &ev3::motor::commands)
             .add_property("count_per_rot", &ev3::motor::count_per_rot)
             .add_property("driver_name", &ev3::motor::driver_name)
@@ -393,7 +401,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::servo_motor>)
 //~autogen python_generic-get-set classes.servoMotor>currentClass
 
-            .def("set_command", &ev3::servo_motor::set_command)
+            .add_property("command", no_getter<ev3::servo_motor>, &ev3::servo_motor::set_command)
             .add_property("driver_name", &ev3::servo_motor::driver_name)
             .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, &ev3::servo_motor::set_max_pulse_sp)
             .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, &ev3::servo_motor::set_mid_pulse_sp)

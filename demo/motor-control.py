@@ -49,9 +49,9 @@ def drive(m = None, state=False, power=None):
     if state:
         m.speed_regulation_enabled = 'off'
         m.duty_cycle_sp = power
-        m.set_command('run-forever')
+        m.command = 'run-forever'
     else:
-        m.set_command('stop')
+        m.command = 'stop'
 
 while not button.back.pressed:
     if button.left.pressed:

@@ -19,7 +19,7 @@ Optional hardware:
 
 from sys import exit
 from time import sleep
-from random import randint
+from random import choice
 from ev3dev import *
 
 lmotor = large_motor(OUTPUT_C)
@@ -47,15 +47,14 @@ while not done():
 
     if distance > 40:
         for m in motors:
-            m.speed_sp = 900
-            m.set_command('run-forever')
+            (m.speed_sp, m.command) = (900, 'run-forever')
 
         sleep(0.01)
     else:
-        dir = 100 * (randint(0, 1) * 2 - 1)
+        dir = choice((100, -100))
+
         while irsens.value() < 70 and not done():
             for (m, p) in zip(motors, steering(dir, 900)):
-                m.speed_sp = p
-                m.set_command('run-forever')
+                (m.speed_sp, m.command) = (p, 'run-forever')
 
             sleep(0.01)

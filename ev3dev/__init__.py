@@ -1,5 +1,5 @@
 from ev3dev_ext import *
-from version import __version__
+from ev3dev.version import __version__
 from PIL import Image, ImageDraw
 
 # Furnish mode_set class (which is a wrapper around std::set<std::string>)
@@ -44,7 +44,7 @@ def steering(direction, power=100):
 
 # Stop a motor on destruction
 def stop_taho_motor(self):
-    self.set_command('stop')
+    self.command = 'stop'
 
 large_motor.__del__ = stop_taho_motor
 medium_motor.__del__ = stop_taho_motor
