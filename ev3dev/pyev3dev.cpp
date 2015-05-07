@@ -254,9 +254,16 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def(init<ev3::port_type>())
             ;
 
-        s.attr("mode_reflect") = ev3::color_sensor::mode_reflect;
-        s.attr("mode_ambient") = ev3::color_sensor::mode_ambient;
-        s.attr("mode_color")   = ev3::color_sensor::mode_color;
+//~autogen python_generic-property-value classes.colorSensor>currentClass
+
+        s.attr("mode_col_reflect") = ev3::color_sensor::mode_col_reflect;
+        s.attr("mode_col_ambient") = ev3::color_sensor::mode_col_ambient;
+        s.attr("mode_col_color") = ev3::color_sensor::mode_col_color;
+        s.attr("mode_ref_raw") = ev3::color_sensor::mode_ref_raw;
+        s.attr("mode_rgb_raw") = ev3::color_sensor::mode_rgb_raw;
+        s.attr("mode_col_cal") = ev3::color_sensor::mode_col_cal;
+
+//~autogen
     }
 
     {
@@ -266,11 +273,17 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def(init<ev3::port_type>())
             ;
 
-        s.attr("mode_dist_cm")   = ev3::ultrasonic_sensor::mode_dist_cm;
-        s.attr("mode_dist_in")   = ev3::ultrasonic_sensor::mode_dist_in;
-        s.attr("mode_listen")    = ev3::ultrasonic_sensor::mode_listen;
-        s.attr("mode_single_cm") = ev3::ultrasonic_sensor::mode_single_cm;
-        s.attr("mode_single_in") = ev3::ultrasonic_sensor::mode_single_in;
+//~autogen python_generic-property-value classes.ultrasonicSensor>currentClass
+
+        s.attr("mode_us_dist_cm") = ev3::ultrasonic_sensor::mode_us_dist_cm;
+        s.attr("mode_us_dist_in") = ev3::ultrasonic_sensor::mode_us_dist_in;
+        s.attr("mode_us_listen") = ev3::ultrasonic_sensor::mode_us_listen;
+        s.attr("mode_us_si_cm") = ev3::ultrasonic_sensor::mode_us_si_cm;
+        s.attr("mode_us_si_in") = ev3::ultrasonic_sensor::mode_us_si_in;
+        s.attr("mode_us_dc_cm") = ev3::ultrasonic_sensor::mode_us_dc_cm;
+        s.attr("mode_us_dc_in") = ev3::ultrasonic_sensor::mode_us_dc_in;
+
+//~autogen
     }
 
     {
@@ -280,9 +293,15 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def(init<ev3::port_type>())
             ;
 
-        s.attr("mode_angle")           = ev3::gyro_sensor::mode_angle;
-        s.attr("mode_speed")           = ev3::gyro_sensor::mode_speed;
-        s.attr("mode_angle_and_speed") = ev3::gyro_sensor::mode_angle_and_speed;
+//~autogen python_generic-property-value classes.gyroSensor>currentClass
+
+        s.attr("mode_gyro_ang") = ev3::gyro_sensor::mode_gyro_ang;
+        s.attr("mode_gyro_rate") = ev3::gyro_sensor::mode_gyro_rate;
+        s.attr("mode_gyro_fas") = ev3::gyro_sensor::mode_gyro_fas;
+        s.attr("mode_gyro_g_a") = ev3::gyro_sensor::mode_gyro_g_a;
+        s.attr("mode_gyro_cal") = ev3::gyro_sensor::mode_gyro_cal;
+
+//~autogen
     }
 
     {
@@ -292,9 +311,16 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def(init<ev3::port_type>())
             ;
 
-        s.attr("mode_proximity") = ev3::infrared_sensor::mode_proximity;
-        s.attr("mode_ir_seeker") = ev3::infrared_sensor::mode_ir_seeker;
+//~autogen python_generic-property-value classes.infraredSensor>currentClass
+
+        s.attr("mode_ir_prox") = ev3::infrared_sensor::mode_ir_prox;
+        s.attr("mode_ir_seek") = ev3::infrared_sensor::mode_ir_seek;
         s.attr("mode_ir_remote") = ev3::infrared_sensor::mode_ir_remote;
+        s.attr("mode_ir_rem_a") = ev3::infrared_sensor::mode_ir_rem_a;
+        s.attr("mode_ir_s_alt") = ev3::infrared_sensor::mode_ir_s_alt;
+        s.attr("mode_ir_cal") = ev3::infrared_sensor::mode_ir_cal;
+
+//~autogen
     }
 
     //-----------------------------------------------------------------------
@@ -340,19 +366,26 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("motor_large")  = ev3::motor::motor_large;
         s.attr("motor_medium") = ev3::motor::motor_medium;
 
-        s.attr("mode_off") = ev3::motor::mode_off;
-        s.attr("mode_on")  = ev3::motor::mode_on;
+//~autogen python_generic-property-value classes.motor>currentClass
 
-        s.attr("run_mode_forever")  = ev3::motor::run_mode_forever;
-        s.attr("run_mode_time")     = ev3::motor::run_mode_time;
-        s.attr("run_mode_position") = ev3::motor::run_mode_position;
+        s.attr("command_run_forever") = ev3::motor::command_run_forever;
+        s.attr("command_run_to_abs_pos") = ev3::motor::command_run_to_abs_pos;
+        s.attr("command_run_to_rel_pos") = ev3::motor::command_run_to_rel_pos;
+        s.attr("command_run_timed") = ev3::motor::command_run_timed;
+        s.attr("command_run_direct") = ev3::motor::command_run_direct;
+        s.attr("command_stop") = ev3::motor::command_stop;
+        s.attr("command_reset") = ev3::motor::command_reset;
+        s.attr("encoder_polarity_normal") = ev3::motor::encoder_polarity_normal;
+        s.attr("encoder_polarity_inverted") = ev3::motor::encoder_polarity_inverted;
+        s.attr("polarity_normal") = ev3::motor::polarity_normal;
+        s.attr("polarity_inverted") = ev3::motor::polarity_inverted;
+        s.attr("speed_regulation_on") = ev3::motor::speed_regulation_on;
+        s.attr("speed_regulation_off") = ev3::motor::speed_regulation_off;
+        s.attr("stop_command_coast") = ev3::motor::stop_command_coast;
+        s.attr("stop_command_brake") = ev3::motor::stop_command_brake;
+        s.attr("stop_command_hold") = ev3::motor::stop_command_hold;
 
-        s.attr("stop_mode_coast") = ev3::motor::stop_mode_coast;
-        s.attr("stop_mode_brake") = ev3::motor::stop_mode_brake;
-        s.attr("stop_mode_hold")  = ev3::motor::stop_mode_hold;
-
-        s.attr("position_mode_absolute") = ev3::motor::position_mode_absolute;
-        s.attr("position_mode_relative") = ev3::motor::position_mode_relative;
+//~autogen
     }
 
     {
@@ -374,24 +407,32 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::dc_motor>)
 //~autogen python_generic-get-set classes.dcMotor>currentClass
 
-            .add_property("command", &ev3::dc_motor::command, &ev3::dc_motor::set_command)
+            .add_property("command", no_getter<ev3::dc_motor>, &ev3::dc_motor::set_command)
             .add_property("commands", &ev3::dc_motor::commands)
             .add_property("driver_name", &ev3::dc_motor::driver_name)
             .add_property("duty_cycle", &ev3::dc_motor::duty_cycle)
             .add_property("duty_cycle_sp", &ev3::dc_motor::duty_cycle_sp, &ev3::dc_motor::set_duty_cycle_sp)
             .add_property("polarity", &ev3::dc_motor::polarity, &ev3::dc_motor::set_polarity)
             .add_property("port_name", &ev3::dc_motor::port_name)
-            .add_property("ramp_down_ms", &ev3::dc_motor::ramp_down_ms, &ev3::dc_motor::set_ramp_down_ms)
-            .add_property("ramp_up_ms", &ev3::dc_motor::ramp_up_ms, &ev3::dc_motor::set_ramp_up_ms)
+            .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, &ev3::dc_motor::set_ramp_down_sp)
+            .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, &ev3::dc_motor::set_ramp_up_sp)
+            .add_property("stop_command", no_getter<ev3::dc_motor>, &ev3::dc_motor::set_stop_command)
+            .add_property("stop_commands", &ev3::dc_motor::stop_commands)
 
 //~autogen
             ;
 
-        s.attr("command_run")       = ev3::dc_motor::command_run;
-        s.attr("command_brake")     = ev3::dc_motor::command_brake;
-        s.attr("command_coast")     = ev3::dc_motor::command_coast;
-        s.attr("polarity_normal")   = ev3::dc_motor::polarity_normal;
+//~autogen python_generic-property-value classes.dcMotor>currentClass
+
+        s.attr("command_run_forever") = ev3::dc_motor::command_run_forever;
+        s.attr("command_run_timed") = ev3::dc_motor::command_run_timed;
+        s.attr("command_stop") = ev3::dc_motor::command_stop;
+        s.attr("polarity_normal") = ev3::dc_motor::polarity_normal;
         s.attr("polarity_inverted") = ev3::dc_motor::polarity_inverted;
+        s.attr("stop_command_coast") = ev3::dc_motor::stop_command_coast;
+        s.attr("stop_command_brake") = ev3::dc_motor::stop_command_brake;
+
+//~autogen
     }
 
     {
@@ -415,10 +456,14 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 //~autogen
             ;
 
-        s.attr("command_run")       = ev3::servo_motor::command_run;
-        s.attr("command_float")     = ev3::servo_motor::command_float;
-        s.attr("polarity_normal")   = ev3::servo_motor::polarity_normal;
+//~autogen python_generic-property-value classes.servoMotor>currentClass
+
+        s.attr("command_run") = ev3::servo_motor::command_run;
+        s.attr("command_float") = ev3::servo_motor::command_float;
+        s.attr("polarity_normal") = ev3::servo_motor::polarity_normal;
         s.attr("polarity_inverted") = ev3::servo_motor::polarity_inverted;
+
+//~autogen
     }
 
     //-----------------------------------------------------------------------
