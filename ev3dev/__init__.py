@@ -13,6 +13,62 @@ def mode_set_str(self):
 mode_set.__repr__ = mode_set_repr
 mode_set.__str__  = mode_set_str
 
+# proxy classes for easy attribute access for device class
+class attr_int_proxy:
+    def __init__(self, dev):
+        self.__dict__['dev'] = dev
+
+    def __getattr__(self, name):
+        return self.__dict__['dev'].get_attr_int(name)
+
+    def __setattr__(self, name, val):
+        self.__dict__['dev'].set_attr_int(name, val)
+
+def attr_int_get(dev):
+    return attr_int_proxy(dev)
+
+device.attr_int = property(fget=attr_int_get)
+
+
+class attr_string_proxy:
+    def __init__(self, dev):
+        self.__dict__['dev'] = dev
+
+    def __getattr__(self, name):
+        return self.__dict__['dev'].get_attr_string(name)
+
+    def __setattr__(self, name, val):
+        self.__dict__['dev'].set_attr_string(name, val)
+
+def attr_string_get(dev):
+    return attr_string_proxy(dev)
+
+device.attr_string = property(fget=attr_string_get)
+
+class attr_line_proxy:
+    def __init__(self, dev):
+        self.__dict__['dev'] = dev
+
+    def __getattr__(self, name):
+        return self.__dict__['dev'].get_attr_line(name)
+
+def attr_line_get(dev):
+    return attr_line_proxy(dev)
+
+device.attr_line = property(fget=attr_line_get)
+
+class attr_set_proxy:
+    def __init__(self, dev):
+        self.__dict__['dev'] = dev
+
+    def __getattr__(self, name):
+        return self.__dict__['dev'].get_attr_set(name)
+
+def attr_set_get(dev):
+    return attr_set_proxy(dev)
+
+device.attr_set = property(fget=attr_set_get)
+
 # Helper function to compute power for left and right motors when steering
 def steering(direction, power=100):
     """
