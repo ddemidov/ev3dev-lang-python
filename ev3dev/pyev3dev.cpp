@@ -1,5 +1,8 @@
 #include <boost/python.hpp>
 #include <boost/python/scope.hpp>
+#include <boost/python/extract.hpp>
+#include <boost/python/raw_function.hpp>
+#include <boost/python/stl_iterator.hpp>
 #include <ev3dev.h>
 #include <iostream>
 
@@ -16,13 +19,31 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(sensor_float_value_ovr, float_value, 0, 1
 // Connect generic device. Only port_name matching is supported.
 // Need this function since there is no easy way to expose std::set to python
 //---------------------------------------------------------------------------
-void device_connect(ev3dev::device &dev,
-        const std::string &dir,
-        const std::string &pattern,
-        const std::string &port_name
-        )
-{
-    dev.connect(dir, pattern, {{"port_name", {port_name}}});
+bool device_connect(boost::python::tuple t, boost::python::dict d) {
+    using namespace boost::python;
+
+    std::map<std::string, std::set<std::string>> match;
+
+    for(stl_input_iterator<tuple> arg(d.items()), end; arg != end; ++arg) {
+        std::string key = extract<std::string>((*arg)[0]);
+        extract<list> l((*arg)[1]);
+
+        if (l.check()) {
+            for(int i = 0, n = len(l()); i < n; ++i)
+                match[key].insert(extract<std::string>(l()[i]));
+        } else {
+            match[key].insert(extract<std::string>((*arg)[1]));
+        }
+
+    }
+
+    ev3dev::device& dev     = extract<ev3dev::device&>(t[0]);
+    std::string     dir     = extract<std::string>(t[1]);
+    std::string     pattern = extract<std::string>(t[2]);
+
+    dev.connect(dir, pattern, match);
+
+    return dev.connected();
 }
 
 //---------------------------------------------------------------------------
@@ -179,7 +200,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     {
         class_<ev3::device>("device")
-            .def("connect", device_connect)
+            .def("connect", raw_function(device_connect))
             .add_property("connected",    &ev3::device::connected)
             .add_property("device_index", &ev3::device::device_index)
             .def("get_attr_int",    &ev3::device::get_attr_int)
