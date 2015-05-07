@@ -416,6 +416,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("port_name", &ev3::dc_motor::port_name)
             .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, &ev3::dc_motor::set_ramp_down_sp)
             .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, &ev3::dc_motor::set_ramp_up_sp)
+            .add_property("state", &ev3::dc_motor::state)
             .add_property("stop_command", no_getter<ev3::dc_motor>, &ev3::dc_motor::set_stop_command)
             .add_property("stop_commands", &ev3::dc_motor::stop_commands)
 
