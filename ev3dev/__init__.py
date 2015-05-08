@@ -2,6 +2,8 @@ from ev3dev_ext import *
 from ev3dev.version import __version__
 from PIL import Image, ImageDraw
 
+#---------------------------------------------------------------------------
+
 # Furnish mode_set class (which is a wrapper around std::set<std::string>)
 # with __repr__ and __str__ methods which are better than defaults.
 def mode_set_repr(self):
@@ -12,6 +14,8 @@ def mode_set_str(self):
 
 mode_set.__repr__ = mode_set_repr
 mode_set.__str__  = mode_set_str
+
+#---------------------------------------------------------------------------
 
 # proxy classes for easy attribute access for device class
 class attr_int_proxy:
@@ -69,6 +73,8 @@ def attr_set_get(dev):
 
 device.attr_set = property(fget=attr_set_get)
 
+#---------------------------------------------------------------------------
+
 # Helper function to compute power for left and right motors when steering
 def steering(direction, power=100):
     """
@@ -98,6 +104,8 @@ def steering(direction, power=100):
 
     return (int(pl), int(pr))
 
+#---------------------------------------------------------------------------
+
 # Stop a motor on destruction
 def stop_taho_motor(self):
     self.command = 'stop'
@@ -114,6 +122,110 @@ def stop_servo_motor(self):
     self.command = 'float'
 
 servo_motor.__del__ = stop_servo_motor
+
+#~autogen python_motor_commands classes.motor>currentClass
+
+def motor_run_forever(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-forever"
+
+motor.run_forever = motor_run_forever
+
+def motor_run_to_abs_pos(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-to-abs-pos"
+
+motor.run_to_abs_pos = motor_run_to_abs_pos
+
+def motor_run_to_rel_pos(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-to-rel-pos"
+
+motor.run_to_rel_pos = motor_run_to_rel_pos
+
+def motor_run_timed(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-timed"
+
+motor.run_timed = motor_run_timed
+
+def motor_run_direct(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-direct"
+
+motor.run_direct = motor_run_direct
+
+def motor_stop(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "stop"
+
+motor.stop = motor_stop
+
+def motor_reset(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "reset"
+
+motor.reset = motor_reset
+
+
+
+#~autogen
+
+#~autogen python_motor_commands classes.dcMotor>currentClass
+
+def dc_motor_run_forever(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-forever"
+
+dc_motor.run_forever = dc_motor_run_forever
+
+def dc_motor_run_timed(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-timed"
+
+dc_motor.run_timed = dc_motor_run_timed
+
+def dc_motor_stop(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "stop"
+
+dc_motor.stop = dc_motor_stop
+
+
+
+#~autogen
+
+#~autogen python_motor_commands classes.servoMotor>currentClass
+
+def servo_motor_run(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run"
+
+servo_motor.run = servo_motor_run
+
+def servo_motor_float(self, **attr):
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "float"
+
+servo_motor.float = servo_motor_float
+
+
+
+#~autogen
+
+#---------------------------------------------------------------------------
 
 # Provide a convenience wrapper for ev3dev.lcd class
 class LCD(lcd):

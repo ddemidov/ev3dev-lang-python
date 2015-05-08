@@ -47,7 +47,7 @@ while not done():
 
     if distance > 40:
         for m in motors:
-            (m.speed_sp, m.command) = (900, 'run-forever')
+            m.run_forever(speed_sp=900)
 
         sleep(0.01)
     else:
@@ -55,6 +55,6 @@ while not done():
 
         while irsens.value() < 70 and not done():
             for (m, p) in zip(motors, steering(dir, 900)):
-                (m.speed_sp, m.command) = (p, 'run-forever')
+                m.run_forever(speed_sp=p)
 
             sleep(0.01)

@@ -36,9 +36,9 @@ rc = remote_control(irsens)
 def make_roll(m, p):
     def roll(state):
         if state:
-            (m.speed_sp, m.command) = (p * 900, 'run-forever')
+            m.run_forever(speed_sp = p * 900)
         else:
-            m.command = 'stop'
+            m.stop()
     return roll
 
 rc.on_red_up   (make_roll(lmotor,  1))

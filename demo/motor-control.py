@@ -47,11 +47,9 @@ def drive(m = None, state=False, power=None):
     if not m.connected: return
 
     if state:
-        m.speed_regulation_enabled = 'off'
-        m.duty_cycle_sp = power
-        m.command = 'run-forever'
+        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=power)
     else:
-        m.command = 'stop'
+        m.stop()
 
 while not button.back.pressed:
     if button.left.pressed:
