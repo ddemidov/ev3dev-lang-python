@@ -20,6 +20,6 @@ http://ddemidov.github.io/ev3dev-lang-python.
 
 ## Usage
 
-See the provided examples (`demo-*.py`).
+See the provided examples (`demo/*.py`).
 
 [ev3dev]: http://ev3dev.org
