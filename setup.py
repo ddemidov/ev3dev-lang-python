@@ -1,5 +1,6 @@
 from setuptools import setup, Extension
 from subprocess import Popen, PIPE
+from spec_version import spec_version
 import os, sys
 
 pyver = sys.version_info
@@ -45,7 +46,7 @@ def get_git_version(abbrev=4):
     version = pep386adapt(version)
 
     # write version to version.py
-    open("ev3dev/version.py", "w").write("__version__='%s'\n" % version)
+    open("ev3dev/version.py", "w").write("__version__='%s (%s)'\n" % (version, spec_version))
 
     # Finally, return the current version.
     return version
