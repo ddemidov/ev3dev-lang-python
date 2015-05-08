@@ -311,6 +311,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("nxt_sound")      = ev3::sensor::nxt_sound;
         s.attr("nxt_ultrasonic") = ev3::sensor::nxt_ultrasonic;
         s.attr("nxt_i2c_sensor") = ev3::sensor::nxt_i2c_sensor;
+        s.attr("nxt_analog")     = ev3::sensor::nxt_analog;
     }
 
     {
@@ -436,6 +437,46 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("mode_ir_remote") = ev3::infrared_sensor::mode_ir_remote;
         s.attr("mode_ir_rem_a") = ev3::infrared_sensor::mode_ir_rem_a;
         s.attr("mode_ir_cal") = ev3::infrared_sensor::mode_ir_cal;
+
+//~autogen
+    }
+
+    {
+        scope s = class_<ev3::sound_sensor, bases<ev3::sensor>>(
+                "sound_sensor",
+//~autogen python_generic-class-description classes.soundSensor>currentClass
+
+                "LEGO NXT Sound Sensor\n"
+
+//~autogen
+                , init<>())
+            .def(init<ev3::port_type>(args("port")))
+            ;
+
+//~autogen python_generic-property-value classes.soundSensor>currentClass
+
+        s.attr("mode_db") = ev3::sound_sensor::mode_db;
+        s.attr("mode_dba") = ev3::sound_sensor::mode_dba;
+
+//~autogen
+    }
+
+    {
+        scope s = class_<ev3::light_sensor, bases<ev3::sensor>>(
+                "light_sensor",
+//~autogen python_generic-class-description classes.lightSensor>currentClass
+
+                "LEGO NXT Light Sensor\n"
+
+//~autogen
+                , init<>())
+            .def(init<ev3::port_type>(args("port")))
+            ;
+
+//~autogen python_generic-property-value classes.lightSensor>currentClass
+
+        s.attr("mode_reflect") = ev3::light_sensor::mode_reflect;
+        s.attr("mode_ambient") = ev3::light_sensor::mode_ambient;
 
 //~autogen
     }
