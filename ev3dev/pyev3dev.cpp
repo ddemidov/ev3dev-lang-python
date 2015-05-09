@@ -165,6 +165,14 @@ boost::python::object lcd_frame_buffer(ev3dev::lcd *lcd) {
 }
 
 //---------------------------------------------------------------------------
+// A return policy that just drops return value
+//---------------------------------------------------------------------------
+struct drop_return_value : boost::python::return_value_policy<boost::python::copy_const_reference>
+{
+    typedef boost::python::detail::return_none result_converter;
+};
+
+//---------------------------------------------------------------------------
 // The module interface
 //---------------------------------------------------------------------------
 BOOST_PYTHON_MODULE(ev3dev_ext)
@@ -224,11 +232,11 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
 //~autogen python_generic-get-set classes.sensor>currentClass
 
-            .add_property("command", no_getter<ev3::sensor>, &ev3::sensor::set_command)
+            .add_property("command", no_getter<ev3::sensor>, make_function(&ev3::sensor::set_command, drop_return_value()))
             .add_property("commands", &ev3::sensor::commands)
             .add_property("decimals", &ev3::sensor::decimals)
             .add_property("driver_name", &ev3::sensor::driver_name)
-            .add_property("mode", &ev3::sensor::mode, &ev3::sensor::set_mode)
+            .add_property("mode", &ev3::sensor::mode, make_function(&ev3::sensor::set_mode, drop_return_value()))
             .add_property("modes", &ev3::sensor::modes)
             .add_property("num_values", &ev3::sensor::num_values)
             .add_property("port_name", &ev3::sensor::port_name)
@@ -257,7 +265,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 //~autogen python_generic-get-set classes.i2cSensor>currentClass
 
             .add_property("fw_version", &ev3::i2c_sensor::fw_version)
-            .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, &ev3::i2c_sensor::set_poll_ms)
+            .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, make_function(&ev3::i2c_sensor::set_poll_ms, drop_return_value()))
 
 //~autogen
             ;
@@ -354,32 +362,32 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index",      device_device_index<ev3::motor>)
 //~autogen python_generic-get-set classes.motor>currentClass
 
-            .add_property("command", no_getter<ev3::motor>, &ev3::motor::set_command)
+            .add_property("command", no_getter<ev3::motor>, make_function(&ev3::motor::set_command, drop_return_value()))
             .add_property("commands", &ev3::motor::commands)
             .add_property("count_per_rot", &ev3::motor::count_per_rot)
             .add_property("driver_name", &ev3::motor::driver_name)
             .add_property("duty_cycle", &ev3::motor::duty_cycle)
-            .add_property("duty_cycle_sp", &ev3::motor::duty_cycle_sp, &ev3::motor::set_duty_cycle_sp)
-            .add_property("encoder_polarity", &ev3::motor::encoder_polarity, &ev3::motor::set_encoder_polarity)
-            .add_property("polarity", &ev3::motor::polarity, &ev3::motor::set_polarity)
+            .add_property("duty_cycle_sp", &ev3::motor::duty_cycle_sp, make_function(&ev3::motor::set_duty_cycle_sp, drop_return_value()))
+            .add_property("encoder_polarity", &ev3::motor::encoder_polarity, make_function(&ev3::motor::set_encoder_polarity, drop_return_value()))
+            .add_property("polarity", &ev3::motor::polarity, make_function(&ev3::motor::set_polarity, drop_return_value()))
             .add_property("port_name", &ev3::motor::port_name)
-            .add_property("position", &ev3::motor::position, &ev3::motor::set_position)
-            .add_property("position_p", &ev3::motor::position_p, &ev3::motor::set_position_p)
-            .add_property("position_i", &ev3::motor::position_i, &ev3::motor::set_position_i)
-            .add_property("position_d", &ev3::motor::position_d, &ev3::motor::set_position_d)
-            .add_property("position_sp", &ev3::motor::position_sp, &ev3::motor::set_position_sp)
+            .add_property("position", &ev3::motor::position, make_function(&ev3::motor::set_position, drop_return_value()))
+            .add_property("position_p", &ev3::motor::position_p, make_function(&ev3::motor::set_position_p, drop_return_value()))
+            .add_property("position_i", &ev3::motor::position_i, make_function(&ev3::motor::set_position_i, drop_return_value()))
+            .add_property("position_d", &ev3::motor::position_d, make_function(&ev3::motor::set_position_d, drop_return_value()))
+            .add_property("position_sp", &ev3::motor::position_sp, make_function(&ev3::motor::set_position_sp, drop_return_value()))
             .add_property("speed", &ev3::motor::speed)
-            .add_property("speed_sp", &ev3::motor::speed_sp, &ev3::motor::set_speed_sp)
-            .add_property("ramp_up_sp", &ev3::motor::ramp_up_sp, &ev3::motor::set_ramp_up_sp)
-            .add_property("ramp_down_sp", &ev3::motor::ramp_down_sp, &ev3::motor::set_ramp_down_sp)
-            .add_property("speed_regulation_enabled", &ev3::motor::speed_regulation_enabled, &ev3::motor::set_speed_regulation_enabled)
-            .add_property("speed_regulation_p", &ev3::motor::speed_regulation_p, &ev3::motor::set_speed_regulation_p)
-            .add_property("speed_regulation_i", &ev3::motor::speed_regulation_i, &ev3::motor::set_speed_regulation_i)
-            .add_property("speed_regulation_d", &ev3::motor::speed_regulation_d, &ev3::motor::set_speed_regulation_d)
+            .add_property("speed_sp", &ev3::motor::speed_sp, make_function(&ev3::motor::set_speed_sp, drop_return_value()))
+            .add_property("ramp_up_sp", &ev3::motor::ramp_up_sp, make_function(&ev3::motor::set_ramp_up_sp, drop_return_value()))
+            .add_property("ramp_down_sp", &ev3::motor::ramp_down_sp, make_function(&ev3::motor::set_ramp_down_sp, drop_return_value()))
+            .add_property("speed_regulation_enabled", &ev3::motor::speed_regulation_enabled, make_function(&ev3::motor::set_speed_regulation_enabled, drop_return_value()))
+            .add_property("speed_regulation_p", &ev3::motor::speed_regulation_p, make_function(&ev3::motor::set_speed_regulation_p, drop_return_value()))
+            .add_property("speed_regulation_i", &ev3::motor::speed_regulation_i, make_function(&ev3::motor::set_speed_regulation_i, drop_return_value()))
+            .add_property("speed_regulation_d", &ev3::motor::speed_regulation_d, make_function(&ev3::motor::set_speed_regulation_d, drop_return_value()))
             .add_property("state", &ev3::motor::state)
-            .add_property("stop_command", &ev3::motor::stop_command, &ev3::motor::set_stop_command)
+            .add_property("stop_command", &ev3::motor::stop_command, make_function(&ev3::motor::set_stop_command, drop_return_value()))
             .add_property("stop_commands", &ev3::motor::stop_commands)
-            .add_property("time_sp", &ev3::motor::time_sp, &ev3::motor::set_time_sp)
+            .add_property("time_sp", &ev3::motor::time_sp, make_function(&ev3::motor::set_time_sp, drop_return_value()))
 
 //~autogen
             ;
@@ -428,17 +436,17 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::dc_motor>)
 //~autogen python_generic-get-set classes.dcMotor>currentClass
 
-            .add_property("command", no_getter<ev3::dc_motor>, &ev3::dc_motor::set_command)
+            .add_property("command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_command, drop_return_value()))
             .add_property("commands", &ev3::dc_motor::commands)
             .add_property("driver_name", &ev3::dc_motor::driver_name)
             .add_property("duty_cycle", &ev3::dc_motor::duty_cycle)
-            .add_property("duty_cycle_sp", &ev3::dc_motor::duty_cycle_sp, &ev3::dc_motor::set_duty_cycle_sp)
-            .add_property("polarity", &ev3::dc_motor::polarity, &ev3::dc_motor::set_polarity)
+            .add_property("duty_cycle_sp", &ev3::dc_motor::duty_cycle_sp, make_function(&ev3::dc_motor::set_duty_cycle_sp, drop_return_value()))
+            .add_property("polarity", &ev3::dc_motor::polarity, make_function(&ev3::dc_motor::set_polarity, drop_return_value()))
             .add_property("port_name", &ev3::dc_motor::port_name)
-            .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, &ev3::dc_motor::set_ramp_down_sp)
-            .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, &ev3::dc_motor::set_ramp_up_sp)
+            .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, make_function(&ev3::dc_motor::set_ramp_down_sp, drop_return_value()))
+            .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, make_function(&ev3::dc_motor::set_ramp_up_sp, drop_return_value()))
             .add_property("state", &ev3::dc_motor::state)
-            .add_property("stop_command", no_getter<ev3::dc_motor>, &ev3::dc_motor::set_stop_command)
+            .add_property("stop_command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_stop_command, drop_return_value()))
             .add_property("stop_commands", &ev3::dc_motor::stop_commands)
 
 //~autogen
@@ -464,15 +472,15 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::servo_motor>)
 //~autogen python_generic-get-set classes.servoMotor>currentClass
 
-            .add_property("command", no_getter<ev3::servo_motor>, &ev3::servo_motor::set_command)
+            .add_property("command", no_getter<ev3::servo_motor>, make_function(&ev3::servo_motor::set_command, drop_return_value()))
             .add_property("driver_name", &ev3::servo_motor::driver_name)
-            .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, &ev3::servo_motor::set_max_pulse_sp)
-            .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, &ev3::servo_motor::set_mid_pulse_sp)
-            .add_property("min_pulse_sp", &ev3::servo_motor::min_pulse_sp, &ev3::servo_motor::set_min_pulse_sp)
-            .add_property("polarity", &ev3::servo_motor::polarity, &ev3::servo_motor::set_polarity)
+            .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, make_function(&ev3::servo_motor::set_max_pulse_sp, drop_return_value()))
+            .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, make_function(&ev3::servo_motor::set_mid_pulse_sp, drop_return_value()))
+            .add_property("min_pulse_sp", &ev3::servo_motor::min_pulse_sp, make_function(&ev3::servo_motor::set_min_pulse_sp, drop_return_value()))
+            .add_property("polarity", &ev3::servo_motor::polarity, make_function(&ev3::servo_motor::set_polarity, drop_return_value()))
             .add_property("port_name", &ev3::servo_motor::port_name)
-            .add_property("position_sp", &ev3::servo_motor::position_sp, &ev3::servo_motor::set_position_sp)
-            .add_property("rate_sp", &ev3::servo_motor::rate_sp, &ev3::servo_motor::set_rate_sp)
+            .add_property("position_sp", &ev3::servo_motor::position_sp, make_function(&ev3::servo_motor::set_position_sp, drop_return_value()))
+            .add_property("rate_sp", &ev3::servo_motor::rate_sp, make_function(&ev3::servo_motor::set_rate_sp, drop_return_value()))
             .add_property("state", &ev3::servo_motor::state)
 
 //~autogen
@@ -510,8 +518,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 //~autogen python_generic-get-set classes.led>currentClass
 
             .add_property("max_brightness", &ev3::led::max_brightness)
-            .add_property("brightness", &ev3::led::brightness, &ev3::led::set_brightness)
-            .add_property("trigger", &ev3::led::trigger, &ev3::led::set_trigger)
+            .add_property("brightness", &ev3::led::brightness, make_function(&ev3::led::set_brightness, drop_return_value()))
+            .add_property("trigger", &ev3::led::trigger, make_function(&ev3::led::set_trigger, drop_return_value()))
 
 //~autogen
             ;

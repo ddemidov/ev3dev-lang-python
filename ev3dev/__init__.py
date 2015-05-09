@@ -175,7 +175,6 @@ def motor_reset(self, **attr):
 motor.reset = motor_reset
 
 
-
 #~autogen
 
 #~autogen python_motor_commands classes.dcMotor>currentClass
@@ -202,7 +201,6 @@ def dc_motor_stop(self, **attr):
 dc_motor.stop = dc_motor_stop
 
 
-
 #~autogen
 
 #~autogen python_motor_commands classes.servoMotor>currentClass
@@ -220,7 +218,6 @@ def servo_motor_float(self, **attr):
     self.command = "float"
 
 servo_motor.float = servo_motor_float
-
 
 
 #~autogen
