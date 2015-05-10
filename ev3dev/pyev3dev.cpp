@@ -194,7 +194,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     scope().attr("OUTPUT_C")    = ev3::OUTPUT_C;
     scope().attr("OUTPUT_D")    = ev3::OUTPUT_D;
 
-    class_<ev3::mode_set>("mode_set")
+    class_<ev3::mode_set>("mode_set", "List of strings")
         .def("__len__",      &ev3::mode_set::size)
         .def("__contains__", mode_set_contains)
         .def("__iter__",     iterator<ev3::mode_set>())
@@ -207,7 +207,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Generic device
     //-----------------------------------------------------------------------
     {
-        class_<ev3::device>("device")
+        class_<ev3::device>("device", "Generic device")
             .def("connect", raw_function(device_connect))
             .add_property("connected",    &ev3::device::connected)
             .add_property("device_index", &ev3::device::device_index)
@@ -225,22 +225,75 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Sensors
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::sensor>("sensor", init<ev3::port_type>())
+        scope s = class_<ev3::sensor>("sensor",
+//~autogen python_generic-class-description classes.sensor>currentClass
+
+                "The sensor class provides a uniform interface for using most of the\n"
+                "sensors available for the EV3. The various underlying device drivers will\n"
+                "create a `lego-sensor` device for interacting with the sensors.\n"
+                "\n"
+                "Sensors are primarily controlled by setting the `mode` and monitored by\n"
+                "reading the `value<N>` attributes. Values can be converted to floating point\n"
+                "if needed by `value<N>` / 10.0 ^ `decimals`.\n"
+                "\n"
+                "Since the name of the `sensor<N>` device node does not correspond to the port\n"
+                "that a sensor is plugged in to, you must look at the `port_name` attribute if\n"
+                "you need to know which port a sensor is plugged in to. However, if you don't\n"
+                "have more than one sensor of each type, you can just look for a matching\n"
+                "`driver_name`. Then it will not matter which port a sensor is plugged in to - your\n"
+                "program will still work.\n"
+
+//~autogen
+                 , init<ev3::port_type>())
             .add_property("connected", device_connected<ev3::sensor>)
             .add_property("device_index", device_device_index<ev3::sensor>)
             .def("value",        &ev3::sensor::value,       sensor_value_ovr())
             .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
 //~autogen python_generic-get-set classes.sensor>currentClass
 
-            .add_property("command", no_getter<ev3::sensor>, make_function(&ev3::sensor::set_command, drop_return_value()))
-            .add_property("commands", &ev3::sensor::commands)
-            .add_property("decimals", &ev3::sensor::decimals)
-            .add_property("driver_name", &ev3::sensor::driver_name)
-            .add_property("mode", &ev3::sensor::mode, make_function(&ev3::sensor::set_mode, drop_return_value()))
-            .add_property("modes", &ev3::sensor::modes)
-            .add_property("num_values", &ev3::sensor::num_values)
-            .add_property("port_name", &ev3::sensor::port_name)
-            .add_property("units", &ev3::sensor::units)
+            .add_property("command", no_getter<ev3::sensor>, make_function(&ev3::sensor::set_command, drop_return_value()),
+                    "Command: write-only\n\n"
+                    "Sends a command to the sensor.\n"
+                    )
+            .add_property("commands", &ev3::sensor::commands,
+                    "Commands: read-only\n\n"
+                    "Returns a space separated list of the valid commands for the sensor.\n"
+                    "Returns -EOPNOTSUPP if no commands are supported.\n"
+                    )
+            .add_property("decimals", &ev3::sensor::decimals,
+                    "Decimals: read-only\n\n"
+                    "Returns the number of decimal places for the values in the `value<N>`\n"
+                    "attributes of the current mode.\n"
+                    )
+            .add_property("driver_name", &ev3::sensor::driver_name,
+                    "Driver Name: read-only\n\n"
+                    "Returns the name of the sensor device/driver. See the list of [supported\n"
+                    "sensors] for a complete list of drivers.\n"
+                    )
+            .add_property("mode", &ev3::sensor::mode, make_function(&ev3::sensor::set_mode, drop_return_value()),
+                    "Mode: read/write\n\n"
+                    "Returns the current mode. Writing one of the values returned by `modes`\n"
+                    "sets the sensor to that mode.\n"
+                    )
+            .add_property("modes", &ev3::sensor::modes,
+                    "Modes: read-only\n\n"
+                    "Returns a space separated list of the valid modes for the sensor.\n"
+                    )
+            .add_property("num_values", &ev3::sensor::num_values,
+                    "Num Values: read-only\n\n"
+                    "Returns the number of `value<N>` attributes that will return a valid value\n"
+                    "for the current mode.\n"
+                    )
+            .add_property("port_name", &ev3::sensor::port_name,
+                    "Port Name: read-only\n\n"
+                    "Returns the name of the port that the sensor is connected to, e.g. `ev3:in1`.\n"
+                    "I2C sensors also include the I2C address (decimal), e.g. `ev3:in1:i2c8`.\n"
+                    )
+            .add_property("units", &ev3::sensor::units,
+                    "Units: read-only\n\n"
+                    "Returns the units of the measured value for the current mode. May return\n"
+                    "empty string\n"
+                    )
 
 //~autogen
             ;
@@ -259,27 +312,49 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor", init<>())
+        class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor",
+//~autogen python_generic-class-description classes.i2cSensor>currentClass
+
+                "A generic interface to control I2C-type EV3 sensors.\n"
+
+//~autogen
+                 , init<>())
             .def(init<ev3::port_type>())
             .def(init<ev3::port_type, ev3::address_type>())
 //~autogen python_generic-get-set classes.i2cSensor>currentClass
 
-            .add_property("fw_version", &ev3::i2c_sensor::fw_version)
-            .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, make_function(&ev3::i2c_sensor::set_poll_ms, drop_return_value()))
+            .add_property("fw_version", &ev3::i2c_sensor::fw_version,
+                    "FW Version: read-only\n\n"
+                    "Returns the firmware version of the sensor if available. Currently only\n"
+                    "I2C/NXT sensors support this.\n"
+                    )
+            .add_property("poll_ms", &ev3::i2c_sensor::poll_ms, make_function(&ev3::i2c_sensor::set_poll_ms, drop_return_value()),
+                    "Poll MS: read/write\n\n"
+                    "Returns the polling period of the sensor in milliseconds. Writing sets the\n"
+                    "polling period. Setting to 0 disables polling. Minimum value is hard\n"
+                    "coded as 50 msec. Returns -EOPNOTSUPP if changing polling is not supported.\n"
+                    "Currently only I2C/NXT sensors support changing the polling period.\n"
+                    )
 
 //~autogen
             ;
     }
 
     {
-        class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", init<>())
+        class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", "Touch sensor", init<>())
             .def(init<ev3::port_type>())
             ;
     }
 
     {
         scope s = class_<ev3::color_sensor, bases<ev3::sensor>>(
-                "color_sensor", init<>())
+                "color_sensor",
+//~autogen python_generic-class-description classes.colorSensor>currentClass
+
+                "LEGO EV3 color sensor.\n"
+
+//~autogen
+                 , init<>())
             .def(init<ev3::port_type>())
             ;
 
@@ -297,8 +372,13 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::ultrasonic_sensor, bases<ev3::sensor>>(
-                "ultrasonic_sensor", init<>()
-                )
+                "ultrasonic_sensor",
+//~autogen python_generic-class-description classes.ultrasonicSensor>currentClass
+
+                "LEGO EV3 ultrasonic sensor.\n"
+
+//~autogen
+                , init<>())
             .def(init<ev3::port_type>())
             ;
 
@@ -317,8 +397,13 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::gyro_sensor, bases<ev3::sensor>>(
-                "gyro_sensor", init<>()
-                )
+                "gyro_sensor",
+//~autogen python_generic-class-description classes.gyroSensor>currentClass
+
+                "LEGO EV3 gyro sensor.\n"
+
+//~autogen
+                , init<>())
             .def(init<ev3::port_type>())
             ;
 
@@ -335,8 +420,13 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::infrared_sensor, bases<ev3::sensor>>(
-                "infrared_sensor", init<>()
-                )
+                "infrared_sensor",
+//~autogen python_generic-class-description classes.infraredSensor>currentClass
+
+                "LEGO EV3 infrared sensor.\n"
+
+//~autogen
+                , init<>())
             .def(init<ev3::port_type>())
             ;
 
@@ -356,38 +446,194 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Motors
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::motor>("motor", init<ev3::port_type>())
+        scope s = class_<ev3::motor>("motor",
+//~autogen python_generic-class-description classes.motor>currentClass
+
+                "The motor class provides a uniform interface for using motors with\n"
+                "positional and directional feedback such as the EV3 and NXT motors.\n"
+                "This feedback allows for precise control of the motors. This is the\n"
+                "most common type of motor, so we just call it `motor`.\n"
+
+//~autogen
+                , init<ev3::port_type>())
             .def(init<ev3::port_type, ev3::motor::motor_type>())
             .add_property("connected",         device_connected<ev3::motor>)
             .add_property("device_index",      device_device_index<ev3::motor>)
 //~autogen python_generic-get-set classes.motor>currentClass
 
-            .add_property("command", no_getter<ev3::motor>, make_function(&ev3::motor::set_command, drop_return_value()))
-            .add_property("commands", &ev3::motor::commands)
-            .add_property("count_per_rot", &ev3::motor::count_per_rot)
-            .add_property("driver_name", &ev3::motor::driver_name)
-            .add_property("duty_cycle", &ev3::motor::duty_cycle)
-            .add_property("duty_cycle_sp", &ev3::motor::duty_cycle_sp, make_function(&ev3::motor::set_duty_cycle_sp, drop_return_value()))
-            .add_property("encoder_polarity", &ev3::motor::encoder_polarity, make_function(&ev3::motor::set_encoder_polarity, drop_return_value()))
-            .add_property("polarity", &ev3::motor::polarity, make_function(&ev3::motor::set_polarity, drop_return_value()))
-            .add_property("port_name", &ev3::motor::port_name)
-            .add_property("position", &ev3::motor::position, make_function(&ev3::motor::set_position, drop_return_value()))
-            .add_property("position_p", &ev3::motor::position_p, make_function(&ev3::motor::set_position_p, drop_return_value()))
-            .add_property("position_i", &ev3::motor::position_i, make_function(&ev3::motor::set_position_i, drop_return_value()))
-            .add_property("position_d", &ev3::motor::position_d, make_function(&ev3::motor::set_position_d, drop_return_value()))
-            .add_property("position_sp", &ev3::motor::position_sp, make_function(&ev3::motor::set_position_sp, drop_return_value()))
-            .add_property("speed", &ev3::motor::speed)
-            .add_property("speed_sp", &ev3::motor::speed_sp, make_function(&ev3::motor::set_speed_sp, drop_return_value()))
-            .add_property("ramp_up_sp", &ev3::motor::ramp_up_sp, make_function(&ev3::motor::set_ramp_up_sp, drop_return_value()))
-            .add_property("ramp_down_sp", &ev3::motor::ramp_down_sp, make_function(&ev3::motor::set_ramp_down_sp, drop_return_value()))
-            .add_property("speed_regulation_enabled", &ev3::motor::speed_regulation_enabled, make_function(&ev3::motor::set_speed_regulation_enabled, drop_return_value()))
-            .add_property("speed_regulation_p", &ev3::motor::speed_regulation_p, make_function(&ev3::motor::set_speed_regulation_p, drop_return_value()))
-            .add_property("speed_regulation_i", &ev3::motor::speed_regulation_i, make_function(&ev3::motor::set_speed_regulation_i, drop_return_value()))
-            .add_property("speed_regulation_d", &ev3::motor::speed_regulation_d, make_function(&ev3::motor::set_speed_regulation_d, drop_return_value()))
-            .add_property("state", &ev3::motor::state)
-            .add_property("stop_command", &ev3::motor::stop_command, make_function(&ev3::motor::set_stop_command, drop_return_value()))
-            .add_property("stop_commands", &ev3::motor::stop_commands)
-            .add_property("time_sp", &ev3::motor::time_sp, make_function(&ev3::motor::set_time_sp, drop_return_value()))
+            .add_property("command", no_getter<ev3::motor>, make_function(&ev3::motor::set_command, drop_return_value()),
+                    "Command: write-only\n\n"
+                    "Sends a command to the motor controller. See `commands` for a list of\n"
+                    "possible values.\n"
+                    )
+            .add_property("commands", &ev3::motor::commands,
+                    "Commands: read-only\n\n"
+                    "Returns a space separated list of commands that are supported by the motor\n"
+                    "controller. Possible values are `run-forever`, `run-to-abs-pos`, `run-to-rel-pos`,\n"
+                    "`run-timed`, `run-direct`, `stop` and `reset`. Not all commands may be supported.\n"
+                    "`run-forever` will cause the motor to run until another command is sent.\n"
+                    "`run-to-abs-pos` will run to an absolute position specified by `position_sp`\n"
+                    "and then stop using the command specified in `stop_command`.\n"
+                    "`run-to-rel-pos` will run to a position relative to the current `position` value.\n"
+                    "The new position will be current `position` + `position_sp`. When the new\n"
+                    "position is reached, the motor will stop using the command specified by `stop_command`.\n"
+                    "`run-timed` will run the motor for the amount of time specified in `time_sp`\n"
+                    "and then stop the motor using the command specified by `stop_command`.\n"
+                    "`run-direct` will run the motor at the duty cycle specified by `duty_cycle_sp`.\n"
+                    "Unlike other run commands, changing `duty_cycle_sp` while running *will*\n"
+                    "take effect immediately.\n"
+                    "`stop` will stop any of the run commands before they are complete using the\n"
+                    "command specified by `stop_command`.\n"
+                    "`reset` will reset all of the motor parameter attributes to their default value.\n"
+                    "This will also have the effect of stopping the motor.\n"
+                    )
+            .add_property("count_per_rot", &ev3::motor::count_per_rot,
+                    "Count Per Rot: read-only\n\n"
+                    "Returns the number of tacho counts in one rotation of the motor. Tacho counts\n"
+                    "are used by the position and speed attributes, so you can use this value\n"
+                    "to convert rotations or degrees to tacho counts. In the case of linear\n"
+                    "actuators, the units here will be counts per centimeter.\n"
+                    )
+            .add_property("driver_name", &ev3::motor::driver_name,
+                    "Driver Name: read-only\n\n"
+                    "Returns the name of the driver that provides this tacho motor device.\n"
+                    )
+            .add_property("duty_cycle", &ev3::motor::duty_cycle,
+                    "Duty Cycle: read-only\n\n"
+                    "Returns the current duty cycle of the motor. Units are percent. Values\n"
+                    "are -100 to 100.\n"
+                    )
+            .add_property("duty_cycle_sp", &ev3::motor::duty_cycle_sp, make_function(&ev3::motor::set_duty_cycle_sp, drop_return_value()),
+                    "Duty Cycle SP: read/write\n\n"
+                    "Writing sets the duty cycle setpoint. Reading returns the current value.\n"
+                    "Units are in percent. Valid values are -100 to 100. A negative value causes\n"
+                    "the motor to rotate in reverse. This value is only used when `speed_regulation`\n"
+                    "is off.\n"
+                    )
+            .add_property("encoder_polarity", &ev3::motor::encoder_polarity, make_function(&ev3::motor::set_encoder_polarity, drop_return_value()),
+                    "Encoder Polarity: read/write\n\n"
+                    "Sets the polarity of the rotary encoder. This is an advanced feature to all\n"
+                    "use of motors that send inverted encoder signals to the EV3. This should\n"
+                    "be set correctly by the driver of a device. It You only need to change this\n"
+                    "value if you are using a unsupported device. Valid values are `normal` and\n"
+                    "`inverted`.\n"
+                    )
+            .add_property("polarity", &ev3::motor::polarity, make_function(&ev3::motor::set_polarity, drop_return_value()),
+                    "Polarity: read/write\n\n"
+                    "Sets the polarity of the motor. With `normal` polarity, a positive duty\n"
+                    "cycle will cause the motor to rotate clockwise. With `inverted` polarity,\n"
+                    "a positive duty cycle will cause the motor to rotate counter-clockwise.\n"
+                    "Valid values are `normal` and `inverted`.\n"
+                    )
+            .add_property("port_name", &ev3::motor::port_name,
+                    "Port Name: read-only\n\n"
+                    "Returns the name of the port that the motor is connected to.\n"
+                    )
+            .add_property("position", &ev3::motor::position, make_function(&ev3::motor::set_position, drop_return_value()),
+                    "Position: read/write\n\n"
+                    "Returns the current position of the motor in pulses of the rotary\n"
+                    "encoder. When the motor rotates clockwise, the position will increase.\n"
+                    "Likewise, rotating counter-clockwise causes the position to decrease.\n"
+                    "Writing will set the position to that value.\n"
+                    )
+            .add_property("position_p", &ev3::motor::position_p, make_function(&ev3::motor::set_position_p, drop_return_value()),
+                    "Position P: read/write\n\n"
+                    "The proportional constant for the position PID.\n"
+                    )
+            .add_property("position_i", &ev3::motor::position_i, make_function(&ev3::motor::set_position_i, drop_return_value()),
+                    "Position I: read/write\n\n"
+                    "The integral constant for the position PID.\n"
+                    )
+            .add_property("position_d", &ev3::motor::position_d, make_function(&ev3::motor::set_position_d, drop_return_value()),
+                    "Position D: read/write\n\n"
+                    "The derivative constant for the position PID.\n"
+                    )
+            .add_property("position_sp", &ev3::motor::position_sp, make_function(&ev3::motor::set_position_sp, drop_return_value()),
+                    "Position SP: read/write\n\n"
+                    "Writing specifies the target position for the `run-to-abs-pos` and `run-to-rel-pos`\n"
+                    "commands. Reading returns the current value. Units are in tacho counts. You\n"
+                    "can use the value returned by `counts_per_rot` to convert tacho counts to/from\n"
+                    "rotations or degrees.\n"
+                    )
+            .add_property("speed", &ev3::motor::speed,
+                    "Speed: read-only\n\n"
+                    "Returns the current motor speed in tacho counts per second. Not, this is\n"
+                    "not necessarily degrees (although it is for LEGO motors). Use the `count_per_rot`\n"
+                    "attribute to convert this value to RPM or deg/sec.\n"
+                    )
+            .add_property("speed_sp", &ev3::motor::speed_sp, make_function(&ev3::motor::set_speed_sp, drop_return_value()),
+                    "Speed SP: read/write\n\n"
+                    "Writing sets the target speed in tacho counts per second used when `speed_regulation`\n"
+                    "is on. Reading returns the current value.  Use the `count_per_rot` attribute\n"
+                    "to convert RPM or deg/sec to tacho counts per second.\n"
+                    )
+            .add_property("ramp_up_sp", &ev3::motor::ramp_up_sp, make_function(&ev3::motor::set_ramp_up_sp, drop_return_value()),
+                    "Ramp Up SP: read/write\n\n"
+                    "Writing sets the ramp up setpoint. Reading returns the current value. Units\n"
+                    "are in milliseconds. When set to a value > 0, the motor will ramp the power\n"
+                    "sent to the motor from 0 to 100% duty cycle over the span of this setpoint\n"
+                    "when starting the motor. If the maximum duty cycle is limited by `duty_cycle_sp`\n"
+                    "or speed regulation, the actual ramp time duration will be less than the setpoint.\n"
+                    )
+            .add_property("ramp_down_sp", &ev3::motor::ramp_down_sp, make_function(&ev3::motor::set_ramp_down_sp, drop_return_value()),
+                    "Ramp Down SP: read/write\n\n"
+                    "Writing sets the ramp down setpoint. Reading returns the current value. Units\n"
+                    "are in milliseconds. When set to a value > 0, the motor will ramp the power\n"
+                    "sent to the motor from 100% duty cycle down to 0 over the span of this setpoint\n"
+                    "when stopping the motor. If the starting duty cycle is less than 100%, the\n"
+                    "ramp time duration will be less than the full span of the setpoint.\n"
+                    )
+            .add_property("speed_regulation_enabled", &ev3::motor::speed_regulation_enabled, make_function(&ev3::motor::set_speed_regulation_enabled, drop_return_value()),
+                    "Speed Regulation Enabled: read/write\n\n"
+                    "Turns speed regulation on or off. If speed regulation is on, the motor\n"
+                    "controller will vary the power supplied to the motor to try to maintain the\n"
+                    "speed specified in `speed_sp`. If speed regulation is off, the controller\n"
+                    "will use the power specified in `duty_cycle_sp`. Valid values are `on` and\n"
+                    "`off`.\n"
+                    )
+            .add_property("speed_regulation_p", &ev3::motor::speed_regulation_p, make_function(&ev3::motor::set_speed_regulation_p, drop_return_value()),
+                    "Speed Regulation P: read/write\n\n"
+                    "The proportional constant for the speed regulation PID.\n"
+                    )
+            .add_property("speed_regulation_i", &ev3::motor::speed_regulation_i, make_function(&ev3::motor::set_speed_regulation_i, drop_return_value()),
+                    "Speed Regulation I: read/write\n\n"
+                    "The integral constant for the speed regulation PID.\n"
+                    )
+            .add_property("speed_regulation_d", &ev3::motor::speed_regulation_d, make_function(&ev3::motor::set_speed_regulation_d, drop_return_value()),
+                    "Speed Regulation D: read/write\n\n"
+                    "The derivative constant for the speed regulation PID.\n"
+                    )
+            .add_property("state", &ev3::motor::state,
+                    "State: read-only\n\n"
+                    "Reading returns a space separated list of state flags. Possible flags are\n"
+                    "`running`, `ramping` `holding` and `stalled`.\n"
+                    )
+            .add_property("stop_command", &ev3::motor::stop_command, make_function(&ev3::motor::set_stop_command, drop_return_value()),
+                    "Stop Command: read/write\n\n"
+                    "Reading returns the current stop command. Writing sets the stop command.\n"
+                    "The value determines the motors behavior when `command` is set to `stop`.\n"
+                    "Also, it determines the motors behavior when a run command completes. See\n"
+                    "`stop_commands` for a list of possible values.\n"
+                    )
+            .add_property("stop_commands", &ev3::motor::stop_commands,
+                    "Stop Commands: read-only\n\n"
+                    "Returns a space-separated list of stop modes supported by the motor controller.\n"
+                    "Possible values are `coast`, `brake` and `hold`. `coast` means that power will\n"
+                    "be removed from the motor and it will freely coast to a stop. `brake` means\n"
+                    "that power will be removed from the motor and a passive electrical load will\n"
+                    "be placed on the motor. This is usually done by shorting the motor terminals\n"
+                    "together. This load will absorb the energy from the rotation of the motors and\n"
+                    "cause the motor to stop more quickly than coasting. `hold` does not remove\n"
+                    "power from the motor. Instead it actively try to hold the motor at the current\n"
+                    "position. If an external force tries to turn the motor, the motor will 'push\n"
+                    "back' to maintain its position.\n"
+                    )
+            .add_property("time_sp", &ev3::motor::time_sp, make_function(&ev3::motor::set_time_sp, drop_return_value()),
+                    "Time SP: read/write\n\n"
+                    "Writing specifies the amount of time the motor will run when using the\n"
+                    "`run-timed` command. Reading returns the current value. Units are in\n"
+                    "milliseconds.\n"
+                    )
 
 //~autogen
             ;
@@ -418,36 +664,94 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", init<>())
+        class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", "EV3 medium motor", init<>())
             .def(init<ev3::port_type>())
             ;
     }
 
     {
-        class_<ev3::large_motor, bases<ev3::motor>>("large_motor", init<>())
+        class_<ev3::large_motor, bases<ev3::motor>>("large_motor", "EV3 large motor", init<>())
             .def(init<ev3::port_type>())
             ;
     }
 
     {
-        scope s = class_<ev3::dc_motor>("dc_motor", init<>())
+        scope s = class_<ev3::dc_motor>("dc_motor",
+//~autogen python_generic-class-description classes.dcMotor>currentClass
+
+                "The DC motor class provides a uniform interface for using regular DC motors\n"
+                "with no fancy controls or feedback. This includes LEGO MINDSTORMS RCX motors\n"
+                "and LEGO Power Functions motors.\n"
+
+//~autogen
+                , init<>())
             .def(init<ev3::port_type>())
             .add_property("connected",    device_connected<ev3::dc_motor>)
             .add_property("device_index", device_device_index<ev3::dc_motor>)
 //~autogen python_generic-get-set classes.dcMotor>currentClass
 
-            .add_property("command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_command, drop_return_value()))
-            .add_property("commands", &ev3::dc_motor::commands)
-            .add_property("driver_name", &ev3::dc_motor::driver_name)
-            .add_property("duty_cycle", &ev3::dc_motor::duty_cycle)
-            .add_property("duty_cycle_sp", &ev3::dc_motor::duty_cycle_sp, make_function(&ev3::dc_motor::set_duty_cycle_sp, drop_return_value()))
-            .add_property("polarity", &ev3::dc_motor::polarity, make_function(&ev3::dc_motor::set_polarity, drop_return_value()))
-            .add_property("port_name", &ev3::dc_motor::port_name)
-            .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, make_function(&ev3::dc_motor::set_ramp_down_sp, drop_return_value()))
-            .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, make_function(&ev3::dc_motor::set_ramp_up_sp, drop_return_value()))
-            .add_property("state", &ev3::dc_motor::state)
-            .add_property("stop_command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_stop_command, drop_return_value()))
-            .add_property("stop_commands", &ev3::dc_motor::stop_commands)
+            .add_property("command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_command, drop_return_value()),
+                    "Command: write-only\n\n"
+                    "Sets the command for the motor. Possible values are `run-forever`, `run-timed` and\n"
+                    "`stop`. Not all commands may be supported, so be sure to check the contents\n"
+                    "of the `commands` attribute.\n"
+                    )
+            .add_property("commands", &ev3::dc_motor::commands,
+                    "Commands: read-only\n\n"
+                    "Returns a space separated list of commands supported by the motor\n"
+                    "controller.\n"
+                    )
+            .add_property("driver_name", &ev3::dc_motor::driver_name,
+                    "Driver Name: read-only\n\n"
+                    "Returns the name of the motor driver that loaded this device. See the list\n"
+                    "of [supported devices] for a list of drivers.\n"
+                    )
+            .add_property("duty_cycle", &ev3::dc_motor::duty_cycle,
+                    "Duty Cycle: read-only\n\n"
+                    "Shows the current duty cycle of the PWM signal sent to the motor. Values\n"
+                    "are -100 to 100 (-100% to 100%).\n"
+                    )
+            .add_property("duty_cycle_sp", &ev3::dc_motor::duty_cycle_sp, make_function(&ev3::dc_motor::set_duty_cycle_sp, drop_return_value()),
+                    "Duty Cycle SP: read/write\n\n"
+                    "Writing sets the duty cycle setpoint of the PWM signal sent to the motor.\n"
+                    "Valid values are -100 to 100 (-100% to 100%). Reading returns the current\n"
+                    "setpoint.\n"
+                    )
+            .add_property("polarity", &ev3::dc_motor::polarity, make_function(&ev3::dc_motor::set_polarity, drop_return_value()),
+                    "Polarity: read/write\n\n"
+                    "Sets the polarity of the motor. Valid values are `normal` and `inverted`.\n"
+                    )
+            .add_property("port_name", &ev3::dc_motor::port_name,
+                    "Port Name: read-only\n\n"
+                    "Returns the name of the port that the motor is connected to.\n"
+                    )
+            .add_property("ramp_down_sp", &ev3::dc_motor::ramp_down_sp, make_function(&ev3::dc_motor::set_ramp_down_sp, drop_return_value()),
+                    "Ramp Down SP: read/write\n\n"
+                    "Sets the time in milliseconds that it take the motor to ramp down from 100%\n"
+                    "to 0%. Valid values are 0 to 10000 (10 seconds). Default is 0.\n"
+                    )
+            .add_property("ramp_up_sp", &ev3::dc_motor::ramp_up_sp, make_function(&ev3::dc_motor::set_ramp_up_sp, drop_return_value()),
+                    "Ramp Up SP: read/write\n\n"
+                    "Sets the time in milliseconds that it take the motor to up ramp from 0% to\n"
+                    "100%. Valid values are 0 to 10000 (10 seconds). Default is 0.\n"
+                    )
+            .add_property("state", &ev3::dc_motor::state,
+                    "State: read-only\n\n"
+                    "Gets a space separated list of flags indicating the motor status. Possible\n"
+                    "flags are `running` and `ramping`. `running` indicates that the motor is\n"
+                    "powered. `ramping` indicates that the motor has not yet reached the\n"
+                    "`duty_cycle_sp`.\n"
+                    )
+            .add_property("stop_command", no_getter<ev3::dc_motor>, make_function(&ev3::dc_motor::set_stop_command, drop_return_value()),
+                    "Stop Command: write-only\n\n"
+                    "Sets the stop command that will be used when the motor stops. Read\n"
+                    "`stop_commands` to get the list of valid values.\n"
+                    )
+            .add_property("stop_commands", &ev3::dc_motor::stop_commands,
+                    "Stop Commands: read-only\n\n"
+                    "Gets a space separated list of stop commands. Valid values are `coast`\n"
+                    "and `brake`.\n"
+                    )
 
 //~autogen
             ;
@@ -466,22 +770,86 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        scope s = class_<ev3::servo_motor>("servo_motor", init<>())
+        scope s = class_<ev3::servo_motor>("servo_motor",
+//~autogen python_generic-class-description classes.servoMotor>currentClass
+
+                "The servo motor class provides a uniform interface for using hobby type\n"
+                "servo motors.\n"
+
+//~autogen
+                , init<>())
             .def(init<ev3::port_type>())
             .add_property("connected",    device_connected<ev3::servo_motor>)
             .add_property("device_index", device_device_index<ev3::servo_motor>)
 //~autogen python_generic-get-set classes.servoMotor>currentClass
 
-            .add_property("command", no_getter<ev3::servo_motor>, make_function(&ev3::servo_motor::set_command, drop_return_value()))
-            .add_property("driver_name", &ev3::servo_motor::driver_name)
-            .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, make_function(&ev3::servo_motor::set_max_pulse_sp, drop_return_value()))
-            .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, make_function(&ev3::servo_motor::set_mid_pulse_sp, drop_return_value()))
-            .add_property("min_pulse_sp", &ev3::servo_motor::min_pulse_sp, make_function(&ev3::servo_motor::set_min_pulse_sp, drop_return_value()))
-            .add_property("polarity", &ev3::servo_motor::polarity, make_function(&ev3::servo_motor::set_polarity, drop_return_value()))
-            .add_property("port_name", &ev3::servo_motor::port_name)
-            .add_property("position_sp", &ev3::servo_motor::position_sp, make_function(&ev3::servo_motor::set_position_sp, drop_return_value()))
-            .add_property("rate_sp", &ev3::servo_motor::rate_sp, make_function(&ev3::servo_motor::set_rate_sp, drop_return_value()))
-            .add_property("state", &ev3::servo_motor::state)
+            .add_property("command", no_getter<ev3::servo_motor>, make_function(&ev3::servo_motor::set_command, drop_return_value()),
+                    "Command: write-only\n\n"
+                    "Sets the command for the servo. Valid values are `run` and `float`. Setting\n"
+                    "to `run` will cause the servo to be driven to the position_sp set in the\n"
+                    "`position_sp` attribute. Setting to `float` will remove power from the motor.\n"
+                    )
+            .add_property("driver_name", &ev3::servo_motor::driver_name,
+                    "Driver Name: read-only\n\n"
+                    "Returns the name of the motor driver that loaded this device. See the list\n"
+                    "of [supported devices] for a list of drivers.\n"
+                    )
+            .add_property("max_pulse_sp", &ev3::servo_motor::max_pulse_sp, make_function(&ev3::servo_motor::set_max_pulse_sp, drop_return_value()),
+                    "Max Pulse SP: read/write\n\n"
+                    "Used to set the pulse size in milliseconds for the signal that tells the\n"
+                    "servo to drive to the maximum (clockwise) position_sp. Default value is 2400.\n"
+                    "Valid values are 2300 to 2700. You must write to the position_sp attribute for\n"
+                    "changes to this attribute to take effect.\n"
+                    )
+            .add_property("mid_pulse_sp", &ev3::servo_motor::mid_pulse_sp, make_function(&ev3::servo_motor::set_mid_pulse_sp, drop_return_value()),
+                    "Mid Pulse SP: read/write\n\n"
+                    "Used to set the pulse size in milliseconds for the signal that tells the\n"
+                    "servo to drive to the mid position_sp. Default value is 1500. Valid\n"
+                    "values are 1300 to 1700. For example, on a 180 degree servo, this would be\n"
+                    "90 degrees. On continuous rotation servo, this is the 'neutral' position_sp\n"
+                    "where the motor does not turn. You must write to the position_sp attribute for\n"
+                    "changes to this attribute to take effect.\n"
+                    )
+            .add_property("min_pulse_sp", &ev3::servo_motor::min_pulse_sp, make_function(&ev3::servo_motor::set_min_pulse_sp, drop_return_value()),
+                    "Min Pulse SP: read/write\n\n"
+                    "Used to set the pulse size in milliseconds for the signal that tells the\n"
+                    "servo to drive to the miniumum (counter-clockwise) position_sp. Default value\n"
+                    "is 600. Valid values are 300 to 700. You must write to the position_sp\n"
+                    "attribute for changes to this attribute to take effect.\n"
+                    )
+            .add_property("polarity", &ev3::servo_motor::polarity, make_function(&ev3::servo_motor::set_polarity, drop_return_value()),
+                    "Polarity: read/write\n\n"
+                    "Sets the polarity of the servo. Valid values are `normal` and `inverted`.\n"
+                    "Setting the value to `inverted` will cause the position_sp value to be\n"
+                    "inverted. i.e `-100` will correspond to `max_pulse_sp`, and `100` will\n"
+                    "correspond to `min_pulse_sp`.\n"
+                    )
+            .add_property("port_name", &ev3::servo_motor::port_name,
+                    "Port Name: read-only\n\n"
+                    "Returns the name of the port that the motor is connected to.\n"
+                    )
+            .add_property("position_sp", &ev3::servo_motor::position_sp, make_function(&ev3::servo_motor::set_position_sp, drop_return_value()),
+                    "Position SP: read/write\n\n"
+                    "Reading returns the current position_sp of the servo. Writing instructs the\n"
+                    "servo to move to the specified position_sp. Units are percent. Valid values\n"
+                    "are -100 to 100 (-100% to 100%) where `-100` corresponds to `min_pulse_sp`,\n"
+                    "`0` corresponds to `mid_pulse_sp` and `100` corresponds to `max_pulse_sp`.\n"
+                    )
+            .add_property("rate_sp", &ev3::servo_motor::rate_sp, make_function(&ev3::servo_motor::set_rate_sp, drop_return_value()),
+                    "Rate SP: read/write\n\n"
+                    "Sets the rate_sp at which the servo travels from 0 to 100.0% (half of the full\n"
+                    "range of the servo). Units are in milliseconds. Example: Setting the rate_sp\n"
+                    "to 1000 means that it will take a 180 degree servo 2 second to move from 0\n"
+                    "to 180 degrees. Note: Some servo controllers may not support this in which\n"
+                    "case reading and writing will fail with `-EOPNOTSUPP`. In continuous rotation\n"
+                    "servos, this value will affect the rate_sp at which the speed ramps up or down.\n"
+                    )
+            .add_property("state", &ev3::servo_motor::state,
+                    "State: read-only\n\n"
+                    "Returns a space separated list of flags indicating the state of the servo.\n"
+                    "Possible values are:\n"
+                    "* `running`: Indicates that the motor is powered.\n"
+                    )
 
 //~autogen
             ;
@@ -500,7 +868,13 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // LED
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::led>("led", init<std::string>())
+        scope s = class_<ev3::led>("led",
+//~autogen python_generic-class-description classes.led>currentClass
+
+                "Any device controlled by the generic LED driver.\n"
+
+//~autogen
+                , init<std::string>())
             .add_property("connected",      device_connected<ev3::led>)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
@@ -517,9 +891,18 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("triggers", &ev3::led::triggers)
 //~autogen python_generic-get-set classes.led>currentClass
 
-            .add_property("max_brightness", &ev3::led::max_brightness)
-            .add_property("brightness", &ev3::led::brightness, make_function(&ev3::led::set_brightness, drop_return_value()))
-            .add_property("trigger", &ev3::led::trigger, make_function(&ev3::led::set_trigger, drop_return_value()))
+            .add_property("max_brightness", &ev3::led::max_brightness,
+                    "Max Brightness: read-only\n\n"
+                    "Gets the maximum allowable brightness value\n"
+                    )
+            .add_property("brightness", &ev3::led::brightness, make_function(&ev3::led::set_brightness, drop_return_value()),
+                    "Brightness: read/write\n\n"
+                    "Sets the brightness level. Possible values are from 0 to `max_brightness`.\n"
+                    )
+            .add_property("trigger", &ev3::led::trigger, make_function(&ev3::led::set_trigger, drop_return_value()),
+                    "Trigger: read/write\n\n"
+                    "Sets the led trigger.\n"
+                    )
 
 //~autogen
             ;
@@ -534,18 +917,39 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Power supply
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::power_supply>("power_supply", init<std::string>())
+        scope s = class_<ev3::power_supply>("power_supply",
+//~autogen python_generic-class-description classes.powerSupply>currentClass
+
+                "A generic interface to read data from the system's power_supply class.\n"
+                "Uses the built-in legoev3-battery if none is specified.\n"
+
+//~autogen
+                , init<std::string>())
             .add_property("connected",        device_connected<ev3::power_supply>)
             .add_property("measured_amps",    &ev3::power_supply::measured_amps)
             .add_property("measured_volts",   &ev3::power_supply::measured_volts)
 //~autogen python_generic-get-set classes.powerSupply>currentClass
 
-            .add_property("measured_current", &ev3::power_supply::measured_current)
-            .add_property("measured_voltage", &ev3::power_supply::measured_voltage)
-            .add_property("max_voltage", &ev3::power_supply::max_voltage)
-            .add_property("min_voltage", &ev3::power_supply::min_voltage)
-            .add_property("technology", &ev3::power_supply::technology)
-            .add_property("type", &ev3::power_supply::type)
+            .add_property("measured_current", &ev3::power_supply::measured_current,
+                    "Measured Current: read-only\n\n"
+                    "The measured current that the battery is supplying (in microamps)\n"
+                    )
+            .add_property("measured_voltage", &ev3::power_supply::measured_voltage,
+                    "Measured Voltage: read-only\n\n"
+                    "The measured voltage that the battery is supplying (in microvolts)\n"
+                    )
+            .add_property("max_voltage", &ev3::power_supply::max_voltage,
+                    "Max Voltage: read-only\n\n"
+                    )
+            .add_property("min_voltage", &ev3::power_supply::min_voltage,
+                    "Min Voltage: read-only\n\n"
+                    )
+            .add_property("technology", &ev3::power_supply::technology,
+                    "Technology: read-only\n\n"
+                    )
+            .add_property("type", &ev3::power_supply::type,
+                    "Type: read-only\n\n"
+                    )
 
 //~autogen
             ;
@@ -557,7 +961,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Buttons
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::button>("button", init<int>())
+        scope s = class_<ev3::button>("button", "EV3 buttons", init<int>())
             .add_property("pressed", &ev3::button::pressed)
             ;
 
@@ -572,7 +976,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     // Sound
     //-----------------------------------------------------------------------
-    class_<ev3::sound>("sound")
+    class_<ev3::sound>("sound", "EV3 sound")
         .def("beep",       &ev3::sound::beep).staticmethod("beep")
         .def("tone",       &ev3::sound::tone).staticmethod("tone")
         .def("play",       (void (*)(const std::string&))&ev3::sound::play,  args("soundfile"))
@@ -587,7 +991,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     // LCD
     //-----------------------------------------------------------------------
-    class_<ev3::lcd>("lcd")
+    class_<ev3::lcd>("lcd", "EV3 LCD")
         .add_property("available",         &ev3::lcd::available)
         .add_property("resolution_x",      &ev3::lcd::resolution_x)
         .add_property("resolution_y",      &ev3::lcd::resolution_y)
@@ -602,7 +1006,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Remote control
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::remote_control>("remote_control", init<>())
+        scope s = class_<ev3::remote_control>("remote_control", "EV3 remote control", init<>())
             .def(init<unsigned>())
             .def(init<ev3::infrared_sensor&>())
             .def(init<ev3::infrared_sensor&, unsigned>())
