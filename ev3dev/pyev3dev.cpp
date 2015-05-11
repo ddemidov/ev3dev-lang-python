@@ -180,6 +180,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     using namespace boost::python;
     namespace ev3 = ev3dev;
 
+    docstring_options(true, true, false);
+
     PyEval_InitThreads();
 
     scope().attr("INPUT_AUTO") = ev3::INPUT_AUTO;
@@ -365,7 +367,6 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("mode_col_color") = ev3::color_sensor::mode_col_color;
         s.attr("mode_ref_raw") = ev3::color_sensor::mode_ref_raw;
         s.attr("mode_rgb_raw") = ev3::color_sensor::mode_rgb_raw;
-        s.attr("mode_col_cal") = ev3::color_sensor::mode_col_cal;
 
 //~autogen
     }
@@ -389,8 +390,6 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("mode_us_listen") = ev3::ultrasonic_sensor::mode_us_listen;
         s.attr("mode_us_si_cm") = ev3::ultrasonic_sensor::mode_us_si_cm;
         s.attr("mode_us_si_in") = ev3::ultrasonic_sensor::mode_us_si_in;
-        s.attr("mode_us_dc_cm") = ev3::ultrasonic_sensor::mode_us_dc_cm;
-        s.attr("mode_us_dc_in") = ev3::ultrasonic_sensor::mode_us_dc_in;
 
 //~autogen
     }
@@ -436,7 +435,6 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("mode_ir_seek") = ev3::infrared_sensor::mode_ir_seek;
         s.attr("mode_ir_remote") = ev3::infrared_sensor::mode_ir_remote;
         s.attr("mode_ir_rem_a") = ev3::infrared_sensor::mode_ir_rem_a;
-        s.attr("mode_ir_s_alt") = ev3::infrared_sensor::mode_ir_s_alt;
         s.attr("mode_ir_cal") = ev3::infrared_sensor::mode_ir_cal;
 
 //~autogen

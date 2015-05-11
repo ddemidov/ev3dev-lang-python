@@ -126,6 +126,9 @@ servo_motor.__del__ = stop_servo_motor
 #~autogen python_motor_commands classes.motor>currentClass
 
 def motor_run_forever(self, **attr):
+    """Run the motor until another command is sent.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-forever"
@@ -133,6 +136,10 @@ def motor_run_forever(self, **attr):
 motor.run_forever = motor_run_forever
 
 def motor_run_to_abs_pos(self, **attr):
+    """Run to an absolute position specified by `position_sp` and then
+    stop using the command specified in `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-to-abs-pos"
@@ -140,6 +147,12 @@ def motor_run_to_abs_pos(self, **attr):
 motor.run_to_abs_pos = motor_run_to_abs_pos
 
 def motor_run_to_rel_pos(self, **attr):
+    """Run to a position relative to the current `position` value.
+    The new position will be current `position` + `position_sp`.
+    When the new position is reached, the motor will stop using
+    the command specified by `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-to-rel-pos"
@@ -147,6 +160,10 @@ def motor_run_to_rel_pos(self, **attr):
 motor.run_to_rel_pos = motor_run_to_rel_pos
 
 def motor_run_timed(self, **attr):
+    """Run the motor for the amount of time specified in `time_sp`
+    and then stop the motor using the command specified by `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-timed"
@@ -154,6 +171,11 @@ def motor_run_timed(self, **attr):
 motor.run_timed = motor_run_timed
 
 def motor_run_direct(self, **attr):
+    """Run the motor at the duty cycle specified by `duty_cycle_sp`.
+    Unlike other run commands, changing `duty_cycle_sp` while running *will*
+    take effect immediately.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-direct"
@@ -161,6 +183,10 @@ def motor_run_direct(self, **attr):
 motor.run_direct = motor_run_direct
 
 def motor_stop(self, **attr):
+    """Stop any of the run commands before they are complete using the
+    command specified by `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "stop"
@@ -168,6 +194,10 @@ def motor_stop(self, **attr):
 motor.stop = motor_stop
 
 def motor_reset(self, **attr):
+    """Reset all of the motor parameter attributes to their default value.
+    This will also have the effect of stopping the motor.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "reset"
@@ -180,6 +210,9 @@ motor.reset = motor_reset
 #~autogen python_motor_commands classes.dcMotor>currentClass
 
 def dc_motor_run_forever(self, **attr):
+    """Run the motor until another command is sent.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-forever"
@@ -187,6 +220,10 @@ def dc_motor_run_forever(self, **attr):
 dc_motor.run_forever = dc_motor_run_forever
 
 def dc_motor_run_timed(self, **attr):
+    """Run the motor for the amount of time specified in `time_sp`
+    and then stop the motor using the command specified by `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run-timed"
@@ -194,6 +231,10 @@ def dc_motor_run_timed(self, **attr):
 dc_motor.run_timed = dc_motor_run_timed
 
 def dc_motor_stop(self, **attr):
+    """Stop any of the run commands before they are complete using the
+    command specified by `stop_command`.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "stop"
@@ -206,6 +247,9 @@ dc_motor.stop = dc_motor_stop
 #~autogen python_motor_commands classes.servoMotor>currentClass
 
 def servo_motor_run(self, **attr):
+    """Drive servo to the position set in the `position_sp` attribute.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "run"
@@ -213,6 +257,9 @@ def servo_motor_run(self, **attr):
 servo_motor.run = servo_motor_run
 
 def servo_motor_float(self, **attr):
+    """Remove power from the motor.
+    """
+
     for key in attr:
         setattr(self, key, attr[key])
     self.command = "float"
@@ -226,8 +273,7 @@ servo_motor.float = servo_motor_float
 
 # Provide a convenience wrapper for ev3dev.lcd class
 class LCD(lcd):
-    """
-    A convenience wrapper for ev3dev.lcd class.
+    """A convenience wrapper for ev3dev.lcd class.
     Provides drawing functions from python imaging library (PIL).
     """
 
