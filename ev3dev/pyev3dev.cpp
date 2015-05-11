@@ -180,7 +180,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     using namespace boost::python;
     namespace ev3 = ev3dev;
 
-    docstring_options(true, true, false);
+    docstring_options options(true, true, false);
 
     PyEval_InitThreads();
 
@@ -246,7 +246,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                 "program will still work.\n"
 
 //~autogen
-                 , init<ev3::port_type>())
+                 , init<ev3::port_type>(args("port")))
             .add_property("connected", device_connected<ev3::sensor>)
             .add_property("device_index", device_device_index<ev3::sensor>)
             .def("value",        &ev3::sensor::value,       sensor_value_ovr())
@@ -321,8 +321,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                  , init<>())
-            .def(init<ev3::port_type>())
-            .def(init<ev3::port_type, ev3::address_type>())
+            .def(init<ev3::port_type>(args("port")))
+            .def(init<ev3::port_type, ev3::address_type>(args("port", "address")))
 //~autogen python_generic-get-set classes.i2cSensor>currentClass
 
             .add_property("fw_version", &ev3::i2c_sensor::fw_version,
@@ -344,7 +344,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", "Touch sensor", init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
     }
 
@@ -357,7 +357,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                  , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
 
 //~autogen python_generic-property-value classes.colorSensor>currentClass
@@ -380,7 +380,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                 , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
 
 //~autogen python_generic-property-value classes.ultrasonicSensor>currentClass
@@ -403,7 +403,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                 , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
 
 //~autogen python_generic-property-value classes.gyroSensor>currentClass
@@ -426,7 +426,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                 , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
 
 //~autogen python_generic-property-value classes.infraredSensor>currentClass
@@ -453,8 +453,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                 "most common type of motor, so we just call it `motor`.\n"
 
 //~autogen
-                , init<ev3::port_type>())
-            .def(init<ev3::port_type, ev3::motor::motor_type>())
+                , init<ev3::port_type>(args("port")))
+            .def(init<ev3::port_type, ev3::motor::motor_type>(args("port", "driver")))
             .add_property("connected",         device_connected<ev3::motor>)
             .add_property("device_index",      device_device_index<ev3::motor>)
 //~autogen python_generic-get-set classes.motor>currentClass
@@ -663,7 +663,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", "EV3 medium motor", init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             ;
     }
 
@@ -683,7 +683,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                 , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             .add_property("connected",    device_connected<ev3::dc_motor>)
             .add_property("device_index", device_device_index<ev3::dc_motor>)
 //~autogen python_generic-get-set classes.dcMotor>currentClass
@@ -776,7 +776,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
 //~autogen
                 , init<>())
-            .def(init<ev3::port_type>())
+            .def(init<ev3::port_type>(args("port")))
             .add_property("connected",    device_connected<ev3::servo_motor>)
             .add_property("device_index", device_device_index<ev3::servo_motor>)
 //~autogen python_generic-get-set classes.servoMotor>currentClass
@@ -872,7 +872,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                 "Any device controlled by the generic LED driver.\n"
 
 //~autogen
-                , init<std::string>())
+                , init<std::string>(args("name")))
             .add_property("connected",      device_connected<ev3::led>)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
@@ -922,7 +922,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                 "Uses the built-in legoev3-battery if none is specified.\n"
 
 //~autogen
-                , init<std::string>())
+                , init<std::string>(args("name")))
             .add_property("connected",        device_connected<ev3::power_supply>)
             .add_property("measured_amps",    &ev3::power_supply::measured_amps)
             .add_property("measured_volts",   &ev3::power_supply::measured_volts)
@@ -959,7 +959,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Buttons
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::button>("button", "EV3 buttons", init<int>())
+        scope s = class_<ev3::button>("button", "EV3 buttons", init<int>(args("bit")))
             .add_property("pressed", &ev3::button::pressed)
             ;
 
@@ -1005,9 +1005,9 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::remote_control>("remote_control", "EV3 remote control", init<>())
-            .def(init<unsigned>())
-            .def(init<ev3::infrared_sensor&>())
-            .def(init<ev3::infrared_sensor&, unsigned>())
+            .def(init<unsigned>(args("channel")))
+            .def(init<ev3::infrared_sensor&>(args("ir_sensor")))
+            .def(init<ev3::infrared_sensor&, unsigned>(args("ir_sensor", "channel")))
             .add_property("connected",    &ev3::remote_control::connected)
             .add_property("channel",      &ev3::remote_control::channel)
             .def("process", &ev3::remote_control::process)
