@@ -41,9 +41,7 @@ bool device_connect(boost::python::tuple t, boost::python::dict d) {
     std::string     dir     = extract<std::string>(t[1]);
     std::string     pattern = extract<std::string>(t[2]);
 
-    dev.connect(dir, pattern, match);
-
-    return dev.connected();
+    return dev.connect(dir, pattern, match);
 }
 
 //---------------------------------------------------------------------------
