@@ -1,6 +1,7 @@
 from ev3dev_ext import *
 from ev3dev.version import __version__
 from PIL import Image, ImageDraw
+from struct import unpack
 
 #---------------------------------------------------------------------------
 # Furnish mode_set class (which is a wrapper around std::set<std::string>)
@@ -291,6 +292,28 @@ servo_motor.float = servo_motor_float
 
 
 #~autogen
+
+#---------------------------------------------------------------------------
+# Convenience method for accessing sensor.bin_data
+#---------------------------------------------------------------------------
+def sensor_bin_data(self, fmt=None):
+    """Bin Data: read-only
+    Reads the unscaled raw values in the `value<N>` attributes as raw byte
+    array. Use `bin_data_format`, `num_values` and the individual sensor
+    documentation to determine how to interpret the data.
+
+    In case format string is provided, unpacks the raw data and returns the
+    unpacked tuple. Without arguments returns the raw data as byte buffer.
+
+    See help(struct) for more on format strings.
+    """
+
+    if fmt is None:
+        return self.bin_data_raw
+    else:
+        return unpack(fmt, self.bin_data_raw)
+
+sensor.bin_data = sensor_bin_data
 
 #---------------------------------------------------------------------------
 # Provide a convenience wrapper for ev3dev.lcd class

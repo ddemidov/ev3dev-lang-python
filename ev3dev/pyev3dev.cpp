@@ -163,6 +163,27 @@ boost::python::object lcd_frame_buffer(ev3dev::lcd *lcd) {
 }
 
 //---------------------------------------------------------------------------
+// Wrap char buffer returned by sensor::bin_data() into Python object
+//---------------------------------------------------------------------------
+boost::python::object sensor_bin_data(const ev3dev::sensor &s) {
+  using namespace boost::python;
+
+  const std::vector<char> &buf = s.bin_data();
+
+#if PY_MAJOR_VERSION < 3
+    PyObject* py_buf = PyBuffer_FromMemory(
+            const_cast<char*>(buf.data()), buf.size()
+            );
+#else
+    PyObject* py_buf = PyMemoryView_FromMemory(
+            const_cast<char*>(buf.data()), buf.size(), PyBUF_READ
+            );
+#endif
+
+    return object(handle<>(py_buf));
+}
+
+//---------------------------------------------------------------------------
 // A return policy that just drops return value
 //---------------------------------------------------------------------------
 struct drop_return_value : boost::python::return_value_policy<boost::python::copy_const_reference>
@@ -249,6 +270,25 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("device_index", device_device_index<ev3::sensor>)
             .def("value",        &ev3::sensor::value,       sensor_value_ovr())
             .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
+            .add_property("bin_data_format", &ev3::sensor::bin_data_format,
+                    "Bin Data Format: read-only\n"
+                    "Returns the format of the values in `bin_data` for the current mode.\n"
+                    "Possible values are:\n"
+                    "\n"
+                    "   - `u8`: Unsigned 8-bit integer (byte)\n"
+                    "   - `s8`: Signed 8-bit integer (sbyte)\n"
+                    "   - `u16`: Unsigned 16-bit integer (ushort)\n"
+                    "   - `s16`: Signed 16-bit integer (short)\n"
+                    "   - `s16_be`: Signed 16-bit integer, big endian\n"
+                    "   - `s32`: Signed 32-bit integer (int)\n"
+                    "   - `float`: IEEE 754 32-bit floating point (float)\n"
+                    )
+            .add_property("bin_data_raw", sensor_bin_data,
+                    "Bin Data: read-only\n"
+                    "Returns the unscaled raw values in the `value<N>` attributes as raw byte\n"
+                    "array. Use `bin_data_format`, `num_values` and the individual sensor\n"
+                    "documentation to determine how to interpret the data.\n"
+                    )
 //~autogen python_generic-get-set classes.sensor>currentClass
 
             .add_property("command", no_getter<ev3::sensor>, make_function(&ev3::sensor::set_command, drop_return_value()),
