@@ -3,9 +3,9 @@ from ev3dev.version import __version__
 from PIL import Image, ImageDraw
 
 #---------------------------------------------------------------------------
-
 # Furnish mode_set class (which is a wrapper around std::set<std::string>)
 # with __repr__ and __str__ methods which are better than defaults.
+#---------------------------------------------------------------------------
 def mode_set_repr(self):
     return list(self).__repr__()
 
@@ -16,8 +16,8 @@ mode_set.__repr__ = mode_set_repr
 mode_set.__str__  = mode_set_str
 
 #---------------------------------------------------------------------------
-
 # proxy classes for easy attribute access for device class
+#---------------------------------------------------------------------------
 class attr_int_proxy:
     def __init__(self, dev):
         self.__dict__['dev'] = dev
@@ -74,8 +74,8 @@ def attr_set_get(dev):
 device.attr_set = property(fget=attr_set_get)
 
 #---------------------------------------------------------------------------
-
 # Helper function to compute power for left and right motors when steering
+#---------------------------------------------------------------------------
 def steering(direction, power=100):
     """
     Computes how fast each motor in a pair should turn to achieve the
@@ -105,8 +105,8 @@ def steering(direction, power=100):
     return (int(pl), int(pr))
 
 #---------------------------------------------------------------------------
-
 # Stop a motor on destruction
+#---------------------------------------------------------------------------
 def stop_taho_motor(self):
     self.command = 'stop'
 
@@ -122,6 +122,22 @@ def stop_servo_motor(self):
     self.command = 'float'
 
 servo_motor.__del__ = stop_servo_motor
+
+#---------------------------------------------------------------------------
+# Batch set method
+#---------------------------------------------------------------------------
+def batch_set(device, **attr):
+    """Set device attributes provided as keyword arguments
+    """
+
+    for key in attr:
+        setattr(device, key, attr[key])
+
+sensor.set      = batch_set
+motor.set       = batch_set
+dc_motor.set    = batch_set
+servo_motor.set = batch_set
+
 
 #~autogen python_motor_commands classes.motor>currentClass
 
@@ -270,8 +286,8 @@ servo_motor.float = servo_motor_float
 #~autogen
 
 #---------------------------------------------------------------------------
-
 # Provide a convenience wrapper for ev3dev.lcd class
+#---------------------------------------------------------------------------
 class LCD(lcd):
     """A convenience wrapper for ev3dev.lcd class.
     Provides drawing functions from python imaging library (PIL).
