@@ -17,18 +17,14 @@ Optional hardware:
 """
 )
 
-from sys import exit
-from time import sleep
+from time   import sleep
 from random import choice
 from ev3dev import *
 
-lmotor = large_motor(OUTPUT_C)
-rmotor = large_motor(OUTPUT_B)
-irsens = infrared_sensor()
-
-assert lmotor.connected, "Left motor is not connected!"
-assert rmotor.connected, "Right motor is not connected!"
-assert irsens.connected, "Infrared sensor is not connected!"
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+irsens = infrared_sensor();     assert irsens.connected
+ts     = touch_sensor()
 
 irsens.mode = 'IR-PROX'
 
@@ -37,8 +33,6 @@ rmotor.speed_regulation_enabled = 'on'
 
 motors = [lmotor, rmotor]
 
-ts = touch_sensor()
-
 def done():
     return ts.connected and ts.value()
 
@@ -46,11 +40,13 @@ while not done():
     distance = irsens.value()
 
     if distance > 40:
+        # Path is clear
         for m in motors:
             m.run_forever(speed_sp=900)
 
         sleep(0.01)
     else:
+        # Path is blocked, take a random turn
         dir = choice((100, -100))
 
         while irsens.value() < 70 and not done():

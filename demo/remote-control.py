@@ -17,26 +17,19 @@ Required hardware:
 from time import sleep
 from ev3dev import *
 
-lmotor = large_motor(OUTPUT_C)
-rmotor = large_motor(OUTPUT_B)
-irsens = infrared_sensor()
-
-assert lmotor.connected, "Left motor is not connected!"
-assert rmotor.connected, "Right motor is not connected!"
-assert irsens.connected, "Infrared sensor is not connected!"
-
-lmotor.speed_regulation_enabled = 'on'
-rmotor.speed_regulation_enabled = 'on'
-
-lmotor.stop_command = 'brake'
-rmotor.stop_command = 'brake'
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+irsens = infrared_sensor();     assert irsens.connected
 
 rc = remote_control(irsens)
+
+lmotor.set(speed_regulation_enabled='on', stop_command='brake')
+rmotor.set(speed_regulation_enabled='on', stop_command='brake')
 
 def make_roll(m, p):
     def roll(state):
         if state:
-            m.run_forever(speed_sp = p * 900)
+            m.run_forever(speed_sp=p*900)
         else:
             m.stop()
     return roll

@@ -32,24 +32,18 @@ from ev3dev import *
 # Parse command line
 #----------------------------------------------------------------------------
 parser = argparse.ArgumentParser(sys.argv[0])
-parser.add_argument('--Kp', dest='Kp', type=float, default=3)
+parser.add_argument('--Kp', dest='Kp', type=float, default=3.0)
 parser.add_argument('--Ki', dest='Ki', type=float, default=0.5)
-parser.add_argument('--Kd', dest='Kd', type=float, default=2)
+parser.add_argument('--Kd', dest='Kd', type=float, default=2.0)
 args = parser.parse_args(sys.argv[1:])
 
 #----------------------------------------------------------------------------
 # Initialize motors and sensors
 #----------------------------------------------------------------------------
-lmotor = large_motor(OUTPUT_C)
-rmotor = large_motor(OUTPUT_B)
-
-cs = color_sensor()
-ts = touch_sensor()
-
-assert lmotor.connected, "Left motor is not connected!"
-assert rmotor.connected, "Right motor is not connected!"
-assert cs.connected,     "Color sensor is not connected!"
-assert ts.connected,     "Touch sensor is not connected!"
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+cs     = color_sensor();        assert cs.connected
+ts     = touch_sensor();        assert ts.connected
 
 #----------------------------------------------------------------------------
 # Calibrate the color sensor.
@@ -82,14 +76,14 @@ last_error = 0
 integral   = 0
 
 while not ts.value():
-    error = mid - cs.value()
-    integral = 0.5 * integral + error
+    error      = mid - cs.value()
+    integral   = 0.5 * integral + error
     derivative = error - last_error
     last_error = error
 
     correction = args.Kp * error + args.Ki * integral + args.Kd * derivative
 
     for m,p in zip((lmotor, rmotor), steering(correction, 540)):
-        m.run_forever(speed_sp = p)
+        m.run_forever(speed_sp=p)
 
     time.sleep(0.01)

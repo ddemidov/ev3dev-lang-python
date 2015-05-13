@@ -43,13 +43,16 @@ def draw():
 
     lcd.update()
 
-def drive(m = None, state=False, power=None):
-    if not m.connected: return
 
-    if state:
-        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=power)
-    else:
+def drive(m, p):
+    if m.connected:
+        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=p)
+
+
+def stop(m):
+    if m.connected:
         m.stop()
+
 
 while not button.back.pressed:
     if button.left.pressed:
@@ -58,11 +61,11 @@ while not button.back.pressed:
         port = (port + 1) % 4
 
     if button.up.pressed:
-        drive(motors[port], True,  100)
+        drive(motors[port], 100)
     elif button.down.pressed:
-        drive(motors[port], True, -100)
+        drive(motors[port], -100)
     else:
-        drive(motors[port], False)
+        stop(motors[port])
 
     draw()
 
