@@ -91,6 +91,10 @@ def steering(direction, power=100):
 
     Output:
         a tuple of power values for a pair of motors.
+
+    Example:
+        for (motor, power) in zip((left_motor, right_motor), steering(50, 900)):
+            motor.run_forever(speed_sp=power)
     """
 
     pl = power
@@ -128,6 +132,9 @@ servo_motor.__del__ = stop_servo_motor
 #---------------------------------------------------------------------------
 def batch_set(device, **attr):
     """Set device attributes provided as keyword arguments
+
+    Example:
+        motor.set(speed_regulation_enabled='on', stop_command='brake')
     """
 
     for key in attr:
@@ -322,7 +329,7 @@ class LCD(lcd):
         Returns a handle to PIL.ImageDraw.Draw class associated with LCD.
 
         Example:
-        lcd.draw.rectangle((10,10,60,20), fill=True)
+            lcd.draw.rectangle((10,10,60,20), fill=True)
         """
         return ImageDraw.Draw(self.img)
 
