@@ -13,7 +13,6 @@ apt-get install libboost-python-dev python-setuptools python-pil
 ```
 easy_install http://ddemidov.github.io/ev3dev-lang-python/_downloads/python_ev3dev-latest.egg
 ```
-The shortened version of the above URL will also work: http://git.io/vU6eO.
 Same command will upgrade already installed package to the latest available
 version.
 
