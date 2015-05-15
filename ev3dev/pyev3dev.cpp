@@ -229,16 +229,48 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     {
         class_<ev3::device>("device", "Generic device")
-            .def("connect", raw_function(device_connect))
             .add_property("connected",    &ev3::device::connected)
             .add_property("device_index", &ev3::device::device_index)
-            .def("get_attr_int",    &ev3::device::get_attr_int)
-            .def("set_attr_int",    &ev3::device::set_attr_int)
-            .def("get_attr_string", &ev3::device::get_attr_string)
-            .def("set_attr_string", &ev3::device::set_attr_string)
-            .def("get_attr_line",   &ev3::device::get_attr_line)
-            .def("get_attr_set",    &ev3::device::get_attr_set, device_get_attr_set_ovr())
-            .def("get_attr_from_set", &ev3::device::get_attr_from_set)
+            .def("connect", raw_function(device_connect),
+                    "connect(path, pattern, attr1=val1, ...)\n\n"
+                    "Tries to connect the device with the provided parameters\n"
+                    "\n"
+                    "Parameters:\n"
+                    "\n"
+                    "    path: path in sysfs to search device node under.\n"
+                    "        Example: '/sys/class/tacho-motor/'\n"
+                    "\n"
+                    "    pattern: device name pattern.\n"
+                    "        Example: 'motor'\n"
+                    "\n"
+                    "    keyword arguments: values of device attributes to match\n"
+                    "        while looking for the device\n"
+                    "\n"
+                    "Example (connect large EV3 motor)::\n\n"
+                    "    d = device()\n"
+                    "    d.connect('/sys/class/tacho-motor/', 'motor', driver_name='lego-ev3-l-motor')\n"
+                    )
+            .def("get_attr_int",      &ev3::device::get_attr_int,
+                    "Read integer attribute\n"
+                )
+            .def("set_attr_int",      &ev3::device::set_attr_int,
+                    "Write integer attribute\n"
+                )
+            .def("get_attr_string",   &ev3::device::get_attr_string,
+                    "Read string attribute\n"
+                )
+            .def("set_attr_string",   &ev3::device::set_attr_string,
+                    "Write string attribute\n"
+                )
+            .def("get_attr_line",     &ev3::device::get_attr_line,
+                    "Read line attribute\n"
+                )
+            .def("get_attr_set",      &ev3::device::get_attr_set,
+                    device_get_attr_set_ovr(args("name"), "Read set attribute\n")
+                )
+            .def("get_attr_from_set", &ev3::device::get_attr_from_set,
+                    "Read current mode from set attribute\n"
+                )
             ;
     }
 
@@ -268,8 +300,10 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                  , init<ev3::port_type>(args("port")))
             .add_property("connected", device_connected<ev3::sensor>)
             .add_property("device_index", device_device_index<ev3::sensor>)
-            .def("value",        &ev3::sensor::value,       sensor_value_ovr())
-            .def("float_value",  &ev3::sensor::float_value, sensor_float_value_ovr())
+            .def("value",        &ev3::sensor::value,
+                    sensor_value_ovr(args("index=0"), "Reads unscaled sensor value"))
+            .def("float_value",  &ev3::sensor::float_value,
+                    sensor_float_value_ovr(args("index=0"), "Reads scaled sensor value"))
             .add_property("bin_data_format", &ev3::sensor::bin_data_format,
                     "Bin Data Format: read-only\n"
                     "Returns the format of the values in `bin_data` for the current mode.\n"

@@ -32,7 +32,9 @@ class attr_int_proxy:
 def attr_int_get(dev):
     return attr_int_proxy(dev)
 
-device.attr_int = property(fget=attr_int_get)
+device.attr_int = property(fget=attr_int_get,
+        doc="Reads/writes integer attributes.\n Example::\n\n    d.attr_int.speed_sp = 100\n"
+    )
 
 
 class attr_string_proxy:
@@ -48,7 +50,9 @@ class attr_string_proxy:
 def attr_string_get(dev):
     return attr_string_proxy(dev)
 
-device.attr_string = property(fget=attr_string_get)
+device.attr_string = property(fget=attr_string_get,
+        doc="Reads/writes string attributes.\nExample::\n\n    d.attr_string.mode = 'IR-PROX'\n"
+        )
 
 class attr_line_proxy:
     def __init__(self, dev):
@@ -60,7 +64,9 @@ class attr_line_proxy:
 def attr_line_get(dev):
     return attr_line_proxy(dev)
 
-device.attr_line = property(fget=attr_line_get)
+device.attr_line = property(fget=attr_line_get,
+        doc="Reads line attributes.\n Example::\n\n    print(d.attr_line.modes)\n"
+        )
 
 class attr_set_proxy:
     def __init__(self, dev):
@@ -72,7 +78,9 @@ class attr_set_proxy:
 def attr_set_get(dev):
     return attr_set_proxy(dev)
 
-device.attr_set = property(fget=attr_set_get)
+device.attr_set = property(fget=attr_set_get,
+        doc="Reads set attributes.\n Example::\n\n    print(d.attr_set.commands)\n"
+        )
 
 #---------------------------------------------------------------------------
 # Helper function to compute power for left and right motors when steering
@@ -93,7 +101,8 @@ def steering(direction, power=100):
     Output:
         a tuple of power values for a pair of motors.
 
-    Example:
+    Example::
+
         for (motor, power) in zip((left_motor, right_motor), steering(50, 900)):
             motor.run_forever(speed_sp=power)
     """
@@ -134,7 +143,8 @@ servo_motor.__del__ = stop_servo_motor
 def batch_set(device, **attr):
     """Set device attributes provided as keyword arguments
 
-    Example:
+    Example::
+
         motor.set(speed_regulation_enabled='on', stop_command='brake')
     """
 
@@ -351,7 +361,8 @@ class LCD(lcd):
         """
         Returns a handle to PIL.ImageDraw.Draw class associated with LCD.
 
-        Example:
+        Example::
+
             lcd.draw.rectangle((10,10,60,20), fill=True)
         """
         return ImageDraw.Draw(self.img)
