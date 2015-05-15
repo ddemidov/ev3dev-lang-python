@@ -11,7 +11,7 @@ Installation
 
 * Prerequisites::
 
-    apt-get install libboost-python-dev python-setuptools python-pil
+    apt-get install libboost-python python-setuptools python-pil
 
 * Now, the actual module installation::
 
