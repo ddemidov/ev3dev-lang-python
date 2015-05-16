@@ -92,11 +92,13 @@ def steering(direction, power=100):
 
     Input:
         direction [-100, 100]:
-            -100 means turn left as fast as possible,
-             0   means drive in a straight line, and
-             100 means turn right as fast as possible.
-        power: the outmost motor (the one rotating faster) should receive this
-            value of power.
+            * -100 means turn left as fast as possible,
+            *  0   means drive in a straight line, and
+            *  100 means turn right as fast as possible.
+
+        power: the power that should be applied to the outmost motor (the one
+            rotating faster). The power of the other motor will be computed
+            automatically.
 
     Output:
         a tuple of power values for a pair of motors.

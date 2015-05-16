@@ -11,31 +11,34 @@ Module interface
 .. toctree::
    :maxdepth: 2
 
-.. autosummary::
-    ev3dev.device
-    ev3dev.motor
-    ev3dev.dc_motor
-    ev3dev.servo_motor
-    ev3dev.medium_motor
-    ev3dev.large_motor
-    ev3dev.sensor
-    ev3dev.i2c_sensor
-    ev3dev.touch_sensor
-    ev3dev.color_sensor
-    ev3dev.ultrasonic_sensor
-    ev3dev.gyro_sensor
-    ev3dev.sound_sensor
-    ev3dev.light_sensor
-    ev3dev.infrared_sensor
-    ev3dev.remote_control
-    ev3dev.led
-    ev3dev.power_supply
-    ev3dev.button
-    ev3dev.sound
-    ev3dev.lcd
-    ev3dev.LCD
-
 .. automodule:: ev3dev
+
+.. autosummary::
+    :nosignatures:
+
+    device
+    motor
+    dc_motor
+    servo_motor
+    medium_motor
+    large_motor
+    steering
+    sensor
+    i2c_sensor
+    touch_sensor
+    color_sensor
+    ultrasonic_sensor
+    gyro_sensor
+    sound_sensor
+    light_sensor
+    infrared_sensor
+    remote_control
+    led
+    power_supply
+    button
+    sound
+    lcd
+    LCD
 
 Generic device
 ^^^^^^^^^^^^^^
