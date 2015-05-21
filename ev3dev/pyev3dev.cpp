@@ -624,17 +624,17 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .add_property("encoder_polarity", &ev3::motor::encoder_polarity, make_function(&ev3::motor::set_encoder_polarity, drop_return_value()),
                     "Encoder Polarity: read/write\n\n"
                     "Sets the polarity of the rotary encoder. This is an advanced feature to all\n"
-                    "use of motors that send inverted encoder signals to the EV3. This should\n"
+                    "use of motors that send inversed encoder signals to the EV3. This should\n"
                     "be set correctly by the driver of a device. It You only need to change this\n"
                     "value if you are using a unsupported device. Valid values are `normal` and\n"
-                    "`inverted`.\n"
+                    "`inversed`.\n"
                     )
             .add_property("polarity", &ev3::motor::polarity, make_function(&ev3::motor::set_polarity, drop_return_value()),
                     "Polarity: read/write\n\n"
                     "Sets the polarity of the motor. With `normal` polarity, a positive duty\n"
-                    "cycle will cause the motor to rotate clockwise. With `inverted` polarity,\n"
+                    "cycle will cause the motor to rotate clockwise. With `inversed` polarity,\n"
                     "a positive duty cycle will cause the motor to rotate counter-clockwise.\n"
-                    "Valid values are `normal` and `inverted`.\n"
+                    "Valid values are `normal` and `inversed`.\n"
                     )
             .add_property("port_name", &ev3::motor::port_name,
                     "Port Name: read-only\n\n"
@@ -762,9 +762,9 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("command_stop") = ev3::motor::command_stop;
         s.attr("command_reset") = ev3::motor::command_reset;
         s.attr("encoder_polarity_normal") = ev3::motor::encoder_polarity_normal;
-        s.attr("encoder_polarity_inverted") = ev3::motor::encoder_polarity_inverted;
+        s.attr("encoder_polarity_inversed") = ev3::motor::encoder_polarity_inversed;
         s.attr("polarity_normal") = ev3::motor::polarity_normal;
-        s.attr("polarity_inverted") = ev3::motor::polarity_inverted;
+        s.attr("polarity_inversed") = ev3::motor::polarity_inversed;
         s.attr("speed_regulation_on") = ev3::motor::speed_regulation_on;
         s.attr("speed_regulation_off") = ev3::motor::speed_regulation_off;
         s.attr("stop_command_coast") = ev3::motor::stop_command_coast;
@@ -830,7 +830,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("polarity", &ev3::dc_motor::polarity, make_function(&ev3::dc_motor::set_polarity, drop_return_value()),
                     "Polarity: read/write\n\n"
-                    "Sets the polarity of the motor. Valid values are `normal` and `inverted`.\n"
+                    "Sets the polarity of the motor. Valid values are `normal` and `inversed`.\n"
                     )
             .add_property("port_name", &ev3::dc_motor::port_name,
                     "Port Name: read-only\n\n"
@@ -873,7 +873,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("command_run_timed") = ev3::dc_motor::command_run_timed;
         s.attr("command_stop") = ev3::dc_motor::command_stop;
         s.attr("polarity_normal") = ev3::dc_motor::polarity_normal;
-        s.attr("polarity_inverted") = ev3::dc_motor::polarity_inverted;
+        s.attr("polarity_inversed") = ev3::dc_motor::polarity_inversed;
         s.attr("stop_command_coast") = ev3::dc_motor::stop_command_coast;
         s.attr("stop_command_brake") = ev3::dc_motor::stop_command_brake;
 
@@ -930,9 +930,9 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("polarity", &ev3::servo_motor::polarity, make_function(&ev3::servo_motor::set_polarity, drop_return_value()),
                     "Polarity: read/write\n\n"
-                    "Sets the polarity of the servo. Valid values are `normal` and `inverted`.\n"
-                    "Setting the value to `inverted` will cause the position_sp value to be\n"
-                    "inverted. i.e `-100` will correspond to `max_pulse_sp`, and `100` will\n"
+                    "Sets the polarity of the servo. Valid values are `normal` and `inversed`.\n"
+                    "Setting the value to `inversed` will cause the position_sp value to be\n"
+                    "inversed. i.e `-100` will correspond to `max_pulse_sp`, and `100` will\n"
                     "correspond to `min_pulse_sp`.\n"
                     )
             .add_property("port_name", &ev3::servo_motor::port_name,
@@ -970,7 +970,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
         s.attr("command_run") = ev3::servo_motor::command_run;
         s.attr("command_float") = ev3::servo_motor::command_float;
         s.attr("polarity_normal") = ev3::servo_motor::polarity_normal;
-        s.attr("polarity_inverted") = ev3::servo_motor::polarity_inverted;
+        s.attr("polarity_inversed") = ev3::servo_motor::polarity_inversed;
 
 //~autogen
     }
