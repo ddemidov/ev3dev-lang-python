@@ -15,7 +15,7 @@ Installation
 
 * Now, the actual module installation::
 
-    easy_install http://ddemidov.github.io/ev3dev-lang-python/python_ev3dev-latest.egg
+    easy_install -U python-ev3dev
 
 Same command will upgrade already installed package to the latest available
 version.
