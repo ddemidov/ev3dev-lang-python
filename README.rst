@@ -75,7 +75,7 @@ EV3, you can connect to the server from your main computer::
 
 The parameter to `connect()` function is the host name or the ip address of the
 EV3.  After the connection is made, you can import the `ev3dev` module
-remotely:
+remotely::
 
     >>> ev3dev = c.modules.ev3dev
     >>> m = ev3dev.large_motor('outA')
