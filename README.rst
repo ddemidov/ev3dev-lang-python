@@ -9,13 +9,15 @@ The source code is hosted at https://github.com/ddemidov/ev3dev-lang-python.
 Installation
 ------------
 
-.. highlight:: bash
+* Prerequisites:
 
-* Prerequisites::
+.. code-block:: bash
 
     apt-get install libboost-python1.55.0 python-setuptools python-pil
 
-* Now, the actual module installation::
+* Now, the actual module installation:
+
+.. code-block:: bash
 
     easy_install -U python-ev3dev
 
@@ -30,10 +32,10 @@ documentation is hosted at http://ddemidov.github.io/ev3dev-lang-python.
 
 .. _demos: https://github.com/ddemidov/ev3dev-lang-python/tree/master/demo
 
-.. highlight:: python
-
 Here is a simple example of running a large EV3 motor connected to output port
-`A` for three seconds::
+`A` for three seconds:
+
+.. code-block:: python
 
     >>> import ev3dev
     >>> m = ev3dev.large_motor('outA')
@@ -49,7 +51,9 @@ Remote operation
 There are a couple of options for running python code remotely on the EV3
 (aside from obvious choice of doing everything in ssh session).
 
-First, you can install `IPython Notebook`_ with::
+First, you can install `IPython Notebook`_ with:
+
+.. code-block:: bash
 
     apt-get install ipython-notebook
 
@@ -59,23 +63,27 @@ process seems to be rather heavy for the limited EV3 resources, and the
 experience tends to deteriorate with time.
 
 The second option is using RPyC_ (Remote Python Call) library. It may be
-installed with::
+installed with:
+
+.. code-block:: bash
 
     pip install rpyc
 
 
-.. highlight:: python
-
 You need to install it both on the EV3 and on the remote host.
 After that, once you launch RPyC server with `rpyc_classic.py` command on the
-EV3, you can connect to the server from your main computer::
+EV3, you can connect to the server from your main computer:
+
+.. code-block:: python
 
     >>> import rpyc
     >>> c = rpyc.classic.connect("192.168.10.42")
 
 The parameter to `connect()` function is the host name or the ip address of the
 EV3.  After the connection is made, you can import the `ev3dev` module
-remotely::
+remotely:
+
+.. code-block:: python
 
     >>> ev3dev = c.modules.ev3dev
     >>> m = ev3dev.large_motor('outA')
