@@ -16,7 +16,7 @@ Required hardware:
 from time import sleep
 from ev3dev import *
 
-ir = infrared_sensor() assert ir.connected
+ir = infrared_sensor(); assert ir.connected
 
 ir.mode = 'IR-PROX'
 
