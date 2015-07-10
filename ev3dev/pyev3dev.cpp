@@ -84,7 +84,7 @@ void no_getter(const T&) {
 }
 
 //---------------------------------------------------------------------------
-// Remote control event processing functions
+// Global interpreter lock holder
 //---------------------------------------------------------------------------
 struct HoldGIL {
     PyGILState_STATE state;
@@ -92,6 +92,9 @@ struct HoldGIL {
     ~HoldGIL() { PyGILState_Release(state); }
 };
 
+//---------------------------------------------------------------------------
+// Remote control event processing functions
+//---------------------------------------------------------------------------
 void rc_on_red_up(ev3dev::remote_control *rc, PyObject *f) {
     Py_INCREF(f);
     rc->on_red_up = [f](bool pressed) {
@@ -137,6 +140,17 @@ void rc_on_state_change(ev3dev::remote_control *rc, PyObject *f) {
     rc->on_state_change = [f](int s) {
         HoldGIL lock;
         boost::python::call<void>(f, s);
+    };
+}
+
+//---------------------------------------------------------------------------
+// Button event processing functions
+//---------------------------------------------------------------------------
+void button_onclick(ev3dev::button *btn, PyObject *f) {
+    Py_INCREF(f);
+    btn->onclick = [f](bool pressed) {
+        HoldGIL lock;
+        boost::python::call<void>(f, pressed);
     };
 }
 
@@ -1074,6 +1088,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     {
         scope s = class_<ev3::button>("button", "EV3 buttons", init<int>(args("bit")))
             .add_property("pressed", &ev3::button::pressed)
+            .def("onclick", button_onclick, args("callable"))
+            .def("process", &ev3::button::process)
             ;
 
         s.attr("back")  = ev3::button::back;
