@@ -1087,9 +1087,20 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     {
         scope s = class_<ev3::button>("button", "EV3 buttons", init<int>(args("bit")))
-            .add_property("pressed", &ev3::button::pressed)
-            .def("onclick", button_onclick, args("callable"))
-            .def("process", &ev3::button::process)
+            .add_property("pressed", &ev3::button::pressed, "Check if the button is pressed")
+            .def("onclick", button_onclick, args("callable"),
+                    "Set function to be called when the button is clicked."
+                    )
+            .def("process", &ev3::button::process,
+                    "Checks if the button state has changed,\n"
+                    "calls function in case it has.\n"
+                    "Returns true if the state has changed since the last call."
+                    )
+            .def("process_all", &ev3::button::process_all,
+                    "Calls process() for each of the EV3 buttons.\n"
+                    "Returns true if any of the states have changed since the last call."
+                    )
+            .staticmethod("process_all")
             ;
 
         s.attr("back")  = ev3::button::back;
