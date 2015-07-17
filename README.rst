@@ -15,6 +15,11 @@ Installation
 
     apt-get install libboost-python1.55.0 python-setuptools python-pil
 
+These should be enough to install and use the library on your ev3. If you want
+to install it on your main computer (for example, to let your IDE of choice
+know about the library), or compile the library from source, you will also need
+to install `libboost-python1.55-dev`.
+
 * Now, the actual module installation:
 
 .. code-block:: bash
