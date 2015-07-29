@@ -1,7 +1,7 @@
 from setuptools import setup, Extension
 from spec_version import spec_version
 from git_version import git_version
-import os, sys
+import os, sys, platform
 
 pyver = sys.version_info
 
@@ -49,6 +49,11 @@ open("ev3dev/version.py", "w").write("__version__='%s (%s)'\n" % (git_version(),
 
 
 #----------------------------------------------------------------------------
+compile_args=['-O2', '-std=c++11']
+
+if platform.machine() == 'armv6l':
+    compile_args.append('-DEV3DEV_RPI')
+
 setup(
         name='python-ev3dev',
         version=git_version(),
@@ -66,7 +71,7 @@ setup(
                 sources=['ev3dev/pyev3dev.cpp', 'ev3dev/ev3dev.cpp'],
                 include_dirs=['ev3dev'],
                 libraries=[boost_python_lib()],
-                extra_compile_args=['-O2', '-std=c++11']
+                extra_compile_args=compile_args
                 )
             ]
 )
