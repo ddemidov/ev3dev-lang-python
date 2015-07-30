@@ -1001,11 +1001,12 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 //~autogen
                 , init<std::string>(args("name")))
             .add_property("connected",      device_connected<ev3::led>)
+            .add_property("delay_on", &ev3::led::delay_on, make_function(&ev3::led::set_delay_on, drop_return_value()))
+            .add_property("delay_off", &ev3::led::delay_off, make_function(&ev3::led::set_delay_off, drop_return_value()))
+            .add_property("triggers", &ev3::led::triggers)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
             .def("flash",          &ev3::led::flash, args("interval_ms"))
-            .def("set_on_delay",   &ev3::led::set_on_delay, args("ms"))
-            .def("set_off_delay",  &ev3::led::set_off_delay, args("ms"))
             .def("triggers",       &ev3::led::triggers)
             .def("red_on",         &ev3::led::red_on).staticmethod("red_on")
             .def("red_off",        &ev3::led::red_off).staticmethod("red_off")
@@ -1013,7 +1014,6 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def("green_off",      &ev3::led::green_off).staticmethod("green_off")
             .def("all_on",         &ev3::led::all_on).staticmethod("all_on")
             .def("all_off",        &ev3::led::all_off).staticmethod("all_off")
-            .add_property("triggers", &ev3::led::triggers)
 //~autogen python_generic-get-set classes.led>currentClass
 
             .add_property("max_brightness", &ev3::led::max_brightness,
