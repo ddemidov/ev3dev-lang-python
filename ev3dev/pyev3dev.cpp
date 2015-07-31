@@ -345,7 +345,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("commands", &ev3::sensor::commands,
                     "Commands: read-only\n\n"
-                    "Returns a space separated list of the valid commands for the sensor.\n"
+                    "Returns a list of the valid commands for the sensor.\n"
                     "Returns -EOPNOTSUPP if no commands are supported.\n"
                     )
             .add_property("decimals", &ev3::sensor::decimals,
@@ -365,7 +365,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("modes", &ev3::sensor::modes,
                     "Modes: read-only\n\n"
-                    "Returns a space separated list of the valid modes for the sensor.\n"
+                    "Returns a list of the valid modes for the sensor.\n"
                     )
             .add_property("num_values", &ev3::sensor::num_values,
                     "Num Values: read-only\n\n"
@@ -593,7 +593,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("commands", &ev3::motor::commands,
                     "Commands: read-only\n\n"
-                    "Returns a space separated list of commands that are supported by the motor\n"
+                    "Returns a list of commands that are supported by the motor\n"
                     "controller. Possible values are `run-forever`, `run-to-abs-pos`, `run-to-rel-pos`,\n"
                     "`run-timed`, `run-direct`, `stop` and `reset`. Not all commands may be supported.\n"
                     "`run-forever` will cause the motor to run until another command is sent.\n"
@@ -730,7 +730,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("state", &ev3::motor::state,
                     "State: read-only\n\n"
-                    "Reading returns a space separated list of state flags. Possible flags are\n"
+                    "Reading returns a list of state flags. Possible flags are\n"
                     "`running`, `ramping` `holding` and `stalled`.\n"
                     )
             .add_property("stop_command", &ev3::motor::stop_command, make_function(&ev3::motor::set_stop_command, drop_return_value()),
@@ -823,7 +823,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("commands", &ev3::dc_motor::commands,
                     "Commands: read-only\n\n"
-                    "Returns a space separated list of commands supported by the motor\n"
+                    "Returns a list of commands supported by the motor\n"
                     "controller.\n"
                     )
             .add_property("driver_name", &ev3::dc_motor::driver_name,
@@ -862,7 +862,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("state", &ev3::dc_motor::state,
                     "State: read-only\n\n"
-                    "Gets a space separated list of flags indicating the motor status. Possible\n"
+                    "Gets a list of flags indicating the motor status. Possible\n"
                     "flags are `running` and `ramping`. `running` indicates that the motor is\n"
                     "powered. `ramping` indicates that the motor has not yet reached the\n"
                     "`duty_cycle_sp`.\n"
@@ -874,7 +874,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("stop_commands", &ev3::dc_motor::stop_commands,
                     "Stop Commands: read-only\n\n"
-                    "Gets a space separated list of stop commands. Valid values are `coast`\n"
+                    "Gets a list of stop commands. Valid values are `coast`\n"
                     "and `brake`.\n"
                     )
 
@@ -971,7 +971,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("state", &ev3::servo_motor::state,
                     "State: read-only\n\n"
-                    "Returns a space separated list of flags indicating the state of the servo.\n"
+                    "Returns a list of flags indicating the state of the servo.\n"
                     "Possible values are:\n"
                     "* `running`: Indicates that the motor is powered.\n"
                     )
@@ -1214,7 +1214,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
             .add_property("modes", &ev3::lego_port::modes,
                     "Modes: read-only\n\n"
-                    "Returns a space separated list of the available modes of the port.\n"
+                    "Returns a list of the available modes of the port.\n"
                     )
             .add_property("mode", &ev3::lego_port::mode, make_function(&ev3::lego_port::set_mode, drop_return_value()),
                     "Mode: read/write\n\n"
