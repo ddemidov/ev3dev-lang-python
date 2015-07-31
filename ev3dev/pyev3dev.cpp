@@ -1167,4 +1167,84 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .value("beacon",    ev3::remote_control::beacon)
             ;
     }
+
+    //-----------------------------------------------------------------------
+    // Lego Port
+    //-----------------------------------------------------------------------
+    {
+        scope s = class_<ev3::lego_port>("lego_port",
+//~autogen python_generic-class-description classes.legoPort>currentClass
+
+                "The `lego-port` class provides an interface for working with input and\n"
+                "output ports that are compatible with LEGO MINDSTORMS RCX/NXT/EV3, LEGO\n"
+                "WeDo and LEGO Power Functions sensors and motors. Supported devices include\n"
+                "the LEGO MINDSTORMS EV3 Intelligent Brick, the LEGO WeDo USB hub and\n"
+                "various sensor multiplexers from 3rd party manufacturers.\n"
+                "\n"
+                "Some types of ports may have multiple modes of operation. For example, the\n"
+                "input ports on the EV3 brick can communicate with sensors using UART, I2C\n"
+                "or analog validate signals - but not all at the same time. Therefore there\n"
+                "are multiple modes available to connect to the different types of sensors.\n"
+                "\n"
+                "In most cases, ports are able to automatically detect what type of sensor\n"
+                "or motor is connected. In some cases though, this must be manually specified\n"
+                "using the `mode` and `set_device` attributes. The `mode` attribute affects\n"
+                "how the port communicates with the connected device. For example the input\n"
+                "ports on the EV3 brick can communicate using UART, I2C or analog voltages,\n"
+                "but not all at the same time, so the mode must be set to the one that is\n"
+                "appropriate for the connected sensor. The `set_device` attribute is used to\n"
+                "specify the exact type of sensor that is connected. Note: the mode must be\n"
+                "correctly set before setting the sensor type.\n"
+                "\n"
+                "Ports can be found at `/sys/class/lego-port/port<N>` where `<N>` is\n"
+                "incremented each time a new port is registered. Note: The number is not\n"
+                "related to the actual port at all - use the `port_name` attribute to find\n"
+                "a specific port.\n"
+
+//~autogen
+                , init<ev3::port_type>(args("port")))
+            .add_property("connected",         device_connected<ev3::lego_port>)
+            .add_property("device_index",      device_device_index<ev3::lego_port>)
+//~autogen python_generic-get-set classes.legoPort>currentClass
+
+            .add_property("driver_name", &ev3::lego_port::driver_name,
+                    "Driver Name: read-only\n\n"
+                    "Returns the name of the driver that loaded this device. You can find the\n"
+                    "complete list of drivers in the [list of port drivers].\n"
+                    )
+            .add_property("modes", &ev3::lego_port::modes,
+                    "Modes: read-only\n\n"
+                    "Returns a space separated list of the available modes of the port.\n"
+                    )
+            .add_property("mode", &ev3::lego_port::mode, make_function(&ev3::lego_port::set_mode, drop_return_value()),
+                    "Mode: read/write\n\n"
+                    "Reading returns the currently selected mode. Writing sets the mode.\n"
+                    "Generally speaking when the mode changes any sensor or motor devices\n"
+                    "associated with the port will be removed new ones loaded, however this\n"
+                    "this will depend on the individual driver implementing this class.\n"
+                    )
+            .add_property("port_name", &ev3::lego_port::port_name,
+                    "Port Name: read-only\n\n"
+                    "Returns the name of the port. See individual driver documentation for\n"
+                    "the name that will be returned.\n"
+                    )
+            .add_property("set_device", no_getter<ev3::lego_port>, make_function(&ev3::lego_port::set_set_device, drop_return_value()),
+                    "Set Device: write-only\n\n"
+                    "For modes that support it, writing the name of a driver will cause a new\n"
+                    "device to be registered for that driver and attached to this port. For\n"
+                    "example, since NXT/Analog sensors cannot be auto-detected, you must use\n"
+                    "this attribute to load the correct driver. Returns -EOPNOTSUPP if setting a\n"
+                    "device is not supported.\n"
+                    )
+            .add_property("status", &ev3::lego_port::status,
+                    "Status: read-only\n\n"
+                    "In most cases, reading status will return the same value as `mode`. In\n"
+                    "cases where there is an `auto` mode additional values may be returned,\n"
+                    "such as `no-device` or `error`. See individual port driver documentation\n"
+                    "for the full list of possible values.\n"
+                    )
+
+//~autogen
+            ;
+    }
 }
