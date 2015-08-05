@@ -997,17 +997,15 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 //~autogen python_generic-class-description classes.led>currentClass
 
                 "Any device controlled by the generic LED driver.\n"
+                "See https://www.kernel.org/doc/Documentation/leds/leds-class.txt\n"
+                "for more details.\n"
 
 //~autogen
                 , init<std::string>(args("name")))
             .add_property("connected",      device_connected<ev3::led>)
-            .add_property("delay_on", &ev3::led::delay_on, make_function(&ev3::led::set_delay_on, drop_return_value()))
-            .add_property("delay_off", &ev3::led::delay_off, make_function(&ev3::led::set_delay_off, drop_return_value()))
-            .add_property("triggers", &ev3::led::triggers)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
-            .def("flash",          &ev3::led::flash, args("interval_ms"))
-            .def("triggers",       &ev3::led::triggers)
+            .def("flash",          &ev3::led::flash, args("on_ms", "off_ms"))
             .def("red_on",         &ev3::led::red_on).staticmethod("red_on")
             .def("red_off",        &ev3::led::red_off).staticmethod("red_off")
             .def("green_on",       &ev3::led::green_on).staticmethod("green_on")
@@ -1018,15 +1016,44 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
             .add_property("max_brightness", &ev3::led::max_brightness,
                     "Max Brightness: read-only\n\n"
-                    "Gets the maximum allowable brightness value\n"
+                    "Returns the maximum allowable brightness value.\n"
                     )
             .add_property("brightness", &ev3::led::brightness, make_function(&ev3::led::set_brightness, drop_return_value()),
                     "Brightness: read/write\n\n"
                     "Sets the brightness level. Possible values are from 0 to `max_brightness`.\n"
                     )
+            .add_property("triggers", &ev3::led::triggers,
+                    "Triggers: read-only\n\n"
+                    "Returns a list of available triggers.\n"
+                    )
             .add_property("trigger", &ev3::led::trigger, make_function(&ev3::led::set_trigger, drop_return_value()),
                     "Trigger: read/write\n\n"
-                    "Sets the led trigger.\n"
+                    "Sets the led trigger. A trigger\n"
+                    "is a kernel based source of led events. Triggers can either be simple or\n"
+                    "complex. A simple trigger isn't configurable and is designed to slot into\n"
+                    "existing subsystems with minimal additional code. Examples are the `ide-disk` and\n"
+                    "`nand-disk` triggers.\n"
+                    "\n"
+                    "Complex triggers whilst available to all LEDs have LED specific\n"
+                    "parameters and work on a per LED basis. The `timer` trigger is an example.\n"
+                    "The `timer` trigger will periodically change the LED brightness between\n"
+                    "0 and the current brightness setting. The `on` and `off` time can\n"
+                    "be specified via `delay_{on,off}` attributes in milliseconds.\n"
+                    "You can change the brightness value of a LED independently of the timer\n"
+                    "trigger. However, if you set the brightness value to 0 it will\n"
+                    "also disable the `timer` trigger.\n"
+                    )
+            .add_property("delay_on", &ev3::led::delay_on, make_function(&ev3::led::set_delay_on, drop_return_value()),
+                    "Delay On: read/write\n\n"
+                    "The `timer` trigger will periodically change the LED brightness between\n"
+                    "0 and the current brightness setting. The `on` time can\n"
+                    "be specified via `delay_on` attribute in milliseconds.\n"
+                    )
+            .add_property("delay_off", &ev3::led::delay_off, make_function(&ev3::led::set_delay_off, drop_return_value()),
+                    "Delay Off: read/write\n\n"
+                    "The `timer` trigger will periodically change the LED brightness between\n"
+                    "0 and the current brightness setting. The `off` time can\n"
+                    "be specified via `delay_off` attribute in milliseconds.\n"
                     )
 
 //~autogen
