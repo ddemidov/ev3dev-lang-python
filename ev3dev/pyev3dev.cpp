@@ -7,7 +7,7 @@
 #include <iostream>
 
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.2-pre, rev 3. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
 //~autogen
 
 //---------------------------------------------------------------------------
@@ -1006,12 +1006,27 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
             .def("on",             &ev3::led::on)
             .def("off",            &ev3::led::off)
             .def("flash",          &ev3::led::flash, args("on_ms", "off_ms"))
-            .def("red_on",         &ev3::led::red_on).staticmethod("red_on")
-            .def("red_off",        &ev3::led::red_off).staticmethod("red_off")
-            .def("green_on",       &ev3::led::green_on).staticmethod("green_on")
-            .def("green_off",      &ev3::led::green_off).staticmethod("green_off")
-            .def("all_on",         &ev3::led::all_on).staticmethod("all_on")
+            .def("mix_colors",     &ev3::led::mix_colors, args("red", "green")).staticmethod("mix_colors")
             .def("all_off",        &ev3::led::all_off).staticmethod("all_off")
+//~autogen python_led-color-methods
+
+            .def("set_red", &ev3::led::set_red, args("intensity")).staticmethod("set_red")
+            .def("red_on", &ev3::led::red_on).staticmethod("red_on")
+
+            .def("set_green", &ev3::led::set_green, args("intensity")).staticmethod("set_green")
+            .def("green_on", &ev3::led::green_on).staticmethod("green_on")
+
+            .def("set_amber", &ev3::led::set_amber, args("intensity")).staticmethod("set_amber")
+            .def("amber_on", &ev3::led::amber_on).staticmethod("amber_on")
+
+            .def("set_orange", &ev3::led::set_orange, args("intensity")).staticmethod("set_orange")
+            .def("orange_on", &ev3::led::orange_on).staticmethod("orange_on")
+
+            .def("set_yellow", &ev3::led::set_yellow, args("intensity")).staticmethod("set_yellow")
+            .def("yellow_on", &ev3::led::yellow_on).staticmethod("yellow_on")
+
+
+//~autogen
 //~autogen python_generic-get-set classes.led>currentClass
 
             .add_property("max_brightness", &ev3::led::max_brightness,
@@ -1057,6 +1072,10 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     )
 
 //~autogen
+            .add_property("brightness_pct", &ev3::led::brightness_pct, make_function(&ev3::led::set_brightness_pct, drop_return_value()),
+                    "Brightness PCT: read/write\n\n"
+                    "Sets the LED's brightness as a percentage (0-1) of the maximum.\n"
+                    )
             ;
 
         s.attr("red_right")   = ev3::led::red_right;
