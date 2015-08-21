@@ -365,7 +365,7 @@ class LCD(lcd):
 
         Example::
 
-            lcd.draw.rectangle((10,10,60,20), fill=True)
+            lcd.draw.rectangle((10,10,60,20), fill='black')
         """
         return ImageDraw.Draw(self.img)
 
