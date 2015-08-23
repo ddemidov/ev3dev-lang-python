@@ -9,25 +9,29 @@ from ev3dev import *
 # documentation already provided by Lego.  Some exceptions are:
 # * It doesn't auto-detect the devices.  You need to call
 #   connect_motor or connect_sensor first for each device you use
-# * There is an assumption on motor connections
-#   'medium' motor must be connected to Port A
-#   'right' large motor must be connected to Port B
-#   'left'  large motor must be connected to Port C
-#   These names are used in the interface instead of the port names
+# * Only two large motors and one medium motor are supported.
+#   This simplifies the interfaces.  The motors are referenced by
+#   the following names in the interfaces:
+#   'medium' motor, default Port A
+#   'right'  large motor, default Port B
+#   'left'   large motor, default Port C
 # * degrees and rotations inputs must always be positive
 #   use negative power to go backward
-# * Rather than having a separate unregulated_motor, regulated is an
+# * Rather than having a separate unregulated_motor widget, regulated is an
 #   an optional input parameter (default = True)
-# * The direction input to move_steering doesn't behave the same 
-#   because it supports rotation i.e. negative direction for one motor
 # * motor_rotation_measure, 'current_power' returns both the duty_cycle_sp
 #   (the actual power level being applied to the motor) and speed_sp
 # * sound includes an option to give a sentence and have the robot speak
 
 # Known issues/limitations
+# * The degrees, rotations, speed and invert values providied as inputs do
+#   not map directly to the values programmed to the sysfs attributes i.e.
+#   if you don't use mindstorm_widgets methods exclusively to control the 
+#   motors you will need to explicitly initialize all the relevant sysfs
+#   attributes each time you program the motor from outside mindstorms_widgets
+# * led_flash
 # * no error handling/recovery
 # * volume for tones doesn't work very well (seems to have only 2 levels)
-# * pulse option for brick_status_light doesn't work
 # * when reading the heading and proximity in beacon mode, ir_sensor_measure
 #   returns good values at first but continuing to poll it seems to result
 #   in inconsistent values
@@ -61,8 +65,28 @@ class mindstorms_widgets:
             speed_x = MEDIUM_MOTOR_SPEED_COEFFICIENT
             
         for m,p in zip ( motors, powers ):
-            # Negative power and invert are synonomous, so the easiest
-            # logic is to invert the polarity when negative power is requested
+            # When using run_forever() the sign of speed_sp or duty_cycle_sp
+            # determines the direction the motor runs.  When using
+            # run_to_rel_pos() the sign of position_sp determines the
+            # direction and the sign of speed_sp/duty_cycle_sp is ignored by
+            # the driver.
+            
+            # In either case the polarity reverses the direction.
+            
+            # When using move_steering, providing a negative power should
+            # result in reversing along the same path of a positive power
+            # in the same direction.  If the steering is sharp the power of
+            # one motor is opposite sign of the other.
+            
+            # This all combines to make for overly complicated logic when the
+            # intent is to set motor attribs independent of knowing what 
+            # methods are being used.  To avoid this complexity I devised the
+            # following scheme:
+            # * Use the motor polarity as the common attribute to determine
+            #   direction since it works the same for run_forever() and 
+            #   run_to_rel_pos()
+            # * Always program duty_cycle_sp and speed_sp to positive values
+            # * Always program position_sp to a positive value  
             pol = ['normal','inversed']
             brk = ['coast', 'brake']
             inv = invert
@@ -71,6 +95,7 @@ class mindstorms_widgets:
                 p = abs( p )
             m.polarity = pol[int( inv )] #e.g. True=1='inversed'
             m.stop_command = brk[int( brake_at_end )]
+            print ('speed: '+str(p)+' inv: '+str(inv))
             if regulated:
                 m.speed_regulation_enabled = 'on'
                 m.speed_sp = int( p*speed_x )
@@ -142,22 +167,56 @@ class mindstorms_widgets:
             motor.run_to_rel_pos(position_sp=int(rotations*360))
             while 'running' in motor.state:
                 time.sleep(0.1)
+                
+    def _led_pulse( self, color ):
+        # Note that calling flash() multiple times on a LED causes an error
+        # Disable this routine for now
+        return
+    
+        if color == 'green':
+            led.green_left.flash( 200, 200 )
+            led.green_right.flash( 200, 200 )
+        elif color == 'orange':
+            led.green_left.flash( 200, 200 )
+            led.red_left.flash( 200, 200 )
+            led.green_right.flash( 200, 200 )
+            led.red_right.flash( 200, 200 )
+        elif color == 'red':
+            led.red_left.flash( 200, 200 )
+            led.red_right.flash( 200, 200 )
+        
 
     # Begin public methods
         
-    def connect_motor( self, motor ):
+    def connect_motor( self, motor, port=None ):
+        default_port = {
+            'medium':'A',
+            'left'  :'B',
+            'right' :'C'
+        }
+
+        port_enum = {
+            'A' :OUTPUT_A,
+            'B' :OUTPUT_B,
+            'C' :OUTPUT_C,
+            'D' :OUTPUT_D
+        }
+        if not port:
+            port = default_port[motor]
+        port = port.upper()
+            
         if motor == 'medium':
-            self.motor['medium'] = medium_motor(OUTPUT_A)
+            self.motor['medium'] = medium_motor(port_enum[port])
             if not self.motor['medium'].connected:
-                print("Medium motor not connected to port A")
+                print("Medium motor not connected to port " + port)
         elif motor == 'right':
-            self.motor['right'] = large_motor(OUTPUT_B)
+            self.motor['right'] = large_motor(port_enum[port])
             if not self.motor['right'].connected:
-                print("Large right motor not connected to port B")
+                print("Large right motor not connected to port " + port)
         elif motor == 'left':
-            self.motor['left'] = large_motor(OUTPUT_C)
+            self.motor['left'] = large_motor(port_enum[port])
             if not self.motor['left'].connected:
-                print("Large left motor not connected to port C")
+                print("Large left motor not connected to port " + port)
             
     def connect_sensor( self, sensor ):
         if sensor == 'color':
@@ -223,23 +282,16 @@ class mindstorms_widgets:
         self._move( mode, seconds, degrees, rotations )
 
     def brick_status_light( self, mode, color='green', pulse=False ):
+        led.all_off()
         if mode == 'on':
             if color == 'green':
                 led.green_on()
-                led.red_off()
             elif color == 'orange':
                 led.all_on()
             elif color == 'red':
-                led.green_off()
                 led.red_on()
-        elif mode == 'off':
-            led.all_off()
-        elif mode == 'reset':
-            led.all_off()
         if mode == 'on' and pulse:
-            #led.red_left.flash( 200 )
-            #todo:Seems that the delay_on/delay_off attributes aren't there in
-            #/sys/class/leds/ev3-left0:red:ev3dev/
+            self._led_pulse( color )
             pass
             
     def color_sensor_measure( self, mode ):

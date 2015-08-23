@@ -4,6 +4,7 @@ print(
 """
 This demo exercises the mindstorms_widgets as well as use of the
 brick display and buttons.
+Run this script from the Brickman File Browser.
 * (green) action widgets from the mindstorms (LabVIEW) software
   - medium_motor, large_motor, move_steering, move_tank, status_light, sound
 * (yellow) sensor widgets
@@ -104,8 +105,8 @@ def demo_status_light():
     brick_print( 'Solid red' )
     robot.brick_status_light( 'on', color='red' )
     time.sleep(3)
-    brick_print( 'Flashing green' )
-    robot.brick_status_light( 'on', color='green', pulse=True )
+    brick_print( 'Flashing orange' )
+    robot.brick_status_light( 'on', color='orange', pulse=True )
     time.sleep(3)
     brick_print( 'Solid orange' )
     robot.brick_status_light( 'on', color='orange' )
@@ -224,7 +225,7 @@ menu = [
 
 # Start script
 
-robot.connect_motor( 'medium' )
+robot.connect_motor( 'medium', port='D' )
 robot.connect_motor( 'left' )
 robot.connect_motor( 'right' )
 robot.connect_sensor( 'touch' )
@@ -232,11 +233,9 @@ robot.connect_sensor( 'color' )
 robot.connect_sensor( 'infrared' )
 
 # Brickman uses virtual terminal 1 to control the brick display.
-# By changing to a different virtual terminal we can take over the
-# display even though brickman is still running.
-
-# Need advice on best way to avoid constantly being prompted for sudo password
-os.system("sudo chvt 7")
+# If running the script from ssh you need to change the virtual terminal
+# to avoid conflicting with Brickman
+# os.system("sudo chvt 7")
 
 while not button.back.pressed:
     if button.up.pressed:
@@ -252,4 +251,4 @@ while not button.back.pressed:
     draw_menu( selection )
     time.sleep(0.05)
     
-os.system("sudo chvt 1")
+# os.system("sudo chvt 1")
