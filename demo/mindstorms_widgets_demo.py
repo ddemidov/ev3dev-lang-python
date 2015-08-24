@@ -22,7 +22,7 @@ robot = mindstorms_widgets()
 lcd    = LCD()
 (hpix,ypix) = lcd.shape
 selection = 0
-lcd.y_pos = 0 
+lcd.y_pos = 0
 #Current y coordinate of cursor
 
 def wait_for_back_button():
@@ -30,11 +30,11 @@ def wait_for_back_button():
     while not button.back.pressed:
         time.sleep(0.1)
     robot.sound( 'play_tone', hz=700, duration_ms=100 )
-    
+
 def wait_for_enter():
     while not button.enter.pressed:
         time.sleep(0.1)
-        
+
 def demo_medium_motor():
     draw_header( 'Medium Motor' )
     wait_for_enter()
@@ -81,7 +81,7 @@ def demo_move_steering():
     time.sleep(5)
     brick_print( 'three point turn' )
     robot.move_steering( 'on_for_degrees', direction=50, degrees=1000 )
-    robot.move_steering( 'on_for_rotations', direction=-50, power=-60, 
+    robot.move_steering( 'on_for_rotations', direction=-50, power=-60,
                          rotations=3, brake_at_end=False )
     robot.move_steering( 'on_for_seconds', power=70, seconds=1 )
     robot.sound( 'play_file', path='~/dog_bark.rsf' )
@@ -92,7 +92,7 @@ def demo_move_tank():
     brick_print( '<enter> to start' )
     wait_for_enter()
     brick_print( 'Left then right' )
-    robot.move_tank( 'on_for_seconds', lr_power=[10,50], seconds=2.5, 
+    robot.move_tank( 'on_for_seconds', lr_power=[10,50], seconds=2.5,
                      regulated=False )
     robot.move_tank( 'on_for_seconds', lr_power=[50,10], seconds=2.5 )
     wait_for_back_button()
@@ -135,7 +135,7 @@ def demo_color_sensor():
     brick_print( 'Detected val = '+str(val) )
     robot.sound( 'speak', sentence='Reflected light level is ' + str(val) )
     wait_for_back_button()
-    
+
 def demo_ir_sensor():
     draw_header( 'IR Sensor' )
     brick_print( 'Proximity - <enter> to stop' )
@@ -147,7 +147,7 @@ def demo_ir_sensor():
     time.sleep(5)
     brick_print( 'Beacon ch2 - <enter> to stop' )
     while not button.enter.pressed:
-        (heading, proximity, detected) = robot.ir_sensor_measure( 'beacon', 
+        (heading, proximity, detected) = robot.ir_sensor_measure( 'beacon',
                                                                   channel=2 )
         print( 'beacon channel 2 (heading=%s, proximity=%s, detected=%s)' % (
                 str(heading), str(proximity), str(detected)) )
@@ -175,7 +175,7 @@ def run_med_motor( regulate ):
                'degrees=%s' %( str(s), str(duty_cycle_sp), str(speed_sp),
                                str(rotations), str(degrees)) )
     robot.medium_motor( 'off' )
-    
+
 def demo_motor_rotation():
     draw_header( 'Motor Rotation' )
     brick_print( '<enter> to start' )
@@ -193,7 +193,7 @@ def draw_header( header ):
     lcd.draw.text( (2,20), header )
     lcd.draw.line( (0, 32, hpix, 32), width=2 )
     lcd.y_pos = 40
-    
+
 def brick_print( line, fill='black', update=True ):
     lcd.draw.text( (2,lcd.y_pos), line, fill=fill )
     lcd.y_pos += 8
@@ -204,14 +204,14 @@ def draw_menu( selection ):
     draw_header( 'Mindstorm Widgets (Back=exit)' )
     for i in range( 0, len(menu) ):
         if i == selection:
-            lcd.draw.rectangle( [0, lcd.y_pos, hpix, lcd.y_pos+9], 
+            lcd.draw.rectangle( [0, lcd.y_pos, hpix, lcd.y_pos+9],
                                 fill="black" )
             brick_print( '>' + menu[selection][1], fill='white',
                             update=False )
         else:
             brick_print( ' ' + menu[i][1], update=False )
     lcd.update()
-            
+
 menu = [
     [demo_medium_motor,    'Medium Motor'],
     [demo_large_motor,     'Large Motor'],
@@ -250,5 +250,5 @@ while not button.back.pressed:
         menu[selection][0]()
     draw_menu( selection )
     time.sleep(0.05)
-    
+
 # os.system("sudo chvt 1")
