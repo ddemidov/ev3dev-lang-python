@@ -7,7 +7,7 @@
 #include <iostream>
 
 //~autogen autogen-header
-    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 1. 
+    // Sections of the following code were auto-generated based on spec v0.9.3-pre, rev 2. 
 //~autogen
 
 //---------------------------------------------------------------------------
@@ -885,6 +885,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
         s.attr("command_run_forever") = ev3::dc_motor::command_run_forever;
         s.attr("command_run_timed") = ev3::dc_motor::command_run_timed;
+        s.attr("command_run_direct") = ev3::dc_motor::command_run_direct;
         s.attr("command_stop") = ev3::dc_motor::command_stop;
         s.attr("polarity_normal") = ev3::dc_motor::polarity_normal;
         s.attr("polarity_inversed") = ev3::dc_motor::polarity_inversed;

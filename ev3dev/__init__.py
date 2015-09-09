@@ -266,6 +266,18 @@ def dc_motor_run_timed(self, **attr):
 
 dc_motor.run_timed = dc_motor_run_timed
 
+def dc_motor_run_direct(self, **attr):
+    """Run the motor at the duty cycle specified by `duty_cycle_sp`.
+    Unlike other run commands, changing `duty_cycle_sp` while running *will*
+    take effect immediately.
+    """
+
+    for key in attr:
+        setattr(self, key, attr[key])
+    self.command = "run-direct"
+
+dc_motor.run_direct = dc_motor_run_direct
+
 def dc_motor_stop(self, **attr):
     """Stop any of the run commands before they are complete using the
     command specified by `stop_command`.
