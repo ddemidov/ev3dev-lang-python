@@ -1,0 +1,5 @@
+# format version number, currently 3; this line is compulsory!
+version=3
+opts=uversionmangle=s/(rc|a|b|c)/~$1/ \
+http://pypi.debian.net/python-ev3dev/python-ev3dev-(.+)\.(?:zip|tgz|tbz|txz|(?:tar\.(?:gz|bz2|xz)))
+
