@@ -31,7 +31,7 @@ cd "${dn}"
 dpkg-buildpackage -us -uc
 cd ..
 
-lintian -EvIm --pedantic --show-overrides --color=auto --profile=debian *.changes
+lintian -EvI --pedantic --show-overrides --color=auto --profile=debian *.changes
 
 echo "packages created in: ${td}"
 
