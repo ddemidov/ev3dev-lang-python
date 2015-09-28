@@ -16,11 +16,11 @@ Required hardware:
 from time import sleep
 from ev3dev import *
 
-ir = infrared_sensor(); assert ir.connected
+ir = InfraredSensor(); assert ir.connected
 
 ir.mode = 'IR-PROX'
 
-sound.beep()
+Sound.beep()
 
 min_freq = 100
 max_freq = 1500
@@ -29,5 +29,5 @@ while True:
     v = float(ir.value())
     if v < 100:
         f = (v / 100) * (max_freq - min_freq) + min_freq
-        sound.tone(int(f), 50)
+        Sound.tone(int(f), 50)
         sleep(0.045)

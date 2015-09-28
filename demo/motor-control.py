@@ -15,10 +15,10 @@ from ev3dev import *
 
 lcd = LCD()
 motors = [
-        motor(OUTPUT_A),
-        motor(OUTPUT_B),
-        motor(OUTPUT_C),
-        motor(OUTPUT_D)
+        Motor(OUTPUT_A),
+        Motor(OUTPUT_B),
+        Motor(OUTPUT_C),
+        Motor(OUTPUT_D)
         ]
 
 port = 0
@@ -54,15 +54,15 @@ def stop(m):
         m.stop()
 
 
-while not button.back.pressed:
-    if button.left.pressed:
+while not Button.back.pressed:
+    if Button.left.pressed:
         port = (port - 1) % 4
-    elif button.right.pressed:
+    elif Button.right.pressed:
         port = (port + 1) % 4
 
-    if button.up.pressed:
+    if Button.up.pressed:
         drive(motors[port], 100)
-    elif button.down.pressed:
+    elif Button.down.pressed:
         drive(motors[port], -100)
     else:
         stop(motors[port])

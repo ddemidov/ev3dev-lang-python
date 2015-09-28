@@ -242,7 +242,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Generic device
     //-----------------------------------------------------------------------
     {
-        class_<ev3::device>("device", "Generic device")
+        class_<ev3::device>("Device", "Generic device")
             .add_property("connected",    &ev3::device::connected)
             .add_property("device_index", &ev3::device::device_index)
             .def("connect", raw_function(device_connect),
@@ -261,7 +261,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
                     "        while looking for the device\n"
                     "\n"
                     "Example (connect large EV3 motor)::\n\n"
-                    "    d = device()\n"
+                    "    d = Device()\n"
                     "    d.connect('/sys/class/tacho-motor/', 'motor', driver_name='lego-ev3-l-motor')\n"
                     )
             .def("get_attr_int",      &ev3::device::get_attr_int,
@@ -292,7 +292,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Sensors
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::sensor>("sensor",
+        scope s = class_<ev3::sensor>("Sensor",
 //~autogen python_generic-class-description classes.sensor>currentClass
 
                 "The sensor class provides a uniform interface for using most of the\n"
@@ -401,7 +401,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::i2c_sensor, bases<ev3::sensor>>("i2c_sensor",
+        class_<ev3::i2c_sensor, bases<ev3::sensor>>("I2CSensor",
 //~autogen python_generic-class-description classes.i2cSensor>currentClass
 
                 "A generic interface to control I2C-type EV3 sensors.\n"
@@ -430,14 +430,14 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::touch_sensor, bases<ev3::sensor>>("touch_sensor", "Touch sensor", init<>())
+        class_<ev3::touch_sensor, bases<ev3::sensor>>("TouchSensor", "Touch sensor", init<>())
             .def(init<ev3::port_type>(args("port")))
             ;
     }
 
     {
         scope s = class_<ev3::color_sensor, bases<ev3::sensor>>(
-                "color_sensor",
+                "ColorSensor",
 //~autogen python_generic-class-description classes.colorSensor>currentClass
 
                 "LEGO EV3 color sensor.\n"
@@ -460,7 +460,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::ultrasonic_sensor, bases<ev3::sensor>>(
-                "ultrasonic_sensor",
+                "UltrasonicSensor",
 //~autogen python_generic-class-description classes.ultrasonicSensor>currentClass
 
                 "LEGO EV3 ultrasonic sensor.\n"
@@ -483,7 +483,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::gyro_sensor, bases<ev3::sensor>>(
-                "gyro_sensor",
+                "GyroSensor",
 //~autogen python_generic-class-description classes.gyroSensor>currentClass
 
                 "LEGO EV3 gyro sensor.\n"
@@ -506,7 +506,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::infrared_sensor, bases<ev3::sensor>>(
-                "infrared_sensor",
+                "InfraredSensor",
 //~autogen python_generic-class-description classes.infraredSensor>currentClass
 
                 "LEGO EV3 infrared sensor.\n"
@@ -529,7 +529,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::sound_sensor, bases<ev3::sensor>>(
-                "sound_sensor",
+                "SoundSensor",
 //~autogen python_generic-class-description classes.soundSensor>currentClass
 
                 "LEGO NXT Sound Sensor\n"
@@ -549,7 +549,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
 
     {
         scope s = class_<ev3::light_sensor, bases<ev3::sensor>>(
-                "light_sensor",
+                "LightSensor",
 //~autogen python_generic-class-description classes.lightSensor>currentClass
 
                 "LEGO NXT Light Sensor\n"
@@ -571,7 +571,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Motors
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::motor>("motor",
+        scope s = class_<ev3::motor>("Motor",
 //~autogen python_generic-class-description classes.motor>currentClass
 
                 "The motor class provides a uniform interface for using motors with\n"
@@ -789,19 +789,19 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::medium_motor, bases<ev3::motor>>("medium_motor", "EV3 medium motor", init<>())
+        class_<ev3::medium_motor, bases<ev3::motor>>("MediumMotor", "EV3 medium motor", init<>())
             .def(init<ev3::port_type>(args("port")))
             ;
     }
 
     {
-        class_<ev3::large_motor, bases<ev3::motor>>("large_motor", "EV3 large motor", init<>())
+        class_<ev3::large_motor, bases<ev3::motor>>("LargeMotor", "EV3 large motor", init<>())
             .def(init<ev3::port_type>())
             ;
     }
 
     {
-        scope s = class_<ev3::dc_motor>("dc_motor",
+        scope s = class_<ev3::dc_motor>("DCMotor",
 //~autogen python_generic-class-description classes.dcMotor>currentClass
 
                 "The DC motor class provides a uniform interface for using regular DC motors\n"
@@ -896,7 +896,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        scope s = class_<ev3::servo_motor>("servo_motor",
+        scope s = class_<ev3::servo_motor>("ServoMotor",
 //~autogen python_generic-class-description classes.servoMotor>currentClass
 
                 "The servo motor class provides a uniform interface for using hobby type\n"
@@ -994,7 +994,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // LED
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::led>("led",
+        scope s = class_<ev3::led>("Led",
 //~autogen python_generic-class-description classes.led>currentClass
 
                 "Any device controlled by the generic LED driver.\n"
@@ -1089,7 +1089,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Power supply
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::power_supply>("power_supply",
+        scope s = class_<ev3::power_supply>("PowerSupply",
 //~autogen python_generic-class-description classes.powerSupply>currentClass
 
                 "A generic interface to read data from the system's power_supply class.\n"
@@ -1133,7 +1133,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Buttons
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::button>("button", "EV3 buttons", init<int>(args("bit")))
+        scope s = class_<ev3::button>("Button", "EV3 buttons", init<int>(args("bit")))
             .add_property("pressed", &ev3::button::pressed, "Check if the button is pressed")
             .def("onclick", button_onclick, args("callable"),
                     "Set function to be called when the button is clicked."
@@ -1161,7 +1161,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     //-----------------------------------------------------------------------
     // Sound
     //-----------------------------------------------------------------------
-    class_<ev3::sound>("sound", "EV3 sound")
+    class_<ev3::sound>("Sound", "EV3 sound")
         .def("beep",       &ev3::sound::beep).staticmethod("beep")
         .def("tone",       &ev3::sound::tone).staticmethod("tone")
         .def("play",       (void (*)(const std::string&))&ev3::sound::play,  args("soundfile"))
@@ -1191,7 +1191,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Remote control
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::remote_control>("remote_control", "EV3 remote control", init<>())
+        scope s = class_<ev3::remote_control>("RemoteControl", "EV3 remote control", init<>())
             .def(init<unsigned>(args("channel")))
             .def(init<ev3::infrared_sensor&>(args("ir_sensor")))
             .def(init<ev3::infrared_sensor&, unsigned>(args("ir_sensor", "channel")))
@@ -1219,7 +1219,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     // Lego Port
     //-----------------------------------------------------------------------
     {
-        scope s = class_<ev3::lego_port>("lego_port",
+        scope s = class_<ev3::lego_port>("LegoPort",
 //~autogen python_generic-class-description classes.legoPort>currentClass
 
                 "The `lego-port` class provides an interface for working with input and\n"
