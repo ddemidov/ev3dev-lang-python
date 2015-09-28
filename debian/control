@@ -2,12 +2,14 @@ Source: python-ev3dev
 Maintainer: Denis Demidov <dennis.demidov@gmail.com>
 Section: python
 Priority: optional
-Build-Depends: python-setuptools (>= 0.6b3), python-all-dev (>= 2.6.6-3), debhelper (>= 7)
+Build-Depends: python-setuptools (>= 0.6b3), python-all-dev (>= 2.6.6-3), 
+ debhelper (>= 7), dh-python, libboost-dev, libboost-python-dev
 Standards-Version: 3.9.5
 Homepage: http://www.ev3dev.org/
 
-Package: python-python-ev3dev
+Package: python-ev3dev
 Architecture: any
-Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}, 
+ libboost-python1.55.0, python-pil
 Description: Python language bindings for ev3dev
  This is a Python library implementing unified interface for ev3dev devices.
