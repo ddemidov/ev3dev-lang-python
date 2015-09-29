@@ -1,7 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: ev3dev-lang-python
 Upstream-Contact: Denis Demidov <dennis.demidov@gmail.com>
-Source: https://github.com/ddemidov/ev3dev-lang-python
 
 Files: *
 Copyright: 2015 Denis Demidov <dennis.demidov@gmail.com>
