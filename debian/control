@@ -1,11 +1,13 @@
 Source: python-ev3dev
-Maintainer: Denis Demidov <dennis.demidov@gmail.com>
+Maintainer: Stefan Sauer <ensonic@google.com>
 Section: python
 Priority: optional
 Build-Depends: python-setuptools (>= 0.6b3), python-all-dev (>= 2.6.6-3), 
- debhelper (>= 7), dh-python, libboost-dev, libboost-python-dev
+ debhelper (>= 9), dh-python, libboost-dev, libboost-python-dev
 Standards-Version: 3.9.5
-Homepage: http://www.ev3dev.org/
+Homepage: https://github.com/ddemidov/ev3dev-lang-python
+Vcs-Browser: https://github.com/ddemidov/ev3dev-lang-python
+Vcs-Git: https://github.com/ddemidov/ev3dev-lang-python.git
 
 Package: python-ev3dev
 Architecture: any
