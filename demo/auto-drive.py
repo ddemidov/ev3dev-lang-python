@@ -21,10 +21,10 @@ from time   import sleep
 from random import choice
 from ev3dev import *
 
-lmotor = LargeMotor(OUTPUT_C); assert lmotor.connected
-rmotor = LargeMotor(OUTPUT_B); assert rmotor.connected
-irsens = InfraredSensor();     assert irsens.connected
-ts     = TouchSensor()
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+irsens = infrared_sensor();     assert irsens.connected
+ts     = touch_sensor()
 
 irsens.mode = 'IR-PROX'
 

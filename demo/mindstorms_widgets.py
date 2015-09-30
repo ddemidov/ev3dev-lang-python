@@ -46,7 +46,7 @@ from ev3dev import *
 MEDIUM_MOTOR_SPEED_COEFFICIENT = 16.4
 LARGE_MOTOR_SPEED_COEFFICIENT  = 10.3
 
-class MindstormsWidgets:
+class mindstorms_widgets:
     def __init__(self):
         self.motor = {
             'medium':None,
@@ -206,29 +206,29 @@ class MindstormsWidgets:
         port = port.upper()
 
         if motor == 'medium':
-            self.motor['medium'] = MediumMotor(port_enum[port])
+            self.motor['medium'] = medium_motor(port_enum[port])
             if not self.motor['medium'].connected:
                 print("Medium motor not connected to port " + port)
         elif motor == 'right':
-            self.motor['right'] = LargeMotor(port_enum[port])
+            self.motor['right'] = large_motor(port_enum[port])
             if not self.motor['right'].connected:
                 print("Large right motor not connected to port " + port)
         elif motor == 'left':
-            self.motor['left'] = LargeMotor(port_enum[port])
+            self.motor['left'] = large_motor(port_enum[port])
             if not self.motor['left'].connected:
                 print("Large left motor not connected to port " + port)
 
     def connect_sensor( self, sensor ):
         if sensor == 'color':
-            self.cs = ColorSensor()
+            self.cs = color_sensor()
             if not self.cs.connected:
                 print("Color sensor not connected")
         elif sensor == 'touch':
-            self.ts = TouchSensor()
+            self.ts = touch_sensor()
             if not self.ts.connected:
                 print("Touch sensor not connected")
         elif sensor == 'infrared':
-            self.irs = InfraredSensor()
+            self.irs = infrared_sensor()
             if not self.irs.connected:
                 print("Infrared sensor not connected")
 
@@ -358,16 +358,16 @@ class MindstormsWidgets:
         #       0=just a click
         #       1-49 same loud volume tone
         #       > 50 same volume really loud tone
-        Sound.volume = volume
+        sound.volume = volume
         if mode == 'play_file':
             # Sound.rsf files can be extracted from mindstorms by using the
             # sound in a mindstorms program then going to mindstorms
             # project->sounds tab and choosing "export"
 
-            Sound.play( path )
+            sound.play( path )
         elif mode == 'play_tone':
-            Sound.tone( int(hz), duration_ms )
+            sound.tone( int(hz), duration_ms )
         elif mode == 'speak':
-            Sound.speak( sentence, True )
+            sound.speak( sentence, True )
 
 

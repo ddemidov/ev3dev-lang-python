@@ -43,7 +43,7 @@ Here is a simple example of running a large EV3 motor connected to output port
 .. code-block:: python
 
     >>> import ev3dev
-    >>> m = ev3dev.LargeMotor('outA')
+    >>> m = ev3dev.large_motor('outA')
     >>> m.connected
     True
     >>> m.run_timed(time_sp=3000, duty_cycle_sp=75)
@@ -91,7 +91,7 @@ remotely:
 .. code-block:: python
 
     >>> ev3dev = c.modules.ev3dev
-    >>> m = ev3dev.LargeMotor('outA')
+    >>> m = ev3dev.large_motor('outA')
     >>> m.connected
     True
     >>> m.run_timed(time_sp=3000, duty_cycle_sp=75)

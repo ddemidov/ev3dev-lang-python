@@ -14,11 +14,11 @@ Run this script from the Brickman File Browser.
 
 import sys, time, os
 from ev3dev import *
-from mindstorms_widgets import MindstormsWidgets
+from mindstorms_widgets import mindstorms_widgets
 
 color = ['none','black','blue','green','yellow','red','white','brown']
 
-robot = MindstormsWidgets()
+robot = mindstorms_widgets()
 lcd    = LCD()
 (hpix,ypix) = lcd.shape
 selection = 0
@@ -27,12 +27,12 @@ lcd.y_pos = 0
 
 def wait_for_back_button():
     brick_print( '<back> to main menu' )
-    while not Button.back.pressed:
+    while not button.back.pressed:
         time.sleep(0.1)
     robot.sound( 'play_tone', hz=700, duration_ms=100 )
 
 def wait_for_enter():
-    while not Button.enter.pressed:
+    while not button.enter.pressed:
         time.sleep(0.1)
 
 def demo_medium_motor():
@@ -139,14 +139,14 @@ def demo_color_sensor():
 def demo_ir_sensor():
     draw_header( 'IR Sensor' )
     brick_print( 'Proximity - <enter> to stop' )
-    while not Button.enter.pressed:
+    while not button.enter.pressed:
         val=robot.ir_sensor_measure('proximity')
         print( 'proximity = '+str(val) )
         time.sleep(1)
 
     time.sleep(5)
     brick_print( 'Beacon ch2 - <enter> to stop' )
-    while not Button.enter.pressed:
+    while not button.enter.pressed:
         (heading, proximity, detected) = robot.ir_sensor_measure( 'beacon',
                                                                   channel=2 )
         print( 'beacon channel 2 (heading=%s, proximity=%s, detected=%s)' % (
@@ -155,7 +155,7 @@ def demo_ir_sensor():
 
     time.sleep(5)
     brick_print( 'Remote ch1 - <enter> to stop' )
-    while not Button.enter.pressed:
+    while not button.enter.pressed:
         val = robot.ir_sensor_measure( 'remote' )
         print( 'remote channel 1 key = ' + str(val) )
         time.sleep(1)
@@ -237,14 +237,14 @@ robot.connect_sensor( 'infrared' )
 # to avoid conflicting with Brickman
 # os.system("sudo chvt 7")
 
-while not Button.back.pressed:
-    if Button.up.pressed:
+while not button.back.pressed:
+    if button.up.pressed:
         selection = (selection - 1) % len( menu )
         robot.sound( 'play_tone', volume=0 )
-    elif Button.down.pressed:
+    elif button.down.pressed:
         selection = (selection + 1) % len( menu )
         robot.sound( 'play_tone', volume=0 )
-    elif Button.enter.pressed:
+    elif button.enter.pressed:
         # run the chosen demo
         draw_menu( selection )
         menu[selection][0]()

@@ -40,10 +40,10 @@ args = parser.parse_args(sys.argv[1:])
 #----------------------------------------------------------------------------
 # Initialize motors and sensors
 #----------------------------------------------------------------------------
-lmotor = LargeMotor(OUTPUT_C); assert lmotor.connected
-rmotor = LargeMotor(OUTPUT_B); assert rmotor.connected
-cs     = ColorSensor();        assert cs.connected
-ts     = TouchSensor();        assert ts.connected
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+cs     = color_sensor();        assert cs.connected
+ts     = touch_sensor();        assert ts.connected
 
 #----------------------------------------------------------------------------
 # Calibrate the color sensor.
@@ -53,12 +53,12 @@ ts     = TouchSensor();        assert ts.connected
 cs.mode = 'COL-REFLECT'
 
 def get_reading(color):
-    Sound.speak("Show me %s!" % color, True)
+    sound.speak("Show me %s!" % color, True)
     while not ts.value(): time.sleep(0.1)
 
     v = cs.value()
     print("%s: %s" %(color, v))
-    Sound.speak("OK", True)
+    sound.speak("OK", True)
     return v
 
 

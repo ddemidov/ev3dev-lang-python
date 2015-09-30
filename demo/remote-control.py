@@ -17,11 +17,11 @@ Required hardware:
 from time import sleep
 from ev3dev import *
 
-lmotor = LargeMotor(OUTPUT_C); assert lmotor.connected
-rmotor = LargeMotor(OUTPUT_B); assert rmotor.connected
-irsens = InfraredSensor();     assert irsens.connected
+lmotor = large_motor(OUTPUT_C); assert lmotor.connected
+rmotor = large_motor(OUTPUT_B); assert rmotor.connected
+irsens = infrared_sensor();     assert irsens.connected
 
-rc = RemoteControl(irsens)
+rc = remote_control(irsens)
 
 lmotor.set(speed_regulation_enabled='on', stop_command='brake')
 rmotor.set(speed_regulation_enabled='on', stop_command='brake')
