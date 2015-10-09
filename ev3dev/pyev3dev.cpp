@@ -3,6 +3,7 @@
 #include <boost/python/extract.hpp>
 #include <boost/python/raw_function.hpp>
 #include <boost/python/stl_iterator.hpp>
+#include <boost/python/implicit.hpp>
 #include <ev3dev.h>
 #include <iostream>
 
@@ -216,6 +217,8 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     docstring_options options(true, true, false);
 
     PyEval_InitThreads();
+
+    implicitly_convertible<float,int>();
 
     scope().attr("INPUT_AUTO") = ev3::INPUT_AUTO;
     scope().attr("INPUT_1")    = ev3::INPUT_1;
