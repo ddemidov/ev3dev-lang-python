@@ -406,9 +406,11 @@ button.keys = {
         'enter' : button.enter
         }
 
+@staticmethod
 def button_key_pressed(k):
     return button.keys[k].pressed
 
+@staticmethod
 def button_any_pressed():
     return any([key.pressed for key in button.keys.values()])
 
