@@ -394,3 +394,24 @@ class LCD(lcd):
         """
         self.frame_buffer[:] = self.img.tobytes("raw", "1;IR")
 
+#---------------------------------------------------------------------------
+# Add helper functions to the button class
+#---------------------------------------------------------------------------
+button.keys = {
+        'back'  : button.back,
+        'left'  : button.left,
+        'right' : button.right,
+        'up'    : button.up,
+        'down'  : button.down,
+        'enter' : button.enter
+        }
+
+def button_key_pressed(k):
+    return button.keys[k].pressed
+
+def button_any_pressed():
+    return any([key.pressed for key in button.keys.values()])
+
+button.key_pressed = button_key_pressed
+button.any_pressed = button_any_pressed
+
