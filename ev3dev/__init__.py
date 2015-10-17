@@ -32,7 +32,7 @@ class attr_int_proxy:
 def attr_int_get(dev):
     return attr_int_proxy(dev)
 
-device.attr_int = property(fget=attr_int_get,
+Device.attr_int = property(fget=attr_int_get,
         doc="Reads/writes integer attributes.\n Example::\n\n    d.attr_int.speed_sp = 100\n"
     )
 
@@ -50,7 +50,7 @@ class attr_string_proxy:
 def attr_string_get(dev):
     return attr_string_proxy(dev)
 
-device.attr_string = property(fget=attr_string_get,
+Device.attr_string = property(fget=attr_string_get,
         doc="Reads/writes string attributes.\nExample::\n\n    d.attr_string.mode = 'IR-PROX'\n"
         )
 
@@ -64,7 +64,7 @@ class attr_line_proxy:
 def attr_line_get(dev):
     return attr_line_proxy(dev)
 
-device.attr_line = property(fget=attr_line_get,
+Device.attr_line = property(fget=attr_line_get,
         doc="Reads line attributes.\n Example::\n\n    print(d.attr_line.modes)\n"
         )
 
@@ -78,7 +78,7 @@ class attr_set_proxy:
 def attr_set_get(dev):
     return attr_set_proxy(dev)
 
-device.attr_set = property(fget=attr_set_get,
+Device.attr_set = property(fget=attr_set_get,
         doc="Reads set attributes.\n Example::\n\n    print(d.attr_set.commands)\n"
         )
 
@@ -123,21 +123,21 @@ def steering(direction, power=100):
 #---------------------------------------------------------------------------
 # Stop a motor on destruction
 #---------------------------------------------------------------------------
-def stop_taho_motor(self):
+def stop_tacho_motor(self):
     self.command = 'stop'
 
-large_motor.__del__ = stop_taho_motor
-medium_motor.__del__ = stop_taho_motor
+LargeMotor.__del__ = stop_tacho_motor
+MediumMotor.__del__ = stop_tacho_motor
 
 def stop_dc_motor(self):
     self.command = 'coast'
 
-dc_motor.__del__ = stop_dc_motor
+DcMotor.__del__ = stop_dc_motor
 
 def stop_servo_motor(self):
     self.command = 'float'
 
-servo_motor.__del__ = stop_servo_motor
+ServoMotor.__del__ = stop_servo_motor
 
 #---------------------------------------------------------------------------
 # Batch set method
@@ -153,10 +153,10 @@ def batch_set(device, **attr):
     for key in attr:
         setattr(device, key, attr[key])
 
-sensor.set      = batch_set
-motor.set       = batch_set
-dc_motor.set    = batch_set
-servo_motor.set = batch_set
+Sensor.set      = batch_set
+Motor.set       = batch_set
+DcMotor.set    = batch_set
+ServoMotor.set = batch_set
 
 
 #~autogen python_motor_commands classes.motor>currentClass
@@ -169,7 +169,7 @@ def motor_run_forever(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-forever"
 
-motor.run_forever = motor_run_forever
+Motor.run_forever = motor_run_forever
 
 def motor_run_to_abs_pos(self, **attr):
     """Run to an absolute position specified by `position_sp` and then
@@ -180,7 +180,7 @@ def motor_run_to_abs_pos(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-to-abs-pos"
 
-motor.run_to_abs_pos = motor_run_to_abs_pos
+Motor.run_to_abs_pos = motor_run_to_abs_pos
 
 def motor_run_to_rel_pos(self, **attr):
     """Run to a position relative to the current `position` value.
@@ -193,7 +193,7 @@ def motor_run_to_rel_pos(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-to-rel-pos"
 
-motor.run_to_rel_pos = motor_run_to_rel_pos
+Motor.run_to_rel_pos = motor_run_to_rel_pos
 
 def motor_run_timed(self, **attr):
     """Run the motor for the amount of time specified in `time_sp`
@@ -204,7 +204,7 @@ def motor_run_timed(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-timed"
 
-motor.run_timed = motor_run_timed
+Motor.run_timed = motor_run_timed
 
 def motor_run_direct(self, **attr):
     """Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -216,7 +216,7 @@ def motor_run_direct(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-direct"
 
-motor.run_direct = motor_run_direct
+Motor.run_direct = motor_run_direct
 
 def motor_stop(self, **attr):
     """Stop any of the run commands before they are complete using the
@@ -227,7 +227,7 @@ def motor_stop(self, **attr):
         setattr(self, key, attr[key])
     self.command = "stop"
 
-motor.stop = motor_stop
+Motor.stop = motor_stop
 
 def motor_reset(self, **attr):
     """Reset all of the motor parameter attributes to their default value.
@@ -238,7 +238,7 @@ def motor_reset(self, **attr):
         setattr(self, key, attr[key])
     self.command = "reset"
 
-motor.reset = motor_reset
+Motor.reset = motor_reset
 
 
 #~autogen
@@ -253,7 +253,7 @@ def dc_motor_run_forever(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-forever"
 
-dc_motor.run_forever = dc_motor_run_forever
+DcMotor.run_forever = dc_motor_run_forever
 
 def dc_motor_run_timed(self, **attr):
     """Run the motor for the amount of time specified in `time_sp`
@@ -264,7 +264,7 @@ def dc_motor_run_timed(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-timed"
 
-dc_motor.run_timed = dc_motor_run_timed
+DcMotor.run_timed = dc_motor_run_timed
 
 def dc_motor_run_direct(self, **attr):
     """Run the motor at the duty cycle specified by `duty_cycle_sp`.
@@ -276,7 +276,7 @@ def dc_motor_run_direct(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run-direct"
 
-dc_motor.run_direct = dc_motor_run_direct
+DcMotor.run_direct = dc_motor_run_direct
 
 def dc_motor_stop(self, **attr):
     """Stop any of the run commands before they are complete using the
@@ -287,7 +287,7 @@ def dc_motor_stop(self, **attr):
         setattr(self, key, attr[key])
     self.command = "stop"
 
-dc_motor.stop = dc_motor_stop
+DcMotor.stop = dc_motor_stop
 
 
 #~autogen
@@ -302,7 +302,7 @@ def servo_motor_run(self, **attr):
         setattr(self, key, attr[key])
     self.command = "run"
 
-servo_motor.run = servo_motor_run
+ServoMotor.run = servo_motor_run
 
 def servo_motor_float(self, **attr):
     """Remove power from the motor.
@@ -312,7 +312,7 @@ def servo_motor_float(self, **attr):
         setattr(self, key, attr[key])
     self.command = "float"
 
-servo_motor.float = servo_motor_float
+ServoMotor.float = servo_motor_float
 
 
 #~autogen
@@ -337,7 +337,7 @@ def sensor_bin_data(self, fmt=None):
     else:
         return unpack(fmt, self.bin_data_raw)
 
-sensor.bin_data = sensor_bin_data
+Sensor.bin_data = sensor_bin_data
 
 #---------------------------------------------------------------------------
 # Provide a convenience wrapper for ev3dev.lcd class
@@ -395,25 +395,25 @@ class LCD(lcd):
         self.frame_buffer[:] = self.img.tobytes("raw", "1;IR")
 
 #---------------------------------------------------------------------------
-# Add helper functions to the button class
+# Add helper functions to the Button class
 #---------------------------------------------------------------------------
-button.keys = {
-        'back'  : button.back,
-        'left'  : button.left,
-        'right' : button.right,
-        'up'    : button.up,
-        'down'  : button.down,
-        'enter' : button.enter
+Button.keys = {
+        'back'  : Button.back,
+        'left'  : Button.left,
+        'right' : Button.right,
+        'up'    : Button.up,
+        'down'  : Button.down,
+        'enter' : Button.enter
         }
 
 @staticmethod
-def button_key_pressed(k):
-    return button.keys[k].pressed
+def Button_key_pressed(k):
+    return Button.keys[k].pressed
 
 @staticmethod
-def button_any_pressed():
-    return any([key.pressed for key in button.keys.values()])
+def Button_any_pressed():
+    return any([key.pressed for key in Button.keys.values()])
 
-button.key_pressed = button_key_pressed
-button.any_pressed = button_any_pressed
+Button.key_pressed = Button_key_pressed
+Button.any_pressed = Button_any_pressed
 

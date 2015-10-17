@@ -404,7 +404,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        class_<ev3::i2c_sensor, bases<ev3::sensor>>("I2CSensor",
+        class_<ev3::i2c_sensor, bases<ev3::sensor>>("I2cSensor",
 //~autogen python_generic-class-description classes.i2cSensor>currentClass
 
                 "A generic interface to control I2C-type EV3 sensors.\n"
@@ -804,7 +804,7 @@ BOOST_PYTHON_MODULE(ev3dev_ext)
     }
 
     {
-        scope s = class_<ev3::dc_motor>("DCMotor",
+        scope s = class_<ev3::dc_motor>("DcMotor",
 //~autogen python_generic-class-description classes.dcMotor>currentClass
 
                 "The DC motor class provides a uniform interface for using regular DC motors\n"
