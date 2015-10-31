@@ -1,3 +1,8 @@
+
+**Deprecation warning!** This version of python bindings has been deprecated in favor of `rhempel/ev3dev-lang-python`_. This repository is no longer under active developement.
+
+.. _`rhempel/ev3dev-lang-python`: https://github.com/rhempel/ev3dev-lang-python
+
 Python language bindings for ev3dev
 ===================================
 
