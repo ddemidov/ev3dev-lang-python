@@ -342,13 +342,13 @@ Sensor.bin_data = sensor_bin_data
 #---------------------------------------------------------------------------
 # Provide a convenience wrapper for ev3dev.lcd class
 #---------------------------------------------------------------------------
-class LCD(lcd):
+class Screen(lcd):
     """A convenience wrapper for ev3dev.lcd class.
     Provides drawing functions from python imaging library (PIL).
     """
 
     def __init__(self):
-        super(LCD, self).__init__()
+        super(Screen, self).__init__()
 
         def alignup(n, m):
             r = n % m

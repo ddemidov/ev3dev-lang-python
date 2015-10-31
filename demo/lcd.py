@@ -8,14 +8,14 @@ print(
 from time import sleep
 from ev3dev import *
 
-screen = LCD()
+screen = Screen()
 
 smile = True
 
 while True:
     screen.clear()
 
-    # LCD.draw returns a PIL.ImageDraw handle
+    # Screen.draw returns a PIL.ImageDraw handle
     screen.draw.ellipse(( 20, 20,  60, 60))
     screen.draw.ellipse((118, 20, 158, 60))
 
