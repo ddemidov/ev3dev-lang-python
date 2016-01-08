@@ -1,7 +1,0 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Contact: Denis Demidov <dennis.demidov@gmail.com>
-
-Files: *
-Copyright: 2015 Denis Demidov <dennis.demidov@gmail.com>
-License: GPL-2
- /usr/share/common-licenses/GPL-2
